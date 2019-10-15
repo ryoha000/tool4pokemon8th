@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -85,38 +85,18 @@ export default class PokemonInBattle extends React.Component<Props,State> {
   onAvatarClickHandler = () => {
     this.props.backParty()
   }
-  // UNSAFE_componentWillMount() {
-  //   this.setState({ loading: true })
-  //   let result: PokemonData = this.getPokemonData()
-  //   setTimeout(() => this.setState({ pokemonData: result, loading: false }), 500)
-  // }
   componentDidMount() {
     if (this.state.pokemonData.name != this.props.name) {
       this.setState({ loading: true })
       getPokemonByName(this.props.name)
-        .then(res => {
-          let result = res
+        .then(result => {
           this.setState({ pokemonData: result, loading: false })
           console.log(result)
         })
     }
   }
-  getPokemonData (name: string): PokemonData {
-    const db = makeDB()
-    let result: PokemonData = this.state.pokemonData
-    db.findOne({ name: name}, async function(err :any, doc :PokemonData){
-      console.log(doc,err)
-      if (doc) {
-        return 
-      }
-      result = doc
-      return result
-      // if (err) { return err }
-    })
-    setTimeout(() => console.log("wait"), 500)
-    console.log(result,"aaa")
-    return result
-    // setTimeout(() => this.setState({ pokemonData: result, loading: false }), 500)
+  handleEffortHP = (event: Event, value: number) => {
+    this.setState({ effortHP: value })
   }
   render() {
     if (this.state.loading) {
@@ -136,7 +116,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
       }
       action={
         <IconButton aria-label="settings">
-        <MoreVertIcon />
+          <MoreVertIcon />
         </IconButton>
       }
       title={this.state.pokemonData.name}
@@ -147,7 +127,8 @@ export default class PokemonInBattle extends React.Component<Props,State> {
           aria-labelledby="discrete-slider"
           valueLabelDisplay="auto"
           step={4}
-          value={this.state.effortHP}
+          defaultValue={4}
+          onChange={this.handleEffortHP}
           min={0}
           max={252}
         />

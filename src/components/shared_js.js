@@ -1,5 +1,5 @@
 import datastore from 'nedb-promise'
-// import {datas} from './shared'
+import {datas} from './shared'
 
 export async function getPokemonByName(name) {
   let DB = datastore({
@@ -16,4 +16,12 @@ export async function getPokemonByName(name) {
   let document = await DB.findOne({ name: name })
   console.log(document)
   return document
+}
+
+export async function insertDatas() {
+  let DB = datastore({
+     filename: './pokemon_data.nedb',
+     autoload: true
+  })
+  await DB.insert(datas)
 }
