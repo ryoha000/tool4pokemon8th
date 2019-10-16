@@ -17,7 +17,9 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import  {name2Pokemon, PokemonData, makeDB}  from './shared';
 import  {getPokemonByName}  from './shared_js';
-import { CircularProgress, Slider } from '@material-ui/core';
+import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 interface Props{
   backParty(): any;
@@ -26,6 +28,9 @@ interface Props{
   
 interface State{
   expanded: boolean;
+  isOpenEffort: boolean;
+  isOpenWaza: boolean;
+  effortForm: string;
   pokemonData: PokemonData;
   loading: boolean;
   effortHP: number;
@@ -65,6 +70,9 @@ export default class PokemonInBattle extends React.Component<Props,State> {
     console.log(this.props.name)
     this.state = {
       expanded: false,
+      isOpenEffort: false,
+      isOpenWaza: false,
+      effortForm: "slider",
       pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",baseH:45,baseA:49,baseB:49,baseC:65,baseD:65,baseS:45,heavy:"f"},
       loading: false,
       effortHP: 4,
@@ -78,9 +86,6 @@ export default class PokemonInBattle extends React.Component<Props,State> {
 
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded })
-    // console.log('====================================');
-    // console.log(name2Pokemon(this.props.name))
-    // console.log('====================================');
   };
   onAvatarClickHandler = () => {
     this.props.backParty()
@@ -95,8 +100,253 @@ export default class PokemonInBattle extends React.Component<Props,State> {
         })
     }
   }
-  handleEffortHP = (event: Event, value: number) => {
-    this.setState({ effortHP: value })
+  renderOver508 = () => {
+    let allEffort: number = this.state.effortA + this.state.effortB + this.state.effortC + this.state.effortD + this.state.effortS + this.state.effortHP
+    if (allEffort > 508) {
+      return (
+        <SnackbarContent
+          style={{backgroundColor: 'red', height: 30}}
+          message="努力値の合計が508を超えています"
+        />
+      )
+    } else {
+      return (
+        <div style={{whiteSpace: 'pre-line', height: 42}}>
+          <FormControl component="fieldset">
+          <FormLabel component="legend">SelectForm</FormLabel>
+          <RadioGroup aria-label="position" name="position" value={this.state.effortForm} onChange={this.handleChangeEffortForm()} row>
+            <FormControlLabel
+              value="slider"
+              control={<Radio color="primary" />}
+              label="Slider"
+              labelPlacement="end"
+            />
+            <FormControlLabel
+              value="input"
+              control={<Radio color="primary" />}
+              label="Input"
+              labelPlacement="end"
+            />
+          </RadioGroup>
+        </FormControl>
+        </div>
+      )
+    }
+  }
+  renderEffortForm = () => {
+    if (this.state.effortForm == "slider") {
+      return (
+        <List component="div" disablePadding>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>H:{this.state.effortHP}    </Typography>
+            <Slider
+              aria-labelledby="effortHP"
+              value={this.state.effortHP}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortHP()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>A:{this.state.effortA}    </Typography>
+            <Slider
+              aria-labelledby="effortA"
+              value={this.state.effortA}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortA()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>B:{this.state.effortB}    </Typography>
+            <Slider
+              aria-labelledby="effortB"
+              value={this.state.effortB}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortB()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>C:{this.state.effortC}    </Typography>
+            <Slider
+              aria-labelledby="effortC"
+              value={this.state.effortC}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortC()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>D:{this.state.effortD}    </Typography>
+            <Slider
+              aria-labelledby="effortD"
+              value={this.state.effortD}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortD()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>S:{this.state.effortS}    </Typography>
+            <Slider
+              aria-labelledby="effortS"
+              value={this.state.effortS}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortS()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+        </List>
+      )
+    }
+    if (this.state.effortForm == "input") {
+      return (
+        <List component="div" disablePadding>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>H:{this.state.effortHP}    </Typography>
+          <Slider
+            aria-labelledby="effortHP"
+            value={this.state.effortHP}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortHP()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>A:{this.state.effortA}    </Typography>
+          <Slider
+            aria-labelledby="effortA"
+            value={this.state.effortA}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortA()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>B:{this.state.effortB}    </Typography>
+          <Slider
+            aria-labelledby="effortB"
+            value={this.state.effortB}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortB()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>C:{this.state.effortC}    </Typography>
+          <Slider
+            aria-labelledby="effortC"
+            value={this.state.effortC}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortC()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>D:{this.state.effortD}    </Typography>
+          <Slider
+            aria-labelledby="effortD"
+            value={this.state.effortD}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortD()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+        <ListItem className="nested">
+          <Typography style={{whiteSpace: 'break-spaces', width: 70}}>S:{this.state.effortS}    </Typography>
+          <Slider
+            aria-labelledby="effortS"
+            value={this.state.effortS}
+            valueLabelDisplay="auto"
+            step={4}
+            onChange={this.handleEffortS()}
+            min={0}
+            max={252}
+            style={{width: 200}}
+          />
+        </ListItem>
+      </List>
+      )
+    }
+  }
+  handleClickOpenEffort = () => {
+    this.setState({ isOpenEffort: !this.state.isOpenEffort})
+    if (this.state.isOpenWaza) {
+      this.setState({ isOpenWaza: false})
+    }
+  }
+  handleClickWaza = () => {
+    this.setState({ isOpenWaza: !this.state.isOpenWaza})
+    if (this.state.isOpenEffort) {
+      this.setState({ isOpenEffort: false})
+    }
+  }
+  handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    this.setState({ effortForm: value })
+  }
+  handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortHP: value })
+    }
+  }
+  handleEffortA = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortA: value })
+    }
+  }
+  handleEffortB = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortB: value })
+    }
+  }
+  handleEffortC = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortC: value })
+    }
+  }
+  handleEffortD = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortD: value })
+    }
+  }
+  handleEffortS = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
+    if (typeof value == "number") {
+      this.setState({ effortS: value })
+    }
   }
   render() {
     if (this.state.loading) {
@@ -121,59 +371,29 @@ export default class PokemonInBattle extends React.Component<Props,State> {
       }
       title={this.state.pokemonData.name}
       subheader={"NickName: " + "Nike"}
+      style={{height: 26}}
       />
-      <CardContent>
-        <Slider
-          aria-labelledby="discrete-slider"
-          valueLabelDisplay="auto"
-          step={4}
-          defaultValue={4}
-          onChange={this.handleEffortHP}
-          min={0}
-          max={252}
-        />
-        </CardContent>
-        <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <IconButton
-          onClick={this.handleExpandClick}
-          aria-expanded={this.state.expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
-        </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>{this.state.pokemonData.ability1} </Typography>
-          {/* <Typography paragraph>
-          Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10
-          minutes.
-          </Typography>
-          <Typography paragraph>
-          Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high
-          heat. Add chicken, shrimp and chorizo, and cook, stirring occasionally until lightly
-          browned, 6 to 8 minutes. Transfer shrimp to a large plate and set aside, leaving chicken
-          and chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes, onion, salt and
-          pepper, and cook, stirring often until thickened and fragrant, about 10 minutes. Add
-          saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-          Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook
-          without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
-          medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook
-          again without stirring, until mussels have opened and rice is just tender, 5 to 7
-          minutes more. (Discard any mussels that don’t open.)
-          </Typography>
-          <Typography>
-          Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography> */}
-        </CardContent>
+      <ListItem button onClick={this.handleClickWaza}>
+        <ListItemText primary="わざ" />
+        {this.state.isOpenWaza ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={this.state.isOpenWaza} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          <ListItem button className="nested">
+            <ListItemAvatar>
+              <Avatar src="/assets/373.png"/>
+            </ListItemAvatar>
+            <ListItemText primary="Salamence" />
+          </ListItem>
+        </List>
+      </Collapse>
+      <ListItem button onClick={this.handleClickOpenEffort}>
+        <ListItemText primary="努力値" />
+        {this.state.isOpenEffort ? <ExpandLess /> : <ExpandMore />}
+      </ListItem>
+      <Collapse in={this.state.isOpenEffort} timeout="auto" unmountOnExit>
+        {this.renderOver508()}
+        {this.renderEffortForm()}
       </Collapse>
     </Card>
     );
