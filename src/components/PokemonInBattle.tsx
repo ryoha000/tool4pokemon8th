@@ -21,6 +21,7 @@ import { computeStatus, natures } from './ComputeMethods'
 import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import InputAuto from './InputAuto';
 
 interface Props{
   backParty(): any;
@@ -149,6 +150,8 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       const pokemon: any = this.props.pokemons.find((element) => {
         return element.name === this.props.name
       })
+      console.log(pokemon)
+      this.setState({ loading: false, pokemonData: pokemon })
       if (!pokemon) { alert("指定されたポケモン名が不正です。再起動してみてください") }
       setTimeout(() => {
         const pokemon: PokemonInBattleState = computeStatus(this.state)
@@ -161,7 +164,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
           statusS: Math.floor(pokemon.statusS),
         })
       },200)
-      this.setState({ loading: false, pokemonData: pokemon })
     }
   }
   renderOver508 = () => {
@@ -440,8 +442,9 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
   }
-  handleChangeInputWaza = () => (event: React.ChangeEvent<{ name?: string; value: unknown }>, child: React.ReactNode) => {
-    this.setState({ inputWaza: event.target.value })
+  handleChangeInputWaza = (name: any) => {
+    this.setState({ inputWaza: name.value })
+    console.log(name)
   }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
@@ -503,29 +506,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
         {this.state.isOpenWaza ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={this.state.isOpenWaza} timeout="auto" unmountOnExit>
-        <Select
-            inputId="react-select-single"
-            TextFieldProps={{
-              label: 'Move Name',
-              InputLabelProps: {
-                htmlFor: 'react-select-single',
-                shrink: true,
-              },
-            }}
-            placeholder="りゅうせいぐん"
-            options={this.state.wazaLabel}
-            // components={components}
-            value={this.state.inputWaza}
-            onChange={this.handleChangeInputWaza()}
-          />
-        <List component="div" disablePadding>
-          <ListItem button className="nested">
-            <ListItemAvatar>
-              <Avatar src="/assets/373.png"/>
-            </ListItemAvatar>
-            <ListItemText primary="Salamence" />
-          </ListItem>
-        </List>
+        <InputAuto datas={this.props.wazas.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
       </Collapse>
       <ListItem button onClick={this.handleClickOpenEffort}>
         <ListItemText primary="努力値" />

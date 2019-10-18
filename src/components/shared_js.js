@@ -4,7 +4,7 @@ import {wazaData} from './WazaData'
 
 export async function getPokemonByName(name) {
   let DB = datastore({
-    filename: './pokemon_data.nedb',
+    filename: './pokemon_datas.nedb',
     autoload: true
   })
   let document = await DB.findOne({ name: name })
@@ -14,7 +14,7 @@ export async function getPokemonByName(name) {
 
 export async function getPokemons() {
     let DB = datastore({
-      filename: './pokemon_data.nedb',
+      filename: './pokemon_datas.nedb',
       autoload: true
     })
     let documents = await DB.find({})
@@ -24,7 +24,7 @@ export async function getPokemons() {
 
 export async function insertPokemonDatas() {
   let DB = datastore({
-    filename: './pokemon_data.nedb',
+    filename: './pokemon_datas.nedb',
     autoload: true
   })
   await DB.insert(datas)
