@@ -14,9 +14,11 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
 import PokemonInBattle from './PokemonInBattle'
-// import { makeDB, insertPokemonData } from './shared'
+import { PokemonData, waza } from './shared'
 
 interface Props{
+  wazas: waza[];
+  pokemons: PokemonData[];
 }
 
 interface State{
@@ -106,7 +108,7 @@ export default class VersusTabs extends React.Component<Props,State> {
           <Grid container justify="center" spacing={2}>
             <Grid item>
               <Paper style={{ height: 430,width: 300 }}>
-                {this.state.open1 ? <PokemonInBattle backParty={this.handleClick1} name="ガブリアス"/> : this.renderPartyList()}
+                {this.state.open1 ? <PokemonInBattle backParty={this.handleClick1} name="ガブリアス" wazas={this.props.wazas} pokemons={this.props.pokemons} /> : this.renderPartyList()}
               </Paper>
             </Grid>
             <Grid item>

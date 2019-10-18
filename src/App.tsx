@@ -2,40 +2,71 @@ import React from 'react';
 // import logo from './logo.svg';
 import './App.css';
 import ParentTabs from './components/ParentTabs'
-import {getPokemonByName, insertDatas} from '../src/components/shared_js'
+import {getPokemons, insertPokemonDatas, getWazas, insertWazaDatas} from '../src/components/shared_js'
+import { PokemonData, waza } from './components/shared'
 import { CircularProgress } from '@material-ui/core';
 
 interface Props{
 }
   
 interface State{
-  initialized: boolean;
+  initialized1: boolean;
+  initialized2: boolean;
+  pokemons: PokemonData[];
+  wazas: waza[];
 }
 
 export default class App extends React.Component<Props,State>{
   constructor(props: any) {
     super(props);
     this.state = {
-      initialized: false,
+      initialized1: false,
+      initialized2: false,
+      pokemons: [],
+      wazas: []
     };
   }
   componentDidMount() {
-    if (!this.state.initialized) {
-      getPokemonByName("ガブリアス")
+    if (!this.state.initialized1) {
+      getPokemons()
         .then(res => {
           let result: any = res
-          if (!result) {
-            insertDatas()
+          if (result.length === 0) {
+            insertPokemonDatas()
               .then(() => {
-                this.setState({ initialized: true})
+                getPokemons()
+                  .then(res => {
+                    this.setState({ initialized1: true, pokemons: res})
+                  })
+                  .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
               })
+              .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
           }
-          this.setState({ initialized: true})
+          this.setState({ initialized1: true, pokemons: res})
         })
+        .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+    }
+    if (!this.state.initialized2){
+      getWazas()
+        .then(res => {
+          if (res.length === 0) {
+            insertWazaDatas()
+            .then(() => {
+              getWazas()
+                .then(res => {
+                  this.setState({ initialized2: true, wazas: res })
+                })
+                .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+            })
+            .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+          }
+          this.setState({ initialized2: true, wazas: res })
+        })
+        // .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
     }
   }
   render() {
-    if (!this.state.initialized) {
+    if (!this.state.initialized1 && this.state.initialized2) {
       return (
         <div className="App">
           <CircularProgress/>
@@ -44,7 +75,7 @@ export default class App extends React.Component<Props,State>{
     } else {
       return (
         <div className="App">
-          <ParentTabs />
+          <ParentTabs pokemons={this.state.pokemons} wazas={this.state.wazas}/>
         </div>
       )
     }

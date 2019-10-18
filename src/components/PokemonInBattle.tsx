@@ -15,30 +15,48 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import  {name2Pokemon, PokemonData, makeDB}  from './shared';
-import  {getPokemonByName}  from './shared_js';
-import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import  {name2Pokemon, PokemonData, makeDB, waza}  from './shared';
+import  {getPokemonByName, getWazas}  from './shared_js';
+import { computeStatus, natures } from './ComputeMethods'
+import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-
+import { element } from 'prop-types';
 interface Props{
   backParty(): any;
   name: string;
+  pokemons: PokemonData[];
+  wazas: waza[];
 }
   
-interface State{
+export interface PokemonInBattleState{
   expanded: boolean;
   isOpenEffort: boolean;
   isOpenWaza: boolean;
+  isOpenNature?: any;
+  isOpenNatureBool: boolean;
   effortForm: string;
   pokemonData: PokemonData;
   loading: boolean;
+  natureName: string;
   effortHP: number;
   effortA: number;
   effortB: number;
   effortC: number;
   effortD: number;
   effortS: number;
+  statusH: number;
+  statusA: number;
+  statusB: number;
+  statusC: number;
+  statusD: number;
+  statusS: number;
+  IndividualH: number;
+  IndividualA: number;
+  IndividualB: number;
+  IndividualC: number;
+  IndividualD: number;
+  IndividualS: number;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -64,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
  
-export default class PokemonInBattle extends React.Component<Props,State> {
+export default class PokemonInBattle extends React.Component<Props,PokemonInBattleState> {
   constructor(props: any) {
     super(props);
     console.log(this.props.name)
@@ -72,15 +90,30 @@ export default class PokemonInBattle extends React.Component<Props,State> {
       expanded: false,
       isOpenEffort: false,
       isOpenWaza: false,
+      isOpenNature: null,
+      isOpenNatureBool: false,
       effortForm: "slider",
-      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",baseH:45,baseA:49,baseB:49,baseC:65,baseD:65,baseS:45,heavy:"f"},
+      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
       loading: false,
+      natureName: "ようき",
       effortHP: 4,
       effortA: 252,
       effortB: 0,
       effortC: 0,
       effortD: 0,
-      effortS: 252
+      effortS: 252,
+      statusH: 0,
+      statusA: 0,
+      statusB: 0,
+      statusC: 0,
+      statusD: 0,
+      statusS: 0,
+      IndividualH: 31,
+      IndividualA: 31,
+      IndividualB: 31,
+      IndividualC: 31,
+      IndividualD: 31,
+      IndividualS: 31,
     };
   }
 
@@ -90,14 +123,36 @@ export default class PokemonInBattle extends React.Component<Props,State> {
   onAvatarClickHandler = () => {
     this.props.backParty()
   }
+  handleChangeCommittedSlider = () => {
+    const pokemon: PokemonInBattleState = computeStatus(this.state)
+    this.setState({
+      statusH: Math.floor(pokemon.statusH),
+      statusA: Math.floor(pokemon.statusA),
+      statusB: Math.floor(pokemon.statusB),
+      statusC: Math.floor(pokemon.statusC),
+      statusD: Math.floor(pokemon.statusD),
+      statusS: Math.floor(pokemon.statusS),
+    })
+  }
   componentDidMount() {
     if (this.state.pokemonData.name != this.props.name) {
       this.setState({ loading: true })
-      getPokemonByName(this.props.name)
-        .then(result => {
-          this.setState({ pokemonData: result, loading: false })
-          console.log(result)
+      const pokemon: any = this.props.pokemons.find((element) => {
+        return element.name === this.props.name
+      })
+      if (!pokemon) { alert("指定されたポケモン名が不正です。再起動してみてください") }
+      setTimeout(() => {
+        const pokemon: PokemonInBattleState = computeStatus(this.state)
+        this.setState({
+          statusH: Math.floor(pokemon.statusH),
+          statusA: Math.floor(pokemon.statusA),
+          statusB: Math.floor(pokemon.statusB),
+          statusC: Math.floor(pokemon.statusC),
+          statusD: Math.floor(pokemon.statusD),
+          statusS: Math.floor(pokemon.statusS),
         })
+      },200)
+      this.setState({ loading: false, pokemonData: pokemon })
     }
   }
   renderOver508 = () => {
@@ -113,22 +168,48 @@ export default class PokemonInBattle extends React.Component<Props,State> {
       return (
         <div style={{whiteSpace: 'pre-line', height: 42}}>
           <FormControl component="fieldset">
-          <FormLabel component="legend">SelectForm</FormLabel>
-          <RadioGroup aria-label="position" name="position" value={this.state.effortForm} onChange={this.handleChangeEffortForm()} row>
-            <FormControlLabel
-              value="slider"
-              control={<Radio color="primary" />}
-              label="Slider"
-              labelPlacement="end"
-            />
-            <FormControlLabel
-              value="input"
-              control={<Radio color="primary" />}
-              label="Input"
-              labelPlacement="end"
-            />
-          </RadioGroup>
-        </FormControl>
+            <FormLabel component="legend">{this.state.statusH + "-" +  this.state.statusA + "-" +  this.state.statusB + "-" +  this.state.statusC + "-" +  this.state.statusD + "-" +  this.state.statusS}</FormLabel>
+            <Grid item>
+              <Grid container>
+                <Button onClick={this.openNature} variant="outlined" color="secondary" style={{height: 35,width: 125}}>
+                  {this.state.natureName}▼
+                </Button>
+                <Menu
+                  id="long-menu"
+                  anchorEl={this.state.isOpenNature}
+                  keepMounted
+                  open={Boolean(this.state.isOpenNature)}
+                  onClose={this.closeNature}
+                  PaperProps={{
+                    style: {
+                      maxHeight: 216,
+                      width: 200,
+                    },
+                  }}
+                >
+                  {natures.map(nature => (
+                    <MenuItem key={nature.id} selected={nature.name === this.state.natureName} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleNature(nature.name);this.closeNature(event);}}>
+                      {nature.name}
+                    </MenuItem>
+                  ))}
+                </Menu>
+                <RadioGroup aria-label="position" name="position" value={this.state.effortForm} onChange={this.handleChangeEffortForm()} row>
+                  <FormControlLabel
+                    value="slider"
+                    control={<Radio color="primary" />}
+                    label="Slider"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="input"
+                    control={<Radio color="primary" />}
+                    label="Input"
+                    labelPlacement="end"
+                  />
+                </RadioGroup>
+              </Grid>
+            </Grid>
+          </FormControl>
         </div>
       )
     }
@@ -145,6 +226,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               valueLabelDisplay="auto"
               step={4}
               onChange={this.handleEffortHP()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               min={0}
               max={252}
               style={{width: 200}}
@@ -158,6 +240,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               valueLabelDisplay="auto"
               step={4}
               onChange={this.handleEffortA()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               min={0}
               max={252}
               style={{width: 200}}
@@ -171,6 +254,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               valueLabelDisplay="auto"
               step={4}
               onChange={this.handleEffortB()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               min={0}
               max={252}
               style={{width: 200}}
@@ -184,6 +268,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               valueLabelDisplay="auto"
               step={4}
               onChange={this.handleEffortC()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               min={0}
               max={252}
               style={{width: 200}}
@@ -196,6 +281,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               value={this.state.effortD}
               valueLabelDisplay="auto"
               step={4}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               onChange={this.handleEffortD()}
               min={0}
               max={252}
@@ -210,6 +296,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
               valueLabelDisplay="auto"
               step={4}
               onChange={this.handleEffortS()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
               min={0}
               max={252}
               style={{width: 200}}
@@ -229,6 +316,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortHP()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -242,6 +330,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortA()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -255,6 +344,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortB()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -268,6 +358,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortC()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -281,6 +372,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortD()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -294,6 +386,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
             valueLabelDisplay="auto"
             step={4}
             onChange={this.handleEffortS()}
+            onChangeCommitted={this.handleChangeCommittedSlider}
             min={0}
             max={252}
             style={{width: 200}}
@@ -314,6 +407,26 @@ export default class PokemonInBattle extends React.Component<Props,State> {
     if (this.state.isOpenEffort) {
       this.setState({ isOpenEffort: false})
     }
+  }
+  handleNature = (name: string) => {
+    this.setState({ natureName: name })
+    setTimeout(() => {
+      const pokemon: PokemonInBattleState = computeStatus(this.state)
+      this.setState({
+        statusH: Math.floor(pokemon.statusH),
+        statusA: Math.floor(pokemon.statusA),
+        statusB: Math.floor(pokemon.statusB),
+        statusC: Math.floor(pokemon.statusC),
+        statusD: Math.floor(pokemon.statusD),
+        statusS: Math.floor(pokemon.statusS),
+      })
+    }, 300)
+  }
+  openNature = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenNature: event.currentTarget})
+  }
+  closeNature = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenNature: null})
   }
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
@@ -362,7 +475,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
     <Card style={{ height: 430, width: 300 }}>
       <CardHeader
       avatar={
-        <Avatar onClick={this.onAvatarClickHandler} aria-label="recipe" src={"/assets/" + 445 + ".png"} />
+        <Avatar onClick={this.onAvatarClickHandler} aria-label="recipe" src={"/assets/" + this.state.pokemonData.number + ".png"} />
       }
       action={
         <IconButton aria-label="settings">
@@ -370,7 +483,7 @@ export default class PokemonInBattle extends React.Component<Props,State> {
         </IconButton>
       }
       title={this.state.pokemonData.name}
-      subheader={"NickName: " + "Nike"}
+      subheader={this.state.pokemonData.base_h + "-" +  this.state.pokemonData.base_a + "-" +  this.state.pokemonData.base_b + "-" +  this.state.pokemonData.base_c + "-" +  this.state.pokemonData.base_d + "-" +  this.state.pokemonData.base_s}
       style={{height: 26}}
       />
       <ListItem button onClick={this.handleClickWaza}>

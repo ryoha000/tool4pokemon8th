@@ -9,11 +9,17 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
+import { waza, PokemonData } from './shared'
 
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
   value: any;
+}
+
+interface Props {
+  wazas: waza[];
+  pokemons: PokemonData[];
 }
 
 function TabPanel(props: TabPanelProps) {
@@ -48,7 +54,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function ScrollableTabsButtonPrevent() {
+export default function ScrollableTabsButtonPrevent(props: Props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -72,7 +78,7 @@ export default function ScrollableTabsButtonPrevent() {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <VersusTabs />
+        <VersusTabs wazas={props.wazas} pokemons={props.pokemons}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
         Item Two
