@@ -21,6 +21,7 @@ import { Omit } from '@material-ui/types';
 import { wazaData } from './WazaData'
 import { PokemonData, waza } from './shared';
 import { Method } from '@babel/types';
+import { element } from 'prop-types';
 
 interface OptionType {
   label: string;
@@ -31,8 +32,8 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      height: 250,
-      minWidth: 290,
+      // height: 250,
+      width: 220,
     },
     input: {
       display: 'flex',
@@ -204,7 +205,6 @@ export default function InputAuto(props: Props) {
   const classes = useStyles();
   const theme = useTheme();
   const [single, setSingle] = React.useState<ValueType<OptionType>>(null);
-  const [multi, setMulti] = React.useState<ValueType<OptionType>>(null);
   const [comittedTime, setCommittedTime] = React.useState<any>(null);
 
   const suggestions: OptionType[] = props.datas.map((suggestion: any) => ({
@@ -212,14 +212,20 @@ export default function InputAuto(props: Props) {
     label: suggestion.name,
   }));
 
-  const handleChangeSingle = (value: ValueType<OptionType>) => {
+  const handleChangeSingle = (value: any) => {
+    const inputted: waza|PokemonData = props.datas.find((element: waza|PokemonData) => {
+      return element.name === value.label
+    })
     setSingle(value);
+    props.handleInput(inputted)
     const now = new Date()
     setCommittedTime(now.getTime())
     setTimeout(() => {
-      console.log(comittedTime)
-    }, 500);
-    props.handleInput(value)
+      const now = new Date()
+      if (comittedTime && now.getTime() > comittedTime + 2000){
+        setSingle(value);
+      }
+    }, 100);
   };
 
   const handleClickSingle = () => {
@@ -228,8 +234,6 @@ export default function InputAuto(props: Props) {
       const now = new Date()
       if (comittedTime && now.getTime() > comittedTime + 2000){
         setSingle(null);
-        console.log(comittedTime)
-        console.log(now.getTime())
       }
     }, 50);
   };

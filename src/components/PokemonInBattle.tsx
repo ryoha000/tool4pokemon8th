@@ -22,6 +22,7 @@ import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar,
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import InputAuto from './InputAuto';
+import { element } from 'prop-types';
 
 interface Props{
   backParty(): any;
@@ -59,7 +60,9 @@ export interface PokemonInBattleState{
   IndividualD: number;
   IndividualS: number;
   wazaLabel: any;
-  inputWaza: any;
+  inputWaza: waza;
+  selectedWaza: waza;
+  customizedWazas: waza[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -118,7 +121,9 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       IndividualD: 31,
       IndividualS: 31,
       wazaLabel: [],
-      inputWaza: "りゅうせいぐん"
+      customizedWazas: [],
+      inputWaza: {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"},
+      selectedWaza: {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
     };
   }
 
@@ -165,6 +170,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
         })
       },200)
     }
+    this.setState({ customizedWazas: [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]})
   }
   renderOver508 = () => {
     let allEffort: number = this.state.effortA + this.state.effortB + this.state.effortC + this.state.effortD + this.state.effortS + this.state.effortHP
@@ -442,9 +448,25 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
   }
-  handleChangeInputWaza = (name: any) => {
-    this.setState({ inputWaza: name.value })
-    console.log(name)
+  handleChangeInputWaza = (waza: waza) => {
+    this.setState({ inputWaza: waza , selectedWaza: waza })
+    console.log(waza)
+  }
+  handleCheckWaza = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    const selectWaza: any = this.props.wazas.find((element: waza) => {
+      return element.name === event.target.value
+    })
+    this.setState({ selectedWaza: selectWaza })
+    console.log(this.state.selectedWaza)
+  }
+  handleCheckWazaGroup = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
+    const selectWaza: any = this.props.wazas.find((element: waza) => {
+      return element.name === value
+    })
+    this.setState({ selectedWaza: selectWaza })
+    setTimeout(() => {
+      console.log(this.state.selectedWaza)
+    }, 200)
   }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
@@ -506,7 +528,32 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
         {this.state.isOpenWaza ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={this.state.isOpenWaza} timeout="auto" unmountOnExit>
-        <InputAuto datas={this.props.wazas.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
+        <Grid item>
+          <Grid container>
+            <Radio
+              checked={this.state.selectedWaza === this.state.inputWaza}
+              onChange={this.handleCheckWaza}
+              value={this.state.inputWaza.name}
+              color="primary"
+              disabled={this.state.inputWaza.name === "ダミー"}
+            />
+            <InputAuto datas={this.props.wazas.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
+            <RadioGroup aria-label="position" name="position"  onChange={this.handleCheckWazaGroup}>
+              {this.state.customizedWazas.map((waza: waza, i: number) => {
+                if (i > 4) {return true}
+                return (<FormControlLabel
+                  value={waza.name}
+                  control={<Radio color="primary"/>}
+                  label={waza.name}
+                  labelPlacement="end"
+                  style={{marginLeft: 0}}
+                  key={i}
+                  checked={this.state.selectedWaza.name === waza.name}
+                />)
+              })}
+            </RadioGroup>
+          </Grid>
+        </Grid>
       </Collapse>
       <ListItem button onClick={this.handleClickOpenEffort}>
         <ListItemText primary="努力値" />
