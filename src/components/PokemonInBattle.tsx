@@ -18,10 +18,10 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import  {name2Pokemon, PokemonData, makeDB, waza}  from './shared';
 import  {getPokemonByName, getWazas}  from './shared_js';
 import { computeStatus, natures } from './ComputeMethods'
-import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem } from '@material-ui/core';
+import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import { element } from 'prop-types';
+
 interface Props{
   backParty(): any;
   name: string;
@@ -57,6 +57,8 @@ export interface PokemonInBattleState{
   IndividualC: number;
   IndividualD: number;
   IndividualS: number;
+  wazaLabel: any;
+  inputWaza: any;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -114,6 +116,8 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       IndividualC: 31,
       IndividualD: 31,
       IndividualS: 31,
+      wazaLabel: [],
+      inputWaza: "りゅうせいぐん"
     };
   }
 
@@ -135,6 +139,11 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     })
   }
   componentDidMount() {
+    const wazaLabels: any = []
+    this.props.wazas.forEach((element) => {
+      wazaLabels.push({lanel: element.name})
+    })
+    this.setState({ wazaLabel: wazaLabels })
     if (this.state.pokemonData.name != this.props.name) {
       this.setState({ loading: true })
       const pokemon: any = this.props.pokemons.find((element) => {
@@ -431,6 +440,9 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
   }
+  handleChangeInputWaza = () => (event: React.ChangeEvent<{ name?: string; value: unknown }>, child: React.ReactNode) => {
+    this.setState({ inputWaza: event.target.value })
+  }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
       this.setState({ effortHP: value })
@@ -491,6 +503,21 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
         {this.state.isOpenWaza ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={this.state.isOpenWaza} timeout="auto" unmountOnExit>
+        <Select
+            inputId="react-select-single"
+            TextFieldProps={{
+              label: 'Move Name',
+              InputLabelProps: {
+                htmlFor: 'react-select-single',
+                shrink: true,
+              },
+            }}
+            placeholder="りゅうせいぐん"
+            options={this.state.wazaLabel}
+            // components={components}
+            value={this.state.inputWaza}
+            onChange={this.handleChangeInputWaza()}
+          />
         <List component="div" disablePadding>
           <ListItem button className="nested">
             <ListItemAvatar>
