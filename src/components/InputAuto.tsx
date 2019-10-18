@@ -20,9 +20,6 @@ import { ValueType } from 'react-select/src/types';
 import { Omit } from '@material-ui/types';
 import { wazaData } from './WazaData'
 import { PokemonData, waza } from './shared';
-import { Method } from '@babel/types';
-import { element } from 'prop-types';
-
 interface OptionType {
   label: string;
   value: string;
@@ -261,7 +258,6 @@ export default function InputAuto(props: Props) {
               htmlFor: 'react-select-single',
               shrink: true,
             },
-            // onclick: {handleClickSingle}
           }}
           placeholder=""
           options={suggestions}

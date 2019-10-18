@@ -36,6 +36,7 @@ export interface PokemonInBattleState{
   isOpenEffort: boolean;
   isOpenWaza: boolean;
   isOpenNature?: any;
+  isOpenAbility?: any;
   isOpenNatureBool: boolean;
   effortForm: string;
   pokemonData: PokemonData;
@@ -63,6 +64,7 @@ export interface PokemonInBattleState{
   inputWaza: waza;
   selectedWaza: waza;
   customizedWazas: waza[];
+  selectedAbility: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -97,6 +99,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       isOpenEffort: false,
       isOpenWaza: false,
       isOpenNature: null,
+      isOpenAbility: null,
       isOpenNatureBool: false,
       effortForm: "slider",
       pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
@@ -123,7 +126,8 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       wazaLabel: [],
       customizedWazas: [],
       inputWaza: {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"},
-      selectedWaza: {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
+      selectedWaza: {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"},
+      selectedAbility: ""
     };
   }
 
@@ -167,6 +171,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
           statusC: Math.floor(pokemon.statusC),
           statusD: Math.floor(pokemon.statusD),
           statusS: Math.floor(pokemon.statusS),
+          selectedAbility: pokemon.pokemonData.ability1
         })
       },200)
     }
@@ -230,6 +235,30 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
         </div>
       )
     }
+  }
+  renderAbility = () => {
+    if (this.state.pokemonData.ability2 != "") {
+      if (this.state.pokemonData.ability3 != "") {
+        return (
+          <div>
+            <MenuItem selected={this.state.pokemonData.ability2 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
+              {this.state.pokemonData.ability2}
+            </MenuItem>
+            <MenuItem selected={this.state.pokemonData.ability3 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability3);this.closeAbility(event);}}>
+              {this.state.pokemonData.ability3}
+            </MenuItem>
+          </div>
+        )
+      }
+      return (
+        <div>
+          <MenuItem selected={this.state.pokemonData.ability2 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
+            {this.state.pokemonData.ability2}
+          </MenuItem>
+        </div>
+      )
+    }
+    return
   }
   renderEffortForm = () => {
     if (this.state.effortForm == "slider") {
@@ -445,6 +474,12 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   closeNature = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenNature: null})
   }
+  openAbility = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenAbility: event.currentTarget})
+  }
+  closeAbility = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenAbility: null})
+  }
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
   }
@@ -467,6 +502,9 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     setTimeout(() => {
       console.log(this.state.selectedWaza)
     }, 200)
+  }
+  handleAbility = (name: string) => {
+    this.setState({ selectedAbility: name })
   }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
@@ -552,6 +590,30 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
                 />)
               })}
             </RadioGroup>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Grid container>
+            <Button onClick={this.openAbility} variant="outlined" color="secondary" style={{height: 35,width: 125}}>
+              {this.state.selectedAbility}▼
+            </Button>
+            <Menu
+              id="long-menu"
+              anchorEl={this.state.isOpenAbility}
+              open={Boolean(this.state.isOpenAbility)}
+              onClose={this.closeAbility}
+              PaperProps={{
+                style: {
+                  maxHeight: 216,
+                  width: 200,
+                },
+              }}
+            >
+              <MenuItem selected={this.state.pokemonData.ability1 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability1);this.closeAbility(event);}}>
+                {this.state.pokemonData.ability1}
+              </MenuItem>
+              {this.renderAbility()}
+            </Menu>
           </Grid>
         </Grid>
       </Collapse>
