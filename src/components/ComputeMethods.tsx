@@ -1,5 +1,5 @@
 import React from 'react';
-import { PokemonData } from '../components/shared'
+import { PokemonData, Status, waza } from '../components/shared'
 import { PokemonInBattleState } from './PokemonInBattle';
 import { element } from 'prop-types';
 
@@ -206,6 +206,160 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
     return pokemon
 }
 
-export function DamageCalculate(myState: PokemonInBattleState, oppoState: PokemonInBattleState) {
+export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData) {
+	// level=50
+	const level: number = 50 * 2 / 5 + 2
+	console.log(level)
+	const power: number = attackWaza.power
+	let AorC: number = 0
+	let BorD: number = 0
+	if (attackWaza.species === "物理") {
+		AorC = attackStatus.statusA
+		BorD = defenceStatus.statusB
+	}
+	if (attackWaza.species === "特殊") {
+		AorC = attackStatus.statusC
+		BorD = defenceStatus.statusD
+	}
+	if (attackWaza.species === "変化") {
+		// return 000
+	}
+	let damage: number = Math.floor(level * power * AorC / BorD / 50)
+	// 天候
+	// 急所
+	// 乱数
+	if (attackWaza)
+	damage = Math.floor(damage * )
+}
 
+export function TypeCompatibility(attackType: string, defencePokemon: PokemonData): number {
+	if (attackType === "ノーマル") {
+		if (defencePokemon.type1 === "ゴースト" || defencePokemon.type2 === "ゴースト") {
+			return 0
+		}
+		if (defencePokemon.type1 === "いわ" || defencePokemon.type2 === "いわ") {
+			if (defencePokemon.type1 === "はがね" || defencePokemon.type2 === "はがね") {
+				return 0.25
+			}
+			return 0.5
+		}
+		if (defencePokemon.type1 === "はがね" || defencePokemon.type2 === "はがね") {
+			return 0.5
+		}
+	}
+	let imahitotu: string[] = []
+	let batugun: string[] = []
+	let mukou: string[] = []
+	if (attackType === "ほのお") {
+		imahitotu = ["ほのお","みず","いわ","ドラゴン"]
+		batugun = ["くさ","こおり","むし","はがね"]
+	}
+	if (attackType === "みず") {
+		imahitotu = ["くさ","みず","ドラゴン"]
+		batugun = ["ほのお","じめん","いわ"]
+	}
+	if (attackType === "でんき") {
+		mukou = ["じめん"]
+		imahitotu = ["でんき","くさ","ドラゴン"]
+		batugun = ["みず","ひこう"]
+	}
+	if (attackType === "くさ") {
+		mukou = []
+		imahitotu = ["ほのお","くさ","ドラゴン","ひこう","どく","むし","はがね"]
+		batugun = ["みず","じめん","いわ"]
+	}
+	if (attackType === "こおり") {
+		mukou = []
+		imahitotu = ["ほのお","みず","こおり","はがね"]
+		batugun = ["くさ","じめん","ドラゴン","ひこう"]
+	}
+	if (attackType === "かくとう") {
+		mukou = ["ゴースト"]
+		imahitotu = ["どく","ひこう","エスパー","むし","フェアリー"]
+		batugun = ["ノーマル","こおり","はがね","いわ","あく"]
+	}
+	if (attackType === "どく") {
+		mukou = ["はがね"]
+		imahitotu = ["どく","じめん","いわ","ゴースト"]
+		batugun = ["くさ","フェアリー"]
+	}
+	if (attackType === "じめん") {
+		mukou = ["ひこう"]
+		imahitotu = ["くさ","むし"]
+		batugun = ["ほのお","でんき","どく","いわ","はがね"]
+	}
+	if (attackType === "ひこう") {
+		mukou = []
+		imahitotu = ["でんき","いわ","はがね"]
+		batugun = ["くさ","かくとう","むし"]
+	}
+	if (attackType === "エスパー") {
+		mukou = ["あく"]
+		imahitotu = ["エスパー","はがね"]
+		batugun = ["かくとう","どく"]
+	}
+	if (attackType === "むし") {
+		mukou = []
+		imahitotu = ["ほのお","かくとう","どく","ひこう","フェアリー","ゴースト","はがね"]
+		batugun = ["くさ","エスパー","あく"]
+	}
+	if (attackType === "いわ") {
+		mukou = []
+		imahitotu = ["かくとう","じめん","はがね"]
+		batugun = ["ほのお","こおり","むし","ひこう"]
+	}
+	if (attackType === "ゴースト") {
+		mukou = ["ノーマル"]
+		imahitotu = ["あく"]
+		batugun = ["エスパー","ゴースト"]
+	}
+	if (attackType === "ドラゴン") {
+		mukou = ["フェアリー"]
+		imahitotu = ["はがね"]
+		batugun = ["ドラゴン"]
+	}
+	if (attackType === "あく") {
+		mukou = []
+		imahitotu = ["かくとう","フェアリー","あく"]
+		batugun = ["エスパー","ゴースト"]
+	}
+	if (attackType === "はがね") {
+		mukou = []
+		imahitotu = ["ほのお","みず","でんき","はがね"]
+		batugun = ["いわ","フェアリー","こおり"]
+	}
+	if (attackType === "フェアリー") {
+		mukou = []
+		imahitotu = ["ほのお","どく","はがね"]
+		batugun = ["あく","かくとう","ドラゴン"]
+	}
+	if (batugun.length === 0) { alert("attackType is null") }
+	if (mukou.find((element) => {return (element === defencePokemon.type1 || element === defencePokemon.type2)})) {
+		return 0
+	}
+	if (imahitotu.find((element) => {return (element === defencePokemon.type1)})) {
+		if (imahitotu.find((element) => {return (element === defencePokemon.type2)})) {
+			return 0.25
+		}
+		return 0.5
+	}
+	if (imahitotu.find((element) => {return (element === defencePokemon.type2)})) {
+		if (imahitotu.find((element) => {return (element === defencePokemon.type1)})) {
+			return 0.25
+		}
+		return 0.5
+	}
+	if (batugun.find((element) => {return (element === defencePokemon.type1)})) {
+		if (batugun.find((element) => {return (element === defencePokemon.type2)})) {
+			return 4
+		}
+		return 2
+	}
+	if (batugun.find((element) => {return (element === defencePokemon.type2)})) {
+		if (batugun.find((element) => {return (element === defencePokemon.type1)})) {
+			return 4
+		}
+		return 2
+	}
+	return 1
 }
