@@ -3,7 +3,8 @@ import React from 'react';
 import './App.css';
 import ParentTabs from './components/ParentTabs'
 import {getPokemons, insertPokemonDatas, getWazas, insertWazaDatas} from '../src/components/shared_js'
-import { PokemonData, waza } from './components/shared'
+import { PokemonData, waza, datas } from './components/shared'
+import {wazaData} from './components/WazaData'
 import { CircularProgress } from '@material-ui/core';
 
 interface Props{
@@ -28,40 +29,42 @@ export default class App extends React.Component<Props,State>{
   }
   componentDidMount() {
     if (!this.state.initialized1) {
-      getPokemons()
-        .then(res => {
-          let result: any = res
-          if (result.length === 0) {
-            insertPokemonDatas()
-              .then(() => {
-                getPokemons()
-                  .then(res => {
-                    this.setState({ initialized1: true, pokemons: res})
-                  })
-                  .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
-              })
-              .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
-          }
-          this.setState({ initialized1: true, pokemons: res})
-        })
-        .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+      this.setState({ initialized1: true, pokemons: datas})
+      // getPokemons()
+      //   .then(res => {
+      //     let result: any = res
+      //     if (result.length === 0) {
+      //       insertPokemonDatas()
+      //         .then(() => {
+      //           getPokemons()
+      //             .then(res => {
+      //               this.setState({ initialized1: true, pokemons: res})
+      //             })
+      //             .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+      //         })
+      //         .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+      //     }
+      //     this.setState({ initialized1: true, pokemons: res})
+      //   })
+      //   .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
     }
     if (!this.state.initialized2){
-      getWazas()
-        .then(res => {
-          if (res.length === 0) {
-            insertWazaDatas()
-            .then(() => {
-              getWazas()
-                .then(res => {
-                  this.setState({ initialized2: true, wazas: res })
-                })
-                .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
-            })
-            .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
-          }
-          this.setState({ initialized2: true, wazas: res })
-        })
+      this.setState({ initialized2: true, wazas: wazaData })
+      // getWazas()
+      //   .then(res => {
+      //     if (res.length === 0) {
+      //       insertWazaDatas()
+      //       .then(() => {
+      //         getWazas()
+      //           .then(res => {
+      //             this.setState({ initialized2: true, wazas: res })
+      //           })
+      //           .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+      //       })
+      //       .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
+      //     }
+      //     this.setState({ initialized2: true, wazas: res })
+      //   })
         // .catch(e => { alert("エラーが発生しました。再起動してみてください。") })
     }
   }

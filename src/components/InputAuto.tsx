@@ -1,271 +1,116 @@
-import React, { CSSProperties, HTMLAttributes } from 'react';
-import clsx from 'clsx';
-import Select from 'react-select';
-import { createStyles, emphasize, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import NoSsr from '@material-ui/core/NoSsr';
-import TextField, { BaseTextFieldProps } from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
+import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
-import CancelIcon from '@material-ui/icons/Cancel';
-import { ValueContainerProps } from 'react-select/src/components/containers';
-import { ControlProps } from 'react-select/src/components/Control';
-import { MenuProps, NoticeProps } from 'react-select/src/components/Menu';
-import { MultiValueProps } from 'react-select/src/components/MultiValue';
-import { OptionProps } from 'react-select/src/components/Option';
-import { PlaceholderProps } from 'react-select/src/components/Placeholder';
-import { SingleValueProps } from 'react-select/src/components/SingleValue';
-import { ValueType } from 'react-select/src/types';
-import { Omit } from '@material-ui/types';
-import { wazaData } from './WazaData'
-import { PokemonData, waza } from './shared';
-interface OptionType {
-  label: string;
-  value: string;
-}
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { datas, waza } from './shared'
+import { TextField, Menu } from '@material-ui/core';
+import { wazaData } from './WazaData';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
-      // height: 250,
-      width: 220,
-    },
-    input: {
       display: 'flex',
-      padding: 0,
-      height: 'auto',
-    },
-    valueContainer: {
-      display: 'flex',
-      flexWrap: 'wrap',
-      flex: 1,
-      alignItems: 'center',
-      overflow: 'hidden',
-    },
-    chip: {
-      margin: theme.spacing(0.5, 0.25),
-    },
-    chipFocused: {
-      backgroundColor: emphasize(
-        theme.palette.type === 'light' ? theme.palette.grey[300] : theme.palette.grey[700],
-        0.08,
-      ),
-    },
-    noOptionsMessage: {
-      padding: theme.spacing(1, 2),
-    },
-    singleValue: {
-      fontSize: 16,
-    },
-    placeholder: {
-      position: 'absolute',
-      left: 2,
-      bottom: 6,
-      fontSize: 16,
     },
     paper: {
-      position: 'absolute',
-      zIndex: 1,
-      marginTop: theme.spacing(1),
-      left: 0,
-      right: 0,
-    },
-    divider: {
-      height: theme.spacing(2),
+      marginRight: theme.spacing(2),
     },
   }),
 );
 
-function NoOptionsMessage(props: NoticeProps<OptionType>) {
-  return (
-    <Typography
-      color="textSecondary"
-      className={props.selectProps.classes.noOptionsMessage}
-      {...props.innerProps}
-    >
-      {props.children}
-    </Typography>
-  );
-}
-
-type InputComponentProps = Pick<BaseTextFieldProps, 'inputRef'> & HTMLAttributes<HTMLDivElement>;
-
-function inputComponent({ inputRef, ...props }: InputComponentProps) {
-  return <div ref={inputRef} {...props} />;
-}
-
-function Control(props: ControlProps<OptionType>) {
-  const {
-    children,
-    innerProps,
-    innerRef,
-    selectProps: { classes, TextFieldProps },
-  } = props;
-
-  return (
-    <TextField
-      fullWidth
-      InputProps={{
-        inputComponent,
-        inputProps: {
-          className: classes.input,
-          ref: innerRef,
-          children,
-          ...innerProps,
-        },
-      }}
-      {...TextFieldProps}
-    />
-  );
-}
-
-function Option(props: OptionProps<OptionType>) {
-  return (
-    <MenuItem
-      ref={props.innerRef}
-      selected={props.isFocused}
-      component="div"
-      style={{
-        fontWeight: props.isSelected ? 500 : 400,
-      }}
-      {...props.innerProps}
-    >
-      {props.children}
-    </MenuItem>
-  );
-}
-
-type MuiPlaceholderProps = Omit<PlaceholderProps<OptionType>, 'innerProps'> &
-  Partial<Pick<PlaceholderProps<OptionType>, 'innerProps'>>;
-function Placeholder(props: MuiPlaceholderProps) {
-  const { selectProps, innerProps = {}, children } = props;
-  return (
-    <Typography color="textSecondary" className={selectProps.classes.placeholder} {...innerProps}>
-      {children}
-    </Typography>
-  );
-}
-
-function SingleValue(props: SingleValueProps<OptionType>) {
-  return (
-    <Typography className={props.selectProps.classes.singleValue} {...props.innerProps}>
-      {props.children}
-    </Typography>
-  );
-}
-
-function ValueContainer(props: ValueContainerProps<OptionType>) {
-  return <div className={props.selectProps.classes.valueContainer}>{props.children}</div>;
-}
-
-function MultiValue(props: MultiValueProps<OptionType>) {
-  return (
-    <Chip
-      tabIndex={-1}
-      label={props.children}
-      className={clsx(props.selectProps.classes.chip, {
-        [props.selectProps.classes.chipFocused]: props.isFocused,
-      })}
-      onDelete={props.removeProps.onClick}
-      deleteIcon={<CancelIcon {...props.removeProps} />}
-    />
-  );
-}
-
-function Menu(props: MenuProps<OptionType>) {
-  return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
-      {props.children}
-    </Paper>
-  );
-}
-
-const components = {
-  Control,
-  Menu,
-  MultiValue,
-  NoOptionsMessage,
-  Option,
-  Placeholder,
-  SingleValue,
-  ValueContainer,
-};
-
 interface Props {
-  datas: any;
-  handleInput: any;
+  handleInput: any
+  datas: waza[]
 }
 
-export default function InputAuto(props: Props) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [single, setSingle] = React.useState<ValueType<OptionType>>(null);
-  const [comittedTime, setCommittedTime] = React.useState<any>(null);
+interface State {
+  isOpenSuggest?: any
+  nowSuggest: waza[]
+  nowInput: string
+  open: boolean
+}
 
-  const suggestions: OptionType[] = props.datas.map((suggestion: any) => ({
-    value: suggestion.name,
-    label: suggestion.name,
-  }));
-
-  const handleChangeSingle = (value: any) => {
-    const inputted: waza|PokemonData = props.datas.find((element: waza|PokemonData) => {
-      return element.name === value.label
-    })
-    setSingle(value);
-    props.handleInput(inputted)
-    const now = new Date()
-    setCommittedTime(now.getTime())
-    setTimeout(() => {
-      const now = new Date()
-      if (comittedTime && now.getTime() > comittedTime + 2000){
-        setSingle(value);
+export default class InputAuto extends React.Component<Props,State> {
+  constructor(props: Readonly<Props>) {
+    super(props);
+    this.state = {
+      isOpenSuggest: null,
+      nowSuggest: [],
+      nowInput: "",
+      open: false
+    };
+  }
+  handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    let updateSuggest: waza[] = []
+    let str: string = event.target.value
+    const pst: string = event.target.value
+    str = str.replace(/[\u3041-\u3096]/g, function(match) {
+      const chr = match.charCodeAt(0) + 0x60;
+      return String.fromCharCode(chr);
+    });
+    if (event.target.value.length > 0) {
+      if (this.state.nowSuggest.length > 0) {
+        updateSuggest = this.state.nowSuggest.filter((element) => {
+          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1)
+        })
+      } else {
+        updateSuggest = this.props.datas.filter((element) => {
+          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1)
+        })
       }
-    }, 100);
-  };
-
-  const handleClickSingle = () => {
-
+    }
+    if (updateSuggest.length === 0) {
+      this.setState({ nowSuggest: updateSuggest , open: false, nowInput: event.target.value })
+    }
+    this.setState({ nowSuggest: updateSuggest , isOpenSuggest: event.currentTarget})
+    this.setState({ nowInput: event.target.value })
     setTimeout(() => {
-      const now = new Date()
-      if (comittedTime && now.getTime() > comittedTime + 2000){
-        setSingle(null);
+      if (this.state.nowInput === pst && this.state.nowSuggest.length != 0) {
+        this.setState({ open: true })
       }
-    }, 50);
-  };
+    }, 800)
+  }
 
-  const selectStyles = {
-    input: (base: CSSProperties) => ({
-      ...base,
-      color: theme.palette.text.primary,
-      '& input': {
-        font: 'inherit',
-      },
-    }),
-  };
+  handleSelect = (pokemon: waza) => {
+    this.props.handleInput(pokemon)
+    this.setState({ nowInput: pokemon.name })
+  }
 
-  return (
-    <div className={classes.root} onClick={handleClickSingle}>
-      <NoSsr>
-        <Select
-          classes={classes}
-          styles={selectStyles}
-          inputId="react-select-single"
-          TextFieldProps={{
-            label: '',
-            InputLabelProps: {
-              htmlFor: 'react-select-single',
-              shrink: true,
-            },
-          }}
-          placeholder=""
-          options={suggestions}
-          components={components}
-          value={single}
-          onChange={handleChangeSingle}
+  openSuggest = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenSuggest: event.currentTarget})
+    console.log(event.currentTarget)
+  }
+  closeSuggest = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ open: false })
+  }
+  render() {
+    return (
+      <div>
+        <TextField
+          value={this.state.nowInput}
+          style={{margin: 0, zIndex: 10, marginTop: 3}}
+          onChange={this.handleInput()}
         />
-      </NoSsr>
-    </div>
-  );
+          <Menu
+            id="long-menu"
+            anchorEl={this.state.isOpenSuggest}
+            open={this.state.open}
+            getContentAnchorEl={null}
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            onClose={this.closeSuggest}
+            transformOrigin={{ vertical: "top", horizontal: "center" }}
+            PaperProps={{
+              style: {
+                maxHeight: 216,
+                width: 200,
+              },
+            }}
+          >
+            {this.state.nowSuggest.map((element: waza, indec: number, array: waza[]) => {
+              return (
+                <MenuItem onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleSelect(element);this.closeSuggest(event);}} key={indec}>{element.name}</MenuItem>
+              )
+            })}
+          </Menu>
+      </div>
+    )
+  }
 }

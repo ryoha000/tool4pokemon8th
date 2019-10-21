@@ -29,6 +29,15 @@ export interface waza{
     _id?: string;
 }
 
+export interface Status {
+    statusH: number;
+    statusA: number;
+    statusB: number;
+    statusC: number;
+    statusD: number;
+    statusS: number;
+}
+
 interface Promise<PokemonData> {
     number: string;
     name: string;
@@ -63,8 +72,8 @@ export const datas = [
     {number:"4",name:"ヒトカゲ",type1:"ほのお",type2:"",ability1:"もうか",ability2:"サンパワー",ability3:"",base_h:39,base_a:52,base_b:43,base_c:60,base_d:50,base_s:65,heavy:"f"},
     {number:"5",name:"リザード",type1:"ほのお",type2:"",ability1:"もうか",ability2:"サンパワー",ability3:"",base_h:58,base_a:64,base_b:58,base_c:80,base_d:65,base_s:80,heavy:"e"},
     {number:"6",name:"リザードン",type1:"ほのお",type2:"ひこう",ability1:"もうか",ability2:"サンパワー",ability3:"",base_h:78,base_a:84,base_b:78,base_c:109,base_d:85,base_s:100,heavy:"c"},
-    {number:"006m",name:"メガリザードンX",type1:"ほのお",type2:"ドラゴン",ability1:"かたいツメ",ability2:"",ability3:"",base_h:78,base_a:130,base_b:111,base_c:130,base_d:85,base_s:100,heavy:"b"},
-    {number:"006m",name:"メガリザードンY",type1:"ほのお",type2:"ひこう",ability1:"ひでり",ability2:"",ability3:"",base_h:78,base_a:104,base_b:78,base_c:159,base_d:115,base_s:100,heavy:"b"},
+    {number:"006mx",name:"メガリザードンX",type1:"ほのお",type2:"ドラゴン",ability1:"かたいツメ",ability2:"",ability3:"",base_h:78,base_a:130,base_b:111,base_c:130,base_d:85,base_s:100,heavy:"b"},
+    {number:"006my",name:"メガリザードンY",type1:"ほのお",type2:"ひこう",ability1:"ひでり",ability2:"",ability3:"",base_h:78,base_a:104,base_b:78,base_c:159,base_d:115,base_s:100,heavy:"b"},
     {number:"7",name:"ゼニガメ",type1:"みず",type2:"",ability1:"げきりゅう",ability2:"あめうけざら",ability3:"",base_h:44,base_a:48,base_b:65,base_c:50,base_d:64,base_s:43,heavy:"f"},
     {number:"8",name:"カメール",type1:"みず",type2:"",ability1:"げきりゅう",ability2:"あめうけざら",ability3:"",base_h:59,base_a:63,base_b:80,base_c:65,base_d:80,base_s:58,heavy:"e"},
     {number:"9",name:"カメックス",type1:"みず",type2:"",ability1:"げきりゅう",ability2:"あめうけざら",ability3:"",base_h:79,base_a:83,base_b:100,base_c:85,base_d:105,base_s:78,heavy:"c"},

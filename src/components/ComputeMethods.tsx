@@ -164,44 +164,48 @@ export const natures: Nature[] = [
 ]
 
 export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleState {
-    pokemon.statusH = pokemon.pokemonData.base_h + pokemon.IndividualH / 2 + pokemon.effortHP / 8 + 60
-    pokemon.statusA = pokemon.pokemonData.base_a + pokemon.IndividualA / 2 + pokemon.effortA / 8 + 5
-    pokemon.statusB = pokemon.pokemonData.base_b + pokemon.IndividualB / 2 + pokemon.effortB / 8 + 5
-    pokemon.statusC = pokemon.pokemonData.base_c + pokemon.IndividualC / 2 + pokemon.effortC / 8 + 5
-    pokemon.statusD = pokemon.pokemonData.base_d + pokemon.IndividualD / 2 + pokemon.effortD / 8 + 5
-    pokemon.statusS = pokemon.pokemonData.base_s + pokemon.IndividualS / 2 + pokemon.effortS / 8 + 5
+    pokemon.status.statusH = pokemon.pokemonData.base_h + pokemon.IndividualH / 2 + pokemon.effortHP / 8 + 60
+    pokemon.status.statusA = pokemon.pokemonData.base_a + pokemon.IndividualA / 2 + pokemon.effortA / 8 + 5
+    pokemon.status.statusB = pokemon.pokemonData.base_b + pokemon.IndividualB / 2 + pokemon.effortB / 8 + 5
+    pokemon.status.statusC = pokemon.pokemonData.base_c + pokemon.IndividualC / 2 + pokemon.effortC / 8 + 5
+    pokemon.status.statusD = pokemon.pokemonData.base_d + pokemon.IndividualD / 2 + pokemon.effortD / 8 + 5
+    pokemon.status.statusS = pokemon.pokemonData.base_s + pokemon.IndividualS / 2 + pokemon.effortS / 8 + 5
     const nature: any = natures.find((element) => {
         return element.name === pokemon.natureName
     })
     if (nature.upStatus === "A") {
-        pokemon.statusA *= 1.1
+        pokemon.status.statusA *= 1.1
     }
     if (nature.upStatus === "B") {
-        pokemon.statusB *= 1.1
+        pokemon.status.statusB *= 1.1
     }
     if (nature.upStatus === "C") {
-        pokemon.statusC *= 1.1
+        pokemon.status.statusC *= 1.1
     }
     if (nature.upStatus === "D") {
-        pokemon.statusD *= 1.1
+        pokemon.status.statusD *= 1.1
     }
     if (nature.upStatus === "S") {
-        pokemon.statusS *= 1.1
+        pokemon.status.statusS *= 1.1
     }
     if (nature.downStatus === "A") {
-        pokemon.statusA *= 0.9
+        pokemon.status.statusA *= 0.9
     }
     if (nature.downStatus === "B") {
-        pokemon.statusB *= 0.9
+        pokemon.status.statusB *= 0.9
     }
     if (nature.downStatus === "C") {
-        pokemon.statusC *= 0.9
+        pokemon.status.statusC *= 0.9
     }
     if (nature.downStatus === "D") {
-        pokemon.statusD *= 0.9
+        pokemon.status.statusD *= 0.9
     }
     if (nature.downStatus === "S") {
-        pokemon.statusS *= 0.9
+        pokemon.status.statusS *= 0.9
     }
     return pokemon
+}
+
+export function DamageCalculate(myState: PokemonInBattleState, oppoState: PokemonInBattleState) {
+
 }
