@@ -26,6 +26,9 @@ export const availableItems: Item[] = [
         name: "しらたま"
     },
     {
+        name: "はっきんだま"
+    },
+    {
         name: "しんかいのきば"
     },
     {

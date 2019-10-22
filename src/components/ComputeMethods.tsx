@@ -2,12 +2,22 @@ import React from 'react';
 import { PokemonData, Status, waza } from '../components/shared'
 import { PokemonInBattleState } from './PokemonInBattle';
 import { element } from 'prop-types';
+import { powerNature, powerItem, powerWaza } from './CalculateData'
+import { border } from '@material-ui/system';
 
 interface Nature{
     id: number;
     name: string;
     upStatus: string;
     downStatus: string;
+}
+
+export interface CheckOptions {
+	attackWaza: boolean
+	attackItem: boolean
+	defenceItem: boolean
+	attackNature: boolean
+	defenceNature: boolean
 }
 
 export const natures: Nature[] = [
@@ -206,12 +216,138 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
     return pokemon
 }
 
-export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number): number {
+export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, other: string): number[] {
 	// level=50
 	const level: number = 50 * 2 / 5 + 2
 	console.log(level)
-  const power: number = attackWaza.power
-  // *威力の補正/4096 五捨五超入 1より小さいなら1 x
+	let power: number = attackWaza.power
+	let item = powerItem.find((element) => {return(element.name === attackItem)})
+	if (checkOptions.attackItem) {
+		if (item) {
+			power = Math.round(power * item.number / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	item = powerItem.find((element) => {return(element.name === defenceItem)})
+	if(checkOptions.defenceItem) {
+		if (item) {
+			power = Math.round(power * item.number / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	let nature = powerNature.find((element) => {return(element.name === attackNature)})
+	if (checkOptions.attackNature) {
+		if (nature) {
+			power = Math.round(power * nature.number / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	nature = powerNature.find((element) => {return(element.name === defenceNature)})
+	if (checkOptions.defenceNature) {
+		if (nature) {
+			power = Math.round(power * nature.number / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	let waza = powerWaza.find((element) => {return(element.name === attackWaza.name)})
+	if (checkOptions.attackWaza) {
+		if (waza) {
+			power = Math.round(power * waza.number / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	if (other === "みずあそび" || attackWaza.type === "ほのお") {
+		power = Math.round(power * 1352 / 4096)
+	}
+	if (power < 1) {power = 1}
+	if (other === "どろあそび" || attackWaza.type === "でんき") {
+		power = Math.round(power * 1352 / 4096)
+	}
+	if (power < 1) {power = 1}
+	if (other === "クロスサンダー+クロスフレイムの後") {
+		power = Math.round(power * 8192 / 4096)
+	}
+	if (power < 1) {power = 1}
+	if (field === "エレキ") {
+		if (attackWaza.type === "でんき") {
+			power = Math.round(power * 6144 / 4096)
+		}
+		if (attackWaza.name === "しぜんのちから") {
+			attackWaza = {name:"10まんボルト",	type:"でんき",	power:90,	accuracy:100,	species:"特殊"}
+		}
+	}
+	if (power < 1) {power = 1}
+	if (field === "グラス") {
+		if (attackWaza.type === "くさ") {
+			power = Math.round(power * 6144 / 4096)
+		}
+		if (attackWaza.name === "しぜんのちから") {
+			attackWaza = {name:"エナジーボール",	type:"くさ",	power:90,	accuracy:100,	species:"特殊"}
+		}
+		if (attackWaza.name === "じしん" || attackWaza.name === "じならし" || attackWaza.name === "マグニチュード") {
+			power = Math.round(power * 2048 / 4096)
+		}
+	}
+	if (power < 1) {power = 1}
+	if (field === "ミスト") {
+		if (attackWaza.type === "ドラゴン") {
+			power = Math.round(power * 2048 / 4096)
+		}
+		if (attackWaza.name === "しぜんのちから") {
+			attackWaza = {name:"ムーンフォース",	type:"フェアリー",	power:95,	accuracy:100,	species:"特殊"}
+		}
+	}
+	if (power < 1) {power = 1}
+	if (field === "サイコ") {
+		if (attackWaza.type === "エスパー") {
+			power = Math.round(power * 6144 / 4096)
+		}
+		if (attackWaza.name === "しぜんのちから") {
+		  attackWaza = {name:"サイコキネシス",	type:"エスパー",	power:90,	accuracy:100,	species:"特殊"}
+		}
+	}
+	if (power < 1) {power = 1}
+	let AorC: number = 0
+	let BorD: number = 0
+	if (attackWaza.species === "物理") {
+		AorC = attackStatus.statusA
+		BorD = defenceStatus.statusB
+	}
+	if (attackWaza.species === "特殊") {
+		AorC = attackStatus.statusC
+		BorD = defenceStatus.statusD
+	}
+	if (attackWaza.species === "変化") {
+		// return 000
+	}
+	let rankA: number = 1
+	let rankD: number = 1
+	if (attackRank > 0) {
+		rankA = (2 + attackRank) / 2
+	}
+	if (attackRank < 0) {
+		rankA = 2 / (2 - attackRank)
+	}
+	if (defenceRank > 0) {
+		rankD = (2 + defenceRank) / 2
+	}
+	if (defenceRank < 0) {
+		rankD = 2 / (2 - defenceRank)
+	}
+	AorC = Math.floor(AorC * rankA)
+	BorD = Math.floor(BorD * rankD)
+	if (attackNature === "はりきり" || checkOptions.attackNature) {
+		AorC = Math.floor(AorC * 6144 / 4096)
+	}
+	let damage: number = Math.floor(level * power * AorC / BorD / 50)
+	// 天候
+	// 急所
+	// 乱数
+	if (attackWaza.type === attackPokemon.type1 || attackWaza.type === attackPokemon.type2) {
+    damage = Math.floor(damage * 1.5)
+  }
+	// *威力の補正/4096 五捨五超入 1より小さいなら1 x done
+	// その他[{name: "みずあそび"},{name: "どろあそび"}, {name: クロスサンダー＋クロスフレイムの後}]
   // こうげき*ランク　切り捨て
   // はりきりだけ例外処理
   // *攻撃の補正/4096 五捨五超入 1より小さいなら1 y
@@ -230,26 +366,6 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
   // やけど　五捨五超入
   // *ダメージ補正 五捨五超入
   // http://pokemon-wiki.net/%E3%83%80%E3%83%A1%E3%83%BC%E3%82%B8%E8%A8%88%E7%AE%97%E5%BC%8F
-	let AorC: number = 0
-	let BorD: number = 0
-	if (attackWaza.species === "物理") {
-		AorC = attackStatus.statusA
-		BorD = defenceStatus.statusB
-	}
-	if (attackWaza.species === "特殊") {
-		AorC = attackStatus.statusC
-		BorD = defenceStatus.statusD
-	}
-	if (attackWaza.species === "変化") {
-		// return 000
-	}
-	let damage: number = Math.floor(level * power * AorC / BorD / 50)
-	// 天候
-	// 急所
-	// 乱数
-	if (attackWaza.type === attackPokemon.type1 || attackWaza.type === attackPokemon.type2) {
-    damage = Math.floor(damage * 1.5)
-  }
   damage = Math.floor(damage * TypeCompatibility(attackWaza.type, defencePokemon))
   return damage
 }
