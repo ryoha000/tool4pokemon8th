@@ -28,8 +28,8 @@ interface State{
   openOppo: boolean;
   myParty: PokemonData[]
   oppoParty: PokemonData[]
-  mySelect: PokemonData
-  oppoSelect: PokemonData
+  mySelect?: PokemonData
+  oppoSelect?: PokemonData
   myStatus?: Status
   oppoStatus?: Status
   myWaza?: waza
@@ -63,8 +63,6 @@ export default class VersusTabs extends React.Component<Props,State> {
       openOppo: false,
       myParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}],
       oppoParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}],
-      mySelect: {number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
-      oppoSelect: {number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
     };
   }
   handleClickMyPoke = () => {
@@ -116,7 +114,6 @@ export default class VersusTabs extends React.Component<Props,State> {
   handleOppoSelect = (pokemon: PokemonData) => {
     this.setState({ oppoSelect: pokemon })
   }
-
   handleClickOppoPoke = () => {
     this.setState({ openOppo: !this.state.openOppo })
   };
@@ -124,10 +121,6 @@ export default class VersusTabs extends React.Component<Props,State> {
     this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime })
     console.log("oppowaza:" + myWaza + "time:" + myTime)
   };
-  // handleClickOppoPokeWithState = (oppoState: PokemonInBattleState) => {
-  //   this.setState({oppoState: oppoState })
-  //   console.log(oppoState)
-  // };
   renderPartyListMy = () => {
     return <List
                 component="nav"
@@ -154,27 +147,27 @@ export default class VersusTabs extends React.Component<Props,State> {
   }
   renderPartyListOppo = () => {
     return <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                subheader={
-                  <ListSubheader component="div" id="nested-list-subheader">
-                    Opponent's Party
-                  </ListSubheader>
-                }
-                style={{flexGrow: 1}}
-              >
-                <InputAutoPokemon handleInput={this.handleChangeInputOppoPokemon} />
-                {this.state.oppoParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
-                  return (
-                    <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element);}} key={i} disabled={element.number === "000"}>
-                      <ListItemAvatar>
-                        <PokemonIcon number={element.number}/>
-                      </ListItemAvatar>
-                      <ListItemText primary={element.name} />
-                    </ListItem>
-                  )
-                })}
-              </List>
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  Opponent's Party
+                </ListSubheader>
+              }
+              style={{flexGrow: 1}}
+            >
+              <InputAutoPokemon handleInput={this.handleChangeInputOppoPokemon} />
+              {this.state.oppoParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
+                return (
+                  <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element);}} key={i} disabled={element.number === "000"}>
+                    <ListItemAvatar>
+                      <PokemonIcon number={element.number}/>
+                    </ListItemAvatar>
+                    <ListItemText primary={element.name} />
+                  </ListItem>
+                )
+              })}
+            </List>
   }
   render() {
     return (

@@ -13,7 +13,19 @@ export default class HPbar extends Component {
       randomHPColor: "rgb(100, 150, 26)"
     };
   }
-  componentDidMount() {
+  // componentDidMount() {
+  //   if (this.props.confirmHP !== this.state.confirmHP) {
+  //     this.setState({ confirmHP: Math.floor(this.props.confirmHP * 2.4), randomHPRange: Math.floor(this.props.lostHP * 2.4 - this.props.confirmHP * 2.4), lostHP: Math.floor(this.props.lostHP * 2.4) })
+  //     if (this.props.confirmHP > 50) {
+  //       this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
+  //     } else if (this.props.confirmHP > 20) {
+  //       this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
+  //     } else {
+  //       this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
+  //     }
+  //   }
+  // }
+  componentDidUpdate() {
     if (this.props.confirmHP !== this.state.confirmHP) {
       this.setState({ confirmHP: Math.floor(this.props.confirmHP * 2.4), randomHPRange: Math.floor(this.props.lostHP * 2.4 - this.props.confirmHP * 2.4), lostHP: Math.floor(this.props.lostHP * 2.4) })
       if (this.props.confirmHP > 50) {
@@ -29,6 +41,9 @@ export default class HPbar extends Component {
     const minutes = Math.floor(parseInt(ref.style.width, 10) / 20) * 30;
     const hour = Math.floor(parseInt(position.x, 10) / 40);
     this.setState({ minutes, hour });
+  }
+  handleClick = () => {
+    this.setState({ randomHPRange: 0, lostHP: 0 , confirmHPColor: "greenyellow" })
   }
   render() {
     return (
@@ -55,6 +70,7 @@ export default class HPbar extends Component {
             bounds="parent"
             resizeGrid={[1, 0]}
             minWidth="1"
+            maxWidth="240"
             onResize={this.onResize}
           />
           <Rnd

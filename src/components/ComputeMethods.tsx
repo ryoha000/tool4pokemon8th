@@ -206,11 +206,30 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
     return pokemon
 }
 
-export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData) {
+export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number): number {
 	// level=50
 	const level: number = 50 * 2 / 5 + 2
 	console.log(level)
-	const power: number = attackWaza.power
+  const power: number = attackWaza.power
+  // *威力の補正/4096 五捨五超入 1より小さいなら1 x
+  // こうげき*ランク　切り捨て
+  // はりきりだけ例外処理
+  // *攻撃の補正/4096 五捨五超入 1より小さいなら1 y
+  // ぼうぎょ*ランク　切り捨て
+  // 砂嵐の例外処理
+  // *防御の補正/4096 五捨五超入 1より小さいなら1 z
+  // 22
+  // *x*y/z　切り捨て
+  // /50 + 2 切り捨て
+  // ダブルバトル処理
+  // 天候処理 五捨五超入
+  // 急所処理 五捨五超入
+  // 乱数 切り捨て
+  // 一致　五捨五超入
+  // 相性　切り捨て
+  // やけど　五捨五超入
+  // *ダメージ補正 五捨五超入
+  // http://pokemon-wiki.net/%E3%83%80%E3%83%A1%E3%83%BC%E3%82%B8%E8%A8%88%E7%AE%97%E5%BC%8F
 	let AorC: number = 0
 	let BorD: number = 0
 	if (attackWaza.species === "物理") {
@@ -228,28 +247,22 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	// 天候
 	// 急所
 	// 乱数
-	if (attackWaza)
-	damage = Math.floor(damage * )
+	if (attackWaza.type === attackPokemon.type1 || attackWaza.type === attackPokemon.type2) {
+    damage = Math.floor(damage * 1.5)
+  }
+  damage = Math.floor(damage * TypeCompatibility(attackWaza.type, defencePokemon))
+  return damage
 }
 
 export function TypeCompatibility(attackType: string, defencePokemon: PokemonData): number {
-	if (attackType === "ノーマル") {
-		if (defencePokemon.type1 === "ゴースト" || defencePokemon.type2 === "ゴースト") {
-			return 0
-		}
-		if (defencePokemon.type1 === "いわ" || defencePokemon.type2 === "いわ") {
-			if (defencePokemon.type1 === "はがね" || defencePokemon.type2 === "はがね") {
-				return 0.25
-			}
-			return 0.5
-		}
-		if (defencePokemon.type1 === "はがね" || defencePokemon.type2 === "はがね") {
-			return 0.5
-		}
-	}
 	let imahitotu: string[] = []
 	let batugun: string[] = []
-	let mukou: string[] = []
+  let mukou: string[] = []
+  if (attackType === "ノーマル") {
+    mukou = ["ゴースト"]
+		imahitotu = ["はがね","いわ"]
+		batugun = []
+	}
 	if (attackType === "ほのお") {
 		imahitotu = ["ほのお","みず","いわ","ドラゴン"]
 		batugun = ["くさ","こおり","むし","はがね"]
@@ -333,7 +346,7 @@ export function TypeCompatibility(attackType: string, defencePokemon: PokemonDat
 		imahitotu = ["ほのお","どく","はがね"]
 		batugun = ["あく","かくとう","ドラゴン"]
 	}
-	if (batugun.length === 0) { alert("attackType is null") }
+	if (imahitotu.length === 0) { alert("attackType is null") }
 	if (mukou.find((element) => {return (element === defencePokemon.type1 || element === defencePokemon.type2)})) {
 		return 0
 	}

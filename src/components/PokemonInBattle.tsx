@@ -20,7 +20,7 @@ import PokemonIcon from './PokemonIcon'
 interface Props{
   backParty: any;
   decidion: any
-  name: PokemonData;
+  name?: PokemonData;
   pokemons: PokemonData[];
   wazas: waza[];
   color: string
@@ -111,7 +111,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     this.setState({
       status: status
     })
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, 0)
   }
   componentDidMount() {
     const wazaLabels: any = []
@@ -119,23 +119,25 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       wazaLabels.push({lanel: element.name})
     })
     this.setState({ wazaLabel: wazaLabels })
-    if (this.state.pokemonData.name != this.props.name.name) {
-      this.setState({ loading: true })
-      const pokemon: PokemonData = this.props.name
-      console.log(pokemon)
-      this.setState({ pokemonData: pokemon })
-      if (!pokemon) { alert("指定されたポケモン名が不正です。再起動してみてください") }
-      setTimeout(() => {
-        const pokemon: PokemonInBattleState = computeStatus(this.state)
-        const status: Status = { statusH: Math.floor(pokemon.status.statusH), statusA: Math.floor(pokemon.status.statusA), statusB: Math.floor(pokemon.status.statusB), statusC: Math.floor(pokemon.status.statusC), statusD: Math.floor(pokemon.status.statusD), statusS: Math.floor(pokemon.status.statusS)}
-        this.setState({
-          loading: false,
-          status: status,
-          selectedAbility: pokemon.pokemonData.ability1
-        })
-        this.props.decidion(status, this.state.selectedWaza, this.state.wazaTime)
-        console.log(this.state.selectedWaza)
-      },50)
+    if (this.props.name) {
+      if (this.state.pokemonData.name != this.props.name.name) {
+        this.setState({ loading: true })
+        const pokemon: PokemonData = this.props.name
+        console.log(pokemon)
+        this.setState({ pokemonData: pokemon })
+        if (!pokemon) { alert("指定されたポケモン名が不正です。再起動してみてください") }
+        setTimeout(() => {
+          const pokemon: PokemonInBattleState = computeStatus(this.state)
+          const status: Status = { statusH: Math.floor(pokemon.status.statusH), statusA: Math.floor(pokemon.status.statusA), statusB: Math.floor(pokemon.status.statusB), statusC: Math.floor(pokemon.status.statusC), statusD: Math.floor(pokemon.status.statusD), statusS: Math.floor(pokemon.status.statusS)}
+          this.setState({
+            loading: false,
+            status: status,
+            selectedAbility: pokemon.pokemonData.ability1
+          })
+          this.props.decidion(status, this.state.selectedWaza, this.state.wazaTime)
+          console.log(this.state.selectedWaza)
+        },50)
+      }
     }
     this.setState({ customizedWazas: [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]})
   }
