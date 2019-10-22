@@ -176,7 +176,7 @@ export const powerWaza: Hosei[] = [
 	},
 ]
 
-export const attackNature: Hosei[] = [
+export const attackNatures: Hosei[] = [
 	{
 		name: "スロースタート",
 		number: 2048
@@ -238,7 +238,161 @@ export const attackNature: Hosei[] = [
 		number: 8192
 	},
 	{
-		name: "すいほう",
+		name: "すいほう(強化)",
 		number: 8192
+	},
+	{
+		name: "はりこみ",
+		number: 8192
+	},
+	{
+		name: "あついしぼう",
+		number: 2048
+	},
+	{
+		name: "すいほう(弱化)",
+		number: 2048
+	},
+]
+
+export const attackItems: Hosei[] = [
+	{
+		name: "こだわりハチマキ",
+		number: 6144
+	},
+	{
+		name: "こだわりメガネ",
+		number: 6144
+	},
+	{
+		name: "ふといホネ",
+		number: 8192
+	},
+	{
+		name: "しんかいのキバ",
+		number: 8192
+	},
+	{
+		name: "でんきだま",
+		number: 8192
+	},
+]
+
+export const defenceNatures: Hosei[] = [
+	{
+		name: "フラワーギフト",
+		number: 6144
+	},
+	{
+		name: "ふしぎなうろこ",
+		number: 6144
+	},
+	{
+		name: "くさのけがわ",
+		number: 6144
+	},
+	{
+		name: "ファーコート",
+		number: 8192
+	},
+]
+
+export const defenceItems: Hosei[] = [
+	{
+		name: "しんかのきせき",
+		number: 6144
+	},
+	{
+		name: "とつげきチョッキ",
+		number: 6144
+	},
+	{
+		name: "しんかいのウロコ",
+		number: 8192
+	},
+	{
+		name: "メタルパウダー",
+		number: 8192
+	},
+]
+export const damageNature: Hosei[] = [
+	{
+		name: "ブレインフォース",
+		number: 5120
+	},
+	{
+		name: "スナイパー",
+		number: 6144
+	},
+	{
+		name: "いろめがね",
+		number: 8192
+	},
+	{
+		name: "もふもふ(被炎)",
+		number: 8192
+	},
+	{
+		name: "マルチスケイル",
+		number: 2048
+	},
+	{
+		name: "ファントムガード",
+		number: 2048
+	},
+	{
+		name: "もふもふ(被接触)",
+		number: 2048
+	},
+	{
+		name: "フレンドガード",
+		number: 3072
+	},
+	{
+		name: "ハードロック",
+		number: 3072
+	},
+	{
+		name: "フィルター",
+		number: 3072
+	},
+	{
+		name: "プリズムアーマー",
+		number: 3072
+	},
+]
+
+export const damageItem: Hosei[] = [
+	{
+		name: "メトロノーム(2回目*1.2)",
+		number: 4915
+	},
+	{
+		name: "メトロノーム(3回目*1.4)",
+		number: 5734
+	},
+	{
+		name: "メトロノーム(4回目*1.6)",
+		number: 6553
+	},
+	{
+		name: "メトロノーム(5回目*1.8)",
+		number: 7372
+	},
+	{
+		name: "メトロノーム(6回目以降*2)",
+		number: 8192
+	},
+	{
+		name: "たつじんのおび",
+		number: 4915
+	},
+	{
+		name: "いのちのたま",
+		number: 5324
+	},
+	{
+		name: "半減きのみ",
+		number: 2048
 	},
 ]
