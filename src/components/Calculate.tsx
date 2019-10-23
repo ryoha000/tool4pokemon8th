@@ -242,6 +242,24 @@ export default class Calculate extends React.Component<Props,State> {
     checked.defenceNature = !checked.defenceNature
     this.setState({checkOption: checked})
   }
+  damage = () => {
+    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza) {
+      const damages: number[][] = DamageCalculate(this.state.attack.status, this.state.defence.status,
+        this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon,
+        this.state.attack.rank, this.state.defence.rank, "ここにフィールド(フィールドは略)", this.state.attack.item,
+        this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
+        this.state.checkOption, "ここにどろあそびとか", "ここに天候")
+      const useDamages: number[] = []
+      useDamages.push(damages[0][0]) // minD
+      useDamages.push(damages[0][15]) //maxD
+      useDamages.push(damages[1][0]) //minCD
+      useDamages.push(damages[1][15]) //maxCD
+      let i: number = -1
+      for (let j = 0;j < 16; j++) {
+        
+      }
+    }
+  }
   renderAttack = () => {
     if (this.state.attack) {
       return (
