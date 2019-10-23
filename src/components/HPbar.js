@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
 import './HPbar.css';
-// n=2.4
+// n=240
 export default class HPbar extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +15,7 @@ export default class HPbar extends Component {
   }
   // componentDidMount() {
   //   if (this.props.confirmHP !== this.state.confirmHP) {
-  //     this.setState({ confirmHP: Math.floor(this.props.confirmHP * 2.4), randomHPRange: Math.floor(this.props.lostHP * 2.4 - this.props.confirmHP * 2.4), lostHP: Math.floor(this.props.lostHP * 2.4) })
+  //     this.setState({ confirmHP: Math.floor(this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240 - this.props.confirmHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
   //     if (this.props.confirmHP > 50) {
   //       this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
   //     } else if (this.props.confirmHP > 20) {
@@ -26,11 +26,14 @@ export default class HPbar extends Component {
   //   }
   // }
   componentDidUpdate() {
-    if (this.props.confirmHP !== this.state.confirmHP) {
-      this.setState({ confirmHP: Math.floor(this.props.confirmHP * 2.4), randomHPRange: Math.floor(this.props.lostHP * 2.4 - this.props.confirmHP * 2.4), lostHP: Math.floor(this.props.lostHP * 2.4) })
-      if (this.props.confirmHP > 50) {
+    console.log(this.props.confirmHP)
+    console.log(this.state.confirmHP)
+    console.log(Math.floor(this.props.confirmHP * 240))
+    if (Math.floor(240 - this.props.confirmHP * 240) !== this.state.confirmHP) {
+      this.setState({ confirmHP: Math.floor(240 - this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240 - this.props.confirmHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
+      if (Math.floor(240 - this.props.confirmHP * 240) > 120) {
         this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
-      } else if (this.props.confirmHP > 20) {
+      } else if (Math.floor(240 - this.props.confirmHP * 240) > 48) {
         this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
       } else {
         this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
@@ -107,7 +110,7 @@ export default class HPbar extends Component {
             minWidth="1"
             style={{background: "rgb(58, 58, 58)"}}
           />
-        </div>
+        </div> 
       </div>
     );
   }

@@ -19,7 +19,7 @@ import InputAutoPokemon from './InputAutoPokemon'
 import HPbar from './HPbar'
 import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
 import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography } from '@material-ui/core';
-import { thisExpression } from '@babel/types';
+import { thisExpression, throwStatement } from '@babel/types';
 import { DamageCalculate, CheckOptions } from './ComputeMethods'
 import classes from '*.module.css';
 import { element } from 'prop-types';
@@ -250,15 +250,36 @@ export default class Calculate extends React.Component<Props,State> {
         this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
         this.state.checkOption, "ここにどろあそびとか", "ここに天候")
       const useDamages: number[] = []
-      useDamages.push(damages[0][0]) // minD
-      useDamages.push(damages[0][15]) //maxD
-      useDamages.push(damages[1][0]) //minCD
-      useDamages.push(damages[1][15]) //maxCD
+      useDamages.push(damages[0][0] / this.state.defence.status.statusH) // minD
+      useDamages.push(damages[0][15] / this.state.defence.status.statusH) //maxD
+      useDamages.push(damages[1][0] / this.state.defence.status.statusH) //minCD
+      useDamages.push(damages[1][15] / this.state.defence.status.statusH) //maxCD
       let i: number = -1
+      let ransu: number = 0 // 0なら確定n(n>1)発
+      let k: number = -1 // n(n>1)発
       for (let j = 0;j < 16; j++) {
-        
+        if (i !== -1) {
+          break
+        }
+        if (damages[0][j] > this.state.defence.status.statusH) {
+          i = j
+          i = Math.round((16 - i) / 16 * 100 * 100)/100
+        }
       }
+      if (i === -1) {
+        if (damages[0][15] > 0) {
+          k = Math.ceil(this.state.defence.status.statusH / damages[0][15])
+        } else {
+          k = -1
+        }
+        if (k !== -1 && damages[0][0] * k < this.state.defence.status.statusH) {
+          ransu = 1
+        }
+      }
+      useDamages.push(i, k, ransu)
+      return useDamages
     }
+    return []
   }
   renderAttack = () => {
     if (this.state.attack) {
@@ -364,11 +385,13 @@ export default class Calculate extends React.Component<Props,State> {
       return (
         <Grid item>
           <Typography>
-            {DamageCalculate(this.state.attack.status, this.state.defence.status,
-              this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon,
-              this.state.attack.rank, this.state.defence.rank, "ここにフィールド(フィールドは略)", this.state.attack.item,
-              this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
-              this.state.checkOption, "ここにどろあそびとか", "ここに天候")[0][0]}
+            ダメージ: {this.damage()[0] * this.state.defence.status.statusH} ~ {this.damage()[1] * this.state.defence.status.statusH}
+          </Typography>
+          <Typography>
+            急所ダメージ: {this.damage()[2] * this.state.defence.status.statusH} ~ {this.damage()[3] * this.state.defence.status.statusH}
+          </Typography>
+          <Typography>
+            {this.damage()[4] === -1 ? this.damage()[5] : this.damage()[4] + "%"}
           </Typography>
         </Grid>
       )
@@ -382,7 +405,7 @@ export default class Calculate extends React.Component<Props,State> {
           {this.renderAttack()}
           {this.renderDefence()}
         </Grid>
-        <HPbar confirmHP={240} style={{marginLeft: 60}} />
+        <HPbar confirmHP={this.damage()[0] ? this.damage()[0] : 0} lostHP={this.damage()[1] ? this.damage()[1] : 0}  style={{marginLeft: 60}} />
         {/* {this.renderAttackOptions()} */}
         {this.renderDamage()}
       </Grid>
