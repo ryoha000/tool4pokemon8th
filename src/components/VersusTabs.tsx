@@ -36,6 +36,10 @@ interface State{
   oppoWaza?: waza
   myTime?: number
   oppoTime?: number
+  myItem?: string
+  oppoItem?: string
+  myNature?: string
+  oppoNature?: string
   // selectedY: Pokemon;
 }
 
@@ -68,8 +72,8 @@ export default class VersusTabs extends React.Component<Props,State> {
   handleClickMyPoke = () => {
     this.setState({ openMy: !this.state.openMy })
   };
-  handleClickMyPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, ) => {
-    this.setState({myStatus: myStatus, myWaza: myWaza, myTime: myTime })
+  handleClickMyPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, myItem: string, myNature: string) => {
+    this.setState({myStatus: myStatus, myWaza: myWaza, myTime: myTime, myItem: myItem, myNature: myNature })
     console.log("mywaza:" + myWaza + "time:" + myTime)
   };
   handleChangeInputMyPokemon = (pokemon: PokemonData) => {
@@ -117,8 +121,8 @@ export default class VersusTabs extends React.Component<Props,State> {
   handleClickOppoPoke = () => {
     this.setState({ openOppo: !this.state.openOppo })
   };
-  handleClickOppoPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, ) => {
-    this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime })
+  handleClickOppoPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, myItem: string, nature: string) => {
+    this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime, oppoItem: myItem, oppoNature: nature })
     console.log("oppowaza:" + myWaza + "time:" + myTime)
   };
   renderPartyListMy = () => {
@@ -186,7 +190,7 @@ export default class VersusTabs extends React.Component<Props,State> {
             </Grid>
             <Grid item>
               <Paper style={{ height: 430,width: 300, marginTop: 8 }}>
-                <Calculate myStatus={this.state.myStatus} myWaza={this.state.myWaza} myTime={this.state.myTime} mySelect={this.state.mySelect} oppoStatus={this.state.oppoStatus} oppoWaza={this.state.oppoWaza} oppoTime={this.state.oppoTime} oppoSelect={this.state.oppoSelect} />
+                <Calculate myStatus={this.state.myStatus} myWaza={this.state.myWaza} myTime={this.state.myTime} mySelect={this.state.mySelect} oppoItem={this.state.oppoItem} myItem={this.state.myItem} myNature={this.state.myNature} oppoNature={this.state.oppoNature} oppoStatus={this.state.oppoStatus} oppoWaza={this.state.oppoWaza} oppoTime={this.state.oppoTime} oppoSelect={this.state.oppoSelect} />
               </Paper>
             </Grid>
           </Grid>

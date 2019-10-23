@@ -111,7 +111,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     this.setState({
       status: status
     })
-    this.props.decidion(status, this.state.selectedWaza, 0)
+    this.props.decidion(status, this.state.selectedWaza, 0, this.state.selectedItem.name, this.state.selectedAbility)
   }
   componentDidMount() {
     const wazaLabels: any = []
@@ -134,7 +134,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
             status: status,
             selectedAbility: pokemon.pokemonData.ability1
           })
-          this.props.decidion(status, this.state.selectedWaza, this.state.wazaTime)
+          this.props.decidion(status, this.state.selectedWaza, this.state.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
           console.log(this.state.selectedWaza)
         },50)
       }
@@ -555,7 +555,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({
         status: status
       })
-      this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+      this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
     }, 300)
   }
   openNature = (event: React.MouseEvent<HTMLElement>) => {
@@ -582,7 +582,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   handleChangeInputWaza = (waza: waza) => {
     this.setState({ inputWaza: waza , selectedWaza: waza , wazaTime: new Date().getTime()})
     console.log(waza)
-    this.props.decidion(this.state.status, waza, new Date().getTime())
+    this.props.decidion(this.state.status, waza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleCheckWaza = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     const selectWaza: any = this.props.wazas.find((element: waza) => {
@@ -590,7 +590,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     })
     this.setState({ selectedWaza: selectWaza , wazaTime: new Date().getTime()})
     console.log(selectWaza)
-    this.props.decidion(this.state.status, selectWaza, new Date().getTime())
+    this.props.decidion(this.state.status, selectWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleCheckWazaGroup = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     const selectWaza: any = this.props.wazas.find((element: waza) => {
@@ -598,7 +598,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     })
     this.setState({ selectedWaza: selectWaza , wazaTime: new Date().getTime()})
     console.log(selectWaza)
-    this.props.decidion(this.state.status, selectWaza, new Date().getTime())
+    this.props.decidion(this.state.status, selectWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleAbility = (name: string) => {
     this.setState({ selectedAbility: name })
@@ -608,6 +608,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       return element.name === name
     })
     this.setState({ selectedItem: item })
+    this.props.decidion(this.state.status, this.state.selectedItem, new Date().getTime(), name, this.state.selectedAbility)
   }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
@@ -690,7 +691,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusH = +event.target.value
       this.setState({ status: status })
     }
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleStatusAInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const status: Status = this.state.status
@@ -701,7 +702,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusA = +event.target.value
       this.setState({ status: status })
     }
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleStatusBInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const status: Status = this.state.status
@@ -712,7 +713,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusB = +event.target.value
       this.setState({ status: status })
     }
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleStatusCInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const status: Status = this.state.status
@@ -722,7 +723,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusC = +event.target.value
     }
     this.setState({ status: status })
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleStatusDInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const status: Status = this.state.status
@@ -732,7 +733,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusD = +event.target.value
     }
     this.setState({ status: status })
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleStatusSInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const status: Status = this.state.status
@@ -742,7 +743,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       status.statusS = +event.target.value
     }
     this.setState({ status: status })
-    this.props.decidion(status, this.state.selectedWaza, new Date().getTime())
+    this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualHPInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -754,7 +755,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualH: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualAInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -766,7 +767,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualA: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualBInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -778,7 +779,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualB: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualCInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -790,7 +791,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualC: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualDInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -802,7 +803,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualD: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleIndividualSInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let pastState: PokemonInBattleState = this.state
@@ -814,7 +815,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.setState({ IndividualS: +event.target.value })
     }
     pastState = computeStatus(pastState)
-    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime)
+    this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
   render() {
     if (this.state.loading) {

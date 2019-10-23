@@ -17,9 +17,12 @@ import { PokemonData, waza, Status } from './shared';
 import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
 import HPbar from './HPbar'
-import { Avatar, TextField } from '@material-ui/core';
+import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
+import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography } from '@material-ui/core';
 import { thisExpression } from '@babel/types';
-import { DamageCalculate } from './ComputeMethods'
+import { DamageCalculate, CheckOptions } from './ComputeMethods'
+import classes from '*.module.css';
+import { element } from 'prop-types';
 
 interface Props{
   myStatus?: Status
@@ -30,6 +33,10 @@ interface Props{
   oppoTime?: number
   mySelect?: PokemonData
   oppoSelect?: PokemonData
+  myItem?: string
+  oppoItem?: string
+  myNature?: string
+  oppoNature?: string
 }
 
 interface DamageInfo {
@@ -37,13 +44,16 @@ interface DamageInfo {
   time: number
   pokemon: PokemonData
   status?: Status
+  item: string
   rank: number
   or?: string
+  nature: string
 }
 
 interface State{
   attack?: DamageInfo
   defence?: DamageInfo
+  checkOption: CheckOptions
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -66,36 +76,9 @@ export default class Calculate extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {
+      checkOption: {attackItem: false, attackNature: false, attackWaza: false, defenceItem: false, defenceNature: false, reflect: false, light: false, aurora: false, many: false, scald: false}
     }
   }
-  // componentDidMount() {
-  //   console.log("ha")
-  //   if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.myTime && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.oppoTime) {
-  //     console.log("katu")
-  //     const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: this.props.myTime, rank: 0}
-  //     const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: this.props.oppoTime, rank: 0}
-  //       if (this.props.myTime > this.props.oppoTime) {
-  //         console.log("katu1")
-  //         this.setState({ attack: myState , defence: oppoState})
-  //       }
-  //       if (this.props.myTime < this.props.oppoTime) {
-  //         console.log("katu2")
-  //         this.setState({ attack: oppoState, defence: myState })
-  //       }
-    // } else if (this.props.myStatus && this.props.myWaza && this.props.myTime && this.props.mySelect) {
-    //   const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: this.props.myTime}
-    //   setTimeout(() => {
-    //     this.setState({ attack: myState })
-    //     console.log("a")
-    //   }, 100);
-    // } else if (this.props.oppoStatus && this.props.oppoWaza && this.props.oppoSelect && this.props.oppoTime) {
-    //   const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: this.props.oppoTime}
-    //   setTimeout(() => {
-    //     this.setState({ attack: oppoState })
-    //     console.log("b")
-    //   }, 100);
-  //   }
-  // }
   componentDidUpdate() {
     console.log("hi")
     if (this.props.myStatus) {console.log("msu")}
@@ -106,14 +89,18 @@ export default class Calculate extends React.Component<Props,State> {
     if (this.props.oppoWaza) {console.log("owa")}
     if (this.props.oppoTime) {console.log("oti")}
     if (this.props.oppoSelect) {console.log("ose")}
+    if (this.props.myItem) {console.log("mi")}
+    if (this.props.oppoItem) {console.log("oi")}
+    if (this.props.myNature) {console.log("mn")}
+    if (this.props.oppoNature) {console.log("on")}
     // if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.myTime && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.oppoTime) {
-    if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect) {
+    if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.myItem && this.props.oppoItem && this.props.myNature && this.props.oppoNature) {
       console.log("katu")
-      const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: 0, rank: 0, or: "my"}
+      const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: 0, rank: 0, or: "my", item: this.props.myItem, nature: this.props.myNature}
       if (this.props.myTime) {
         myState.time = this.props.myTime
       }
-      const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: 0, rank: 0, or: "oppo"}
+      const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: 0, rank: 0, or: "oppo", item: this.props.oppoItem, nature: this.props.oppoNature}
       if (this.props.oppoTime) {
         oppoState.time = this.props.oppoTime
       }
@@ -148,7 +135,7 @@ export default class Calculate extends React.Component<Props,State> {
     // if (this.props.myStatus && this.props.mySelect && this.props.myTime) {
       console.log("ma")
       // const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, time: this.props.myTime, rank: 0}
-      const myState: DamageInfo = {pokemon: this.props.mySelect, time: 0, rank: 0, or: "my"}
+      const myState: DamageInfo = {pokemon: this.props.mySelect, time: 0, rank: 0, or: "my", item: "なし", nature: this.props.mySelect.ability1}
       if (!this.state.attack) {
         console.log("mu")
         this.setState({ attack: myState })
@@ -163,7 +150,7 @@ export default class Calculate extends React.Component<Props,State> {
     // if (this.props.oppoStatus && this.props.oppoSelect && this.props.oppoTime) {
       console.log("mi")
       // const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, time: this.props.oppoTime, rank: 0}
-      const oppoState: DamageInfo = {pokemon: this.props.oppoSelect, time: 0, rank: 0, or: "oppo"}
+      const oppoState: DamageInfo = {pokemon: this.props.oppoSelect, time: 0, rank: 0, or: "oppo", item: "なし", nature: this.props.oppoSelect.ability1}
       if (!this.state.attack) {
         console.log("me")
         this.setState({ attack: oppoState })
@@ -174,6 +161,35 @@ export default class Calculate extends React.Component<Props,State> {
           this.setState({ defence: oppoState })
       }
     }
+  }
+  checkNature = (side: string) => {
+    if (side === "attack") {
+      if (this.state.attack) {
+        const now: DamageInfo = this.state.attack
+        if (attackNatures.find((element) => {return(element.name === now.nature)})
+          || defenceNatures.find(element => {return element.name === now.nature})
+          || damageNature.find(element => {return element.name === now.nature})
+          || powerNature.find(element => {return element.name === now.nature})) {
+          console.log("a")
+          return true
+        }
+        console.log("b")
+        return false
+      }
+    }
+    if (side === "defence") {
+      if (this.state.defence) {
+        const now: DamageInfo = this.state.defence
+        if (attackNatures.find((element) => {return(element.name === now.nature)})
+          || defenceNatures.find(element => {return element.name === now.nature})
+          || damageNature.find(element => {return element.name === now.nature})
+          || powerNature.find(element => {return element.name === now.nature})) {
+          return true
+        }
+        return false
+      }
+    }
+    return true
   }
   handleAttackRank = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (this.state.attack) {
@@ -200,6 +216,31 @@ export default class Calculate extends React.Component<Props,State> {
       }
       this.setState({ defence: defence })
     }
+  }
+  handleChangeAIOption = () => {
+    let checked: CheckOptions = this.state.checkOption
+    checked.attackItem = !checked.attackItem
+    this.setState({checkOption: checked})
+  }
+  handleChangeANOption = () => {
+    let checked: CheckOptions = this.state.checkOption
+    checked.attackNature = !checked.attackNature
+    this.setState({checkOption: checked})
+  }
+  handleChangeWOption = () => {
+    let checked: CheckOptions = this.state.checkOption
+    checked.attackWaza = !checked.attackWaza
+    this.setState({checkOption: checked})
+  }
+  handleChangeDIOption = () => {
+    let checked: CheckOptions = this.state.checkOption
+    checked.defenceItem = !checked.defenceItem
+    this.setState({checkOption: checked})
+  }
+  handleChangeDNOption = () => {
+    let checked: CheckOptions = this.state.checkOption
+    checked.defenceNature = !checked.defenceNature
+    this.setState({checkOption: checked})
   }
   renderAttack = () => {
     if (this.state.attack) {
@@ -277,6 +318,44 @@ export default class Calculate extends React.Component<Props,State> {
       </div>
     )
   }
+  renderAttackOptions = () => {
+    if (this.state.attack) {
+      return (
+      <FormControl component="fieldset" style={{ marginLeft: 20 }}>
+        <FormLabel component="legend">Attack Side Options</FormLabel>
+        <Grid item>
+          <Grid container>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={this.state.checkOption.attackItem} onChange={this.handleChangeAIOption} value="attackItem" disabled={this.state.attack.item === "なし"} />}
+                label={this.state.attack.item}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.checkOption.attackNature} onChange={this.handleChangeANOption} value="attackNature" disabled={!this.checkNature("attack")} />}
+                label={this.state.attack.nature}
+              />
+            </FormGroup>
+          </Grid>
+        </Grid>
+      </FormControl>
+      )
+    }
+  }
+  renderDamage = () => {
+    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza) {
+      return (
+        <Grid item>
+          <Typography>
+            {DamageCalculate(this.state.attack.status, this.state.defence.status,
+              this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon,
+              this.state.attack.rank, this.state.defence.rank, "ここにフィールド(フィールドは略)", this.state.attack.item,
+              this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
+              this.state.checkOption, "ここにどろあそびとか", "ここに天候")[0][0]}
+          </Typography>
+        </Grid>
+      )
+    }
+  }
   
   render() {
     return (
@@ -286,6 +365,8 @@ export default class Calculate extends React.Component<Props,State> {
           {this.renderDefence()}
         </Grid>
         <HPbar confirmHP={240} style={{marginLeft: 60}} />
+        {/* {this.renderAttackOptions()} */}
+        {this.renderDamage()}
       </Grid>
     );
   }
