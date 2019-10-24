@@ -385,7 +385,7 @@ export default class Calculate extends React.Component<Props,State> {
       return (
         <Grid item>
           <Typography>
-            ダメージ: {this.damage()[0] * this.state.defence.status.statusH} ~ {this.damage()[1] * this.state.defence.status.statusH}
+            ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
           </Typography>
           <Typography>
             急所ダメージ: {this.damage()[2] * this.state.defence.status.statusH} ~ {this.damage()[3] * this.state.defence.status.statusH}
@@ -405,7 +405,7 @@ export default class Calculate extends React.Component<Props,State> {
           {this.renderAttack()}
           {this.renderDefence()}
         </Grid>
-        <HPbar confirmHP={this.damage()[0] ? this.damage()[0] : 0} lostHP={this.damage()[1] ? this.damage()[1] : 0}  style={{marginLeft: 60}} />
+        <HPbar confirmHP={this.damage()[1] ? this.damage()[1] : 0} lostHP={this.damage()[0] ? this.damage()[0] : 0}  style={{marginLeft: 60}} time={this.state.attack ? this.state.attack.time : 0} />
         {/* {this.renderAttackOptions()} */}
         {this.renderDamage()}
       </Grid>

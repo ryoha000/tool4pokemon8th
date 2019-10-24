@@ -1,52 +1,49 @@
 import React, { Component } from 'react';
 import { Rnd } from 'react-rnd';
 import './HPbar.css';
-// n=240
+// n=2.4
 export default class HPbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      confirmHP: 240, // 上の方の乱数
+      remainHP: 240,
+      confirmHP: 0, // 上の方の乱数
       randomHPRange: 0, // 乱数幅
       lostHP:240, // 下の方の乱数
       confirmHPColor: "greenyellow",
-      randomHPColor: "rgb(100, 150, 26)"
+      randomHPColor: "rgb(100, 150, 26)",
+      time: 1
     };
   }
-  // componentDidMount() {
-  //   if (this.props.confirmHP !== this.state.confirmHP) {
-  //     this.setState({ confirmHP: Math.floor(this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240 - this.props.confirmHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
-  //     if (this.props.confirmHP > 50) {
-  //       this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
-  //     } else if (this.props.confirmHP > 20) {
-  //       this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
-  //     } else {
-  //       this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
-  //     }
-  //   }
-  // }
   componentDidUpdate() {
-    console.log(this.props.confirmHP)
-    console.log(this.state.confirmHP)
-    console.log(Math.floor(this.props.confirmHP * 240))
-    if (Math.floor(240 - this.props.confirmHP * 240) !== this.state.confirmHP) {
-      this.setState({ confirmHP: Math.floor(240 - this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240 - this.props.confirmHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
-      if (Math.floor(240 - this.props.confirmHP * 240) > 120) {
+    console.log("hpbar1", this.state.remainHP , Math.floor(this.props.confirmHP * 240), Math.floor(this.props.lostHP * 240))
+    if (this.state.confirmHP !== Math.floor(this.props.confirmHP * 240) && this.props.time > this.state.time) {
+      console.log("hpbar2")
+      this.setState({ confirmHP: Math.floor(this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
+      if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120) {
         this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
-      } else if (Math.floor(240 - this.props.confirmHP * 240) > 48) {
+      } else if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 48) {
         this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
       } else {
         this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
       }
     }
+    console.log(this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 , this.state.confirmHPColor !== "greenyellow")
+    if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 && this.state.confirmHPColor !== "greenyellow") {
+      this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
+    } else if (!this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 && this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 48 && this.state.confirmHPColor !== "yellow") {
+      this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
+    } else if (!this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 48 && this.state.confirmHPColor !== "red") {
+      this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
+    }
   }
   onResize = (e, direction, ref, delta, position) => {
-    const minutes = Math.floor(parseInt(ref.style.width, 10) / 20) * 30;
-    const hour = Math.floor(parseInt(position.x, 10) / 40);
-    this.setState({ minutes, hour });
+    // const minutes = Math.floor(parseInt(ref.style.width, 10) / 20) * 30;
+    // const hour = Math.floor(parseInt(position.x, 10) / 40);
+    this.setState({ confirmHP: ref.style.width });
   }
   handleClick = () => {
-    this.setState({ randomHPRange: 0, lostHP: 0 , confirmHPColor: "greenyellow" })
+    this.setState({ randomHPRange: 240, lostHP: 0 , confirmHP: 0, remainHP: 240, confirmHPColor: "greenyellow", time: new Date().getTime() })
   }
   render() {
     return (
@@ -57,14 +54,57 @@ export default class HPbar extends Component {
             </div>
           )}
           <Rnd
+            className="rndgr"
+            default={{
+              x: 0,
+              y: 0,
+              width: 240,
+              height: '100%'
+            }}
+            dragAxis="none"
+            enableResizing={{
+              top: false, right: false, bottom: false, left: false,
+              topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
+            }}
+            minWidth="0"
+            maxWidth="240"
+            style={{background: "rgb(58, 58, 58)"}}
+          />
+          <Rnd
+            className="rnddg"
+            default={{
+              x: 0,
+              y: 0,
+            }}
+            size={{
+              width: this.state.remainHP - this.state.randomHPRange,
+              height: '100%',
+            }}
+            dragAxis="none"
+            enableResizing={{
+              top: false, right: false, bottom: false, left: false,
+              topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
+            }}
+            bounds="parent"
+            minWidth="0"
+            maxWidth="240"
+            style={{background: this.state.randomHPColor}}
+          />
+          <Rnd
             className="rndlg"
             default={{
               x: 0,
               y: 0,
-              width: this.state.confirmHP,
-              height: '100%',
             }}
+            size={{ width: this.state.remainHP - this.state.confirmHP, height: '100%'}}
             dragAxis="none"
+            onResizeStop={(e, direction, ref, delta, position) => {
+              console.log(ref.style.width.slice( 0, -2 ), this.state.confirmHP)
+              this.setState({
+                remainHP: ref.style.width.slice( 0, -2 ),
+                time: new Date().getTime()
+              });
+            }}
             enableResizing={{
               top: false, right: true, bottom: false, left: false,
               topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
@@ -72,45 +112,10 @@ export default class HPbar extends Component {
             style={{background: this.state.confirmHPColor}}
             bounds="parent"
             resizeGrid={[1, 0]}
-            minWidth="1"
+            minWidth="0"
             maxWidth="240"
-            onResize={this.onResize}
           />
-          <Rnd
-            className="rnddg"
-            default={{
-              x: this.state.confirmHP,
-              y: 0,
-              width: this.state.randomHPRange,
-              height: '100%',
-            }}
-            dragAxis="none"
-            enableResizing={{
-              top: false, right: false, bottom: false, left: false,
-              topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
-            }}
-            bounds="parent"
-            minWidth="1"
-            style={{background: this.state.randomHPColor}}
-          />
-          <Rnd
-            className="rndgr"
-            default={{
-              x: this.state.lostHP,
-              y: 0,
-              width: 240 - this.state.lostHP,
-              height: '100%',
-            }}
-            dragAxis="none"
-            enableResizing={{
-              top: false, right: false, bottom: false, left: false,
-              topRight: false, bottomRight: false, bottomLeft: false, topLeft: false
-            }}
-            bounds="parent"
-            minWidth="1"
-            style={{background: "rgb(58, 58, 58)"}}
-          />
-        </div> 
+        </div>
       </div>
     );
   }
