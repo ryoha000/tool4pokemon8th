@@ -17,15 +17,16 @@ export default class HPbar extends Component {
   }
   componentDidUpdate() {
     console.log("hpbar1", this.state.remainHP , Math.floor(this.props.confirmHP * 240), Math.floor(this.props.lostHP * 240))
+    console.log("hpbar2", this.props.confirmHP, this.props.lostHP)
     if (this.state.confirmHP !== Math.floor(this.props.confirmHP * 240) && this.props.time > this.state.time) {
       console.log("hpbar2")
       this.setState({ confirmHP: Math.floor(this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
       if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120) {
         this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
       } else if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 48) {
-        this.setState({ confirmHPColor: "yellow", randomHPColor: "gold"})
+        this.setState({ confirmHPColor: "yellow", randomHPColor: "#DAA520"})
       } else {
-        this.setState({ confirmHPColor: "red", randomHPColor: "crimson"})
+        this.setState({ confirmHPColor: "red", randomHPColor: "#8B0000"})
       }
     }
     console.log(this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 , this.state.confirmHPColor !== "greenyellow")
@@ -77,7 +78,7 @@ export default class HPbar extends Component {
               y: 0,
             }}
             size={{
-              width: this.state.remainHP - this.state.randomHPRange,
+              width: this.state.remainHP - this.state.randomHPRange < 0? 0 : this.state.remainHP - this.state.randomHPRange,
               height: '100%',
             }}
             dragAxis="none"
@@ -96,7 +97,10 @@ export default class HPbar extends Component {
               x: 0,
               y: 0,
             }}
-            size={{ width: this.state.remainHP - this.state.confirmHP, height: '100%'}}
+            size={{
+              width: this.state.remainHP - this.state.confirmHP < 0 ? 0 : this.state.remainHP - this.state.confirmHP,
+              height: '100%'
+            }}
             dragAxis="none"
             onResizeStop={(e, direction, ref, delta, position) => {
               console.log(ref.style.width.slice( 0, -2 ), this.state.confirmHP)
