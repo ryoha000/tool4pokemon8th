@@ -281,6 +281,24 @@ export default class Calculate extends React.Component<Props,State> {
     }
     return []
   }
+  renderRansu = (n1: number, n2: number, n3: number) => {
+    if (n1 === -1) {
+      if (n3 === 0) {
+        if (n2 === -1) {
+          return 'ダメージなし'
+        }
+        return '確定' + n2 + '発'
+      } else {
+        return '乱数' + n2 + '発'
+      }
+    } else {
+      if (n1 === 100) {
+        return '確定1発'
+      } else {
+        return '乱数1発(' + n1 + '%)'
+      }
+    }
+  }
   renderAttack = () => {
     if (this.state.attack) {
       return (
@@ -384,14 +402,14 @@ export default class Calculate extends React.Component<Props,State> {
     if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza) {
       return (
         <Grid item>
-          <Typography>
+          <Typography align="center">
             ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
           </Typography>
-          <Typography>
-            急所ダメージ: {this.damage()[2] * this.state.defence.status.statusH} ~ {this.damage()[3] * this.state.defence.status.statusH}
+          <Typography align="center">
+            急所ダメージ: {Math.round(this.damage()[2] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[3] * this.state.defence.status.statusH)}
           </Typography>
-          <Typography>
-            {this.damage()[4] === -1 ? this.damage()[5] : this.damage()[4] + "%"}
+          <Typography align="center">
+            {this.renderRansu(this.damage()[4], this.damage()[5], this.damage()[6])}
           </Typography>
         </Grid>
       )
