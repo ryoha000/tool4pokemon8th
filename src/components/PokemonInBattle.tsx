@@ -608,7 +608,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       return element.name === name
     })
     this.setState({ selectedItem: item })
-    this.props.decidion(this.state.status, this.state.selectedItem, new Date().getTime(), name, this.state.selectedAbility)
+    this.props.decidion(this.state.status, this.state.selectedWaza, new Date().getTime(), name, this.state.selectedAbility)
   }
   handleEffortHP = () => (event: React.ChangeEvent<{}>, value: number|number[]) => {
     if (typeof value == "number") {
