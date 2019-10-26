@@ -607,7 +607,15 @@ export function TypeCompatibility(attackType: string, defencePokemon: PokemonDat
 		imahitotu = ["ほのお","どく","はがね"]
 		batugun = ["あく","かくとう","ドラゴン"]
 	}
-	if (imahitotu.length === 0) { alert("attackType is null") }
+	if (attackType === "ダミー") {
+		console.log("ダミー")
+		return 0
+	}
+	if (imahitotu.length === 0) {
+		console.log("ダミー1")
+		alert("attackType is null")
+		return 0
+  }
 	if (mukou.find((element) => {return (element === defencePokemon.type1 || element === defencePokemon.type2)})) {
 		return 0
 	}

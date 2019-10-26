@@ -243,7 +243,8 @@ export default class Calculate extends React.Component<Props,State> {
     this.setState({checkOption: checked})
   }
   damage = () => {
-    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza) {
+    console.log("damage1")
+    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status && this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
       const damages: number[][] = DamageCalculate(this.state.attack.status, this.state.defence.status,
         this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon,
         this.state.attack.rank, this.state.defence.rank, "ここにフィールド(フィールドは略)", this.state.attack.item,
@@ -367,11 +368,13 @@ export default class Calculate extends React.Component<Props,State> {
             <FormGroup>
               <FormControlLabel
                 control={<Checkbox checked={this.state.checkOption.attackItem} onChange={this.handleChangeAIOption} value="attackItem" disabled={this.state.attack.item === "なし"} />}
-                label={this.state.attack.item}
+                label="アイテム"
+                style={{width: 100}}
               />
               <FormControlLabel
                 control={<Checkbox checked={this.state.checkOption.attackNature} onChange={this.handleChangeANOption} value="attackNature" disabled={!this.checkNature("attack")} />}
-                label={this.state.attack.nature}
+                label="特性"
+                style={{width: 100}}
               />
             </FormGroup>
           </Grid>
@@ -380,21 +383,48 @@ export default class Calculate extends React.Component<Props,State> {
       )
     }
   }
-  renderDamage = () => {
-    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza) {
+  renderDefenceOptions = () => {
+    if (this.state.defence) {
       return (
-        <Grid item>
-          <Typography>
-            ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
-          </Typography>
-          <Typography>
-            急所ダメージ: {this.damage()[2] * this.state.defence.status.statusH} ~ {this.damage()[3] * this.state.defence.status.statusH}
-          </Typography>
-          <Typography>
-            {this.damage()[4] === -1 ? this.damage()[5] : this.damage()[4] + "%"}
-          </Typography>
-        </Grid>
+      <FormControl component="fieldset" style={{ marginLeft: 20 }}>
+        <FormLabel component="legend">Defence Side Options</FormLabel>
+        {/* <Grid item> */}
+          <Grid container>
+            <FormGroup>
+              <FormControlLabel
+                control={<Checkbox checked={this.state.checkOption.defenceItem} onChange={this.handleChangeDIOption} value="defenceItem" disabled={this.state.defence.item === "なし"} />}
+                label="アイテム"
+                style={{width: 100}}
+              />
+              <FormControlLabel
+                control={<Checkbox checked={this.state.checkOption.defenceNature} onChange={this.handleChangeDNOption} value="defenceNature" disabled={!this.checkNature("defence")} />}
+                label="特性"
+                style={{width: 100}}
+              />
+            </FormGroup>
+          </Grid>
+        {/* </Grid> */}
+      </FormControl>
       )
+    }
+  }
+  renderDamage = () => {
+    if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
+      if (this.state.attack.waza.type !== "ダミー") {
+        return (
+          <Grid item>
+            <Typography>
+              ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
+            </Typography>
+            <Typography>
+              急所ダメージ: {this.damage()[2] * this.state.defence.status.statusH} ~ {this.damage()[3] * this.state.defence.status.statusH}
+            </Typography>
+            <Typography>
+              {this.damage()[4] === -1 ? this.damage()[5] : this.damage()[4] + "%"}
+            </Typography>
+          </Grid>
+        )
+      }
     }
   }
   
@@ -406,8 +436,10 @@ export default class Calculate extends React.Component<Props,State> {
           {this.renderDefence()}
         </Grid>
         <HPbar confirmHP={this.damage()[1] ? this.damage()[1] : 0} lostHP={this.damage()[0] ? this.damage()[0] : 0}  style={{marginLeft: 60}} time={this.state.attack ? this.state.attack.time : 0} />
-        {/* {this.renderAttackOptions()} */}
         {this.renderDamage()}
+        {this.renderAttackOptions()}
+        {this.renderDefenceOptions()}
+        <div>{this.state.checkOption.attackItem }</div>
       </Grid>
     );
   }
