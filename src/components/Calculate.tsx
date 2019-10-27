@@ -18,11 +18,8 @@ import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
 import HPbar from './HPbar'
 import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
-import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography } from '@material-ui/core';
-import { thisExpression, throwStatement } from '@babel/types';
+import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography, Button, Menu, MenuItem } from '@material-ui/core';
 import { DamageCalculate, CheckOptions } from './ComputeMethods'
-import classes from '*.module.css';
-import { element } from 'prop-types';
 
 interface Props{
   myStatus?: Status
@@ -54,48 +51,35 @@ interface State{
   attack?: DamageInfo
   defence?: DamageInfo
   checkOption: CheckOptions
+  isOpenField: any
+  field: string
+  isOpenWeather: any
+  weather: string
+  isOpenOthers: any
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: { height: 430,width: 300 },
-    nested: { paddingLeft: theme.spacing(4) },
-    control: { padding: theme.spacing(2) },
-    avatar: {
-      margin: 10,
-      width: 30,
-      height: 30,
-    },
-  }),
-);
+const allField: string[] = [
+  "なし", "エレキ", "サイコ", "グラス", "ミスト"
+]
+
+const allWeather: string[] = [
+  "なし", "すなあらし", "あめ", "はれ", "あられ"
+]
 
 export default class Calculate extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {
-      checkOption: {attackItem: false, attackNature: false, attackWaza: false, defenceItem: false, defenceNature: false, reflect: false, light: false, aurora: false, many: false, scald: false}
+      isOpenField: null,
+      field: "なし",
+      isOpenWeather: null,
+      weather: "なし",
+      isOpenOthers: null,
+      checkOption: {attackItem: true, attackNature: true, attackWaza: false, defenceItem: false, defenceNature: true, reflect: false, light: false, aurora: false, many: false, scald: false, water: false, mad: false, cross: false}
     }
   }
   componentDidUpdate() {
-    console.log("hi")
-    if (this.props.myStatus) {console.log("msu")}
-    if (this.props.myWaza) {console.log("mwa")}
-    if (this.props.myTime) {console.log("mti")}
-    if (this.props.mySelect) {console.log("mse")}
-    if (this.props.oppoStatus) {console.log("osu")}
-    if (this.props.oppoWaza) {console.log("owa")}
-    if (this.props.oppoTime) {console.log("oti")}
-    if (this.props.oppoSelect) {console.log("ose")}
-    if (this.props.myItem) {console.log("mi")}
-    if (this.props.oppoItem) {console.log("oi")}
-    if (this.props.myNature) {console.log("mn")}
-    if (this.props.oppoNature) {console.log("on")}
-    // if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.myTime && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.oppoTime) {
     if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.myItem && this.props.oppoItem && this.props.myNature && this.props.oppoNature) {
-      console.log("katu")
       const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: 0, rank: 0, or: "my", item: this.props.myItem, nature: this.props.myNature}
       if (this.props.myTime) {
         myState.time = this.props.myTime
@@ -105,59 +89,39 @@ export default class Calculate extends React.Component<Props,State> {
         oppoState.time = this.props.oppoTime
       }
       if (myState.time > oppoState.time) {
-        console.log("ta")
         if (this.state.attack) {
-          console.log("ti")
           if (this.state.attack.pokemon.name != myState.pokemon.name || this.state.attack.waza != myState.waza || this.state.attack.status != myState.status) {
-            console.log("katu1" + myState.pokemon.name + oppoState.pokemon.name)
             this.setState({ attack: myState , defence: oppoState})
           }
         } else {
-          console.log("ta1")
           this.setState({ attack: myState , defence: oppoState})
         }
       }
       if (myState.time < oppoState.time) {
-        console.log("tu")
         if (this.state.attack) {
-          console.log("te")
           if (this.state.attack.pokemon.name != oppoState.pokemon.name || this.state.attack.waza != oppoState.waza || this.state.attack.status != oppoState.status) {
-            console.log("katu2" + oppoState.pokemon.name + myState.pokemon.name)
             this.setState({ attack: oppoState , defence: myState})
           }
         } else {
-          console.log("tu2")
           this.setState({ attack: oppoState , defence: myState})
         }
       }
     }
     if (this.props.mySelect) {
-    // if (this.props.myStatus && this.props.mySelect && this.props.myTime) {
-      console.log("ma")
-      // const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, time: this.props.myTime, rank: 0}
       const myState: DamageInfo = {pokemon: this.props.mySelect, time: 0, rank: 0, or: "my", item: "なし", nature: this.props.mySelect.ability1}
       if (!this.state.attack) {
-        console.log("mu")
         this.setState({ attack: myState })
       }
-      // if (this.state.attack && !this.state.defence && this.state.attack != myState) {
       if (this.state.attack && !this.state.defence && this.state.attack.or !== "my") {
-        console.log("mo")
         this.setState({ defence: myState })
       }
     }
     if (this.props.oppoSelect) {
-    // if (this.props.oppoStatus && this.props.oppoSelect && this.props.oppoTime) {
-      console.log("mi")
-      // const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, time: this.props.oppoTime, rank: 0}
       const oppoState: DamageInfo = {pokemon: this.props.oppoSelect, time: 0, rank: 0, or: "oppo", item: "なし", nature: this.props.oppoSelect.ability1}
       if (!this.state.attack) {
-        console.log("me")
         this.setState({ attack: oppoState })
       }
-      // if (this.state.attack && !this.state.defence && this.state.attack != oppoState) {
         if (this.state.attack && !this.state.defence && this.state.attack.or !== "oppo") {
-          console.log("ya")
           this.setState({ defence: oppoState })
       }
     }
@@ -167,23 +131,23 @@ export default class Calculate extends React.Component<Props,State> {
       if (this.state.attack) {
         const now: DamageInfo = this.state.attack
         if (attackNatures.find((element) => {return(element.name === now.nature)})
-          || defenceNatures.find(element => {return element.name === now.nature})
           || damageNature.find(element => {return element.name === now.nature})
-          || powerNature.find(element => {return element.name === now.nature})) {
-          console.log("a")
+          || powerNature.find(element => {return element.name === now.nature})
+          || "はりきり" === now.nature
+          || "てきおうりょく" === now.nature) {
           return true
         }
-        console.log("b")
         return false
       }
     }
     if (side === "defence") {
       if (this.state.defence) {
         const now: DamageInfo = this.state.defence
-        if (attackNatures.find((element) => {return(element.name === now.nature)})
-          || defenceNatures.find(element => {return element.name === now.nature})
+        if (defenceNatures.find(element => {return element.name === now.nature})
           || damageNature.find(element => {return element.name === now.nature})
-          || powerNature.find(element => {return element.name === now.nature})) {
+          || "たいねつ" === now.nature
+          || "あついしぼう" === now.nature
+          || "もらいび" === now.nature) {
           return true
         }
         return false
@@ -243,13 +207,12 @@ export default class Calculate extends React.Component<Props,State> {
     this.setState({checkOption: checked})
   }
   damage = () => {
-    console.log("damage1")
     if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status && this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
       const damages: number[][] = DamageCalculate(this.state.attack.status, this.state.defence.status,
         this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon,
-        this.state.attack.rank, this.state.defence.rank, "ここにフィールド(フィールドは略)", this.state.attack.item,
+        this.state.attack.rank, this.state.defence.rank, this.state.field, this.state.attack.item,
         this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
-        this.state.checkOption, "ここにどろあそびとか", "ここに天候")
+        this.state.checkOption, this.state.weather)
       const useDamages: number[] = []
       useDamages.push(damages[0][0] / this.state.defence.status.statusH) // minD
       useDamages.push(damages[0][15] / this.state.defence.status.statusH) //maxD
@@ -281,6 +244,20 @@ export default class Calculate extends React.Component<Props,State> {
       return useDamages
     }
     return []
+  }
+  natureFontSize = (num: number) => {
+    if (num < 6) {
+      return 16
+    }
+    if (num === 6) {
+      return 14
+    }
+    if (num === 7) {
+      return 12
+    }
+    if (num > 7) {
+      return 13
+    }
   }
   renderRansu = (n1: number, n2: number, n3: number) => {
     if (n1 === -1) {
@@ -317,7 +294,6 @@ export default class Calculate extends React.Component<Props,State> {
             margin="normal"
             style={{width: 50, marginTop: 0, marginBottom: 0 }}
           />
-          {/* MaxDamage: {DamageCalculate(this.state.attack.status, this.state.defence.status, this.state.attack.waza, this.state.attack.pokemon, this.state.defence.pokemon)} */}
         </div>
       )
     }
@@ -344,7 +320,6 @@ export default class Calculate extends React.Component<Props,State> {
         <div style={{padding: 15, marginLeft: 90}}>
           防
           <PokemonIcon number={this.state.defence.pokemon.number} />
-          {/* 選択中の技:{this.state.defence.waza.name} */}
           <TextField
             label="Rank"
             value={this.state.defence.rank}
@@ -376,53 +351,208 @@ export default class Calculate extends React.Component<Props,State> {
       </div>
     )
   }
-  renderAttackOptions = () => {
-    if (this.state.attack) {
-      return (
-      <FormControl component="fieldset" style={{ marginLeft: 20 }}>
-        <FormLabel component="legend">Attack Side Options</FormLabel>
-        <Grid item>
-          <Grid container>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={this.state.checkOption.attackItem} onChange={this.handleChangeAIOption} value="attackItem" disabled={this.state.attack.item === "なし"} />}
-                label="アイテム"
-                style={{width: 100}}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.checkOption.attackNature} onChange={this.handleChangeANOption} value="attackNature" disabled={!this.checkNature("attack")} />}
-                label="特性"
-                style={{width: 100}}
-              />
-            </FormGroup>
-          </Grid>
-        </Grid>
-      </FormControl>
-      )
-    }
+  openField = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenField: event.currentTarget})
   }
-  renderDefenceOptions = () => {
-    if (this.state.defence) {
+  closeField = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenField: null})
+  }
+  handleField = (field: string) => {
+    this.setState({ field: field })
+  }
+  fieldColor = (): string => {
+    if (this.state.field === "ミスト") {
+      return "#87cefa"
+    }
+    if (this.state.field === "サイコ") {
+      return "#ee82ee"
+    }
+    if (this.state.field === "グラス") {
+      return "#90ee90"
+    }
+    if (this.state.field === "エレキ") {
+      return "#ffff00"
+    }
+    return "#ffffff"
+  }
+  openWeather = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenWeather: event.currentTarget})
+  }
+  closeWeather = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenWeather: null})
+  }
+  handleWeather = (weather: string) => {
+    this.setState({ weather: weather })
+  }
+  openOthers = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenOthers: event.currentTarget})
+  }
+  closeOthers = (event: React.MouseEvent<HTMLElement>) => {
+    this.setState({ isOpenOthers: null})
+  }
+  handleMany = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.many = !now.many
+    this.setState({ checkOption: now })
+  }
+  handleWater = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.water = !now.water
+    this.setState({ checkOption: now })
+  }
+  handleMad = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.mad = !now.mad
+    this.setState({ checkOption: now })
+  }
+  handleScald = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.scald = !now.scald
+    this.setState({ checkOption: now })
+  }
+  handleReflect = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.reflect = !now.reflect
+    this.setState({ checkOption: now })
+  }
+  handleLight = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.light = !now.light
+    this.setState({ checkOption: now })
+  }
+  handleAurora = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.aurora = !now.aurora
+    this.setState({ checkOption: now })
+  }
+  handleCross = () => {
+    let now: CheckOptions = this.state.checkOption
+    now.cross = !now.cross
+    this.setState({ checkOption: now })
+  }
+  weatherColor = (): string => {
+    if (this.state.weather === "はれ") {
+      return "#ff6347"
+    }
+    if (this.state.weather === "すなあらし") {
+      return "#f5deb3"
+    }
+    if (this.state.weather === "あめ") {
+      return "#00bfff"
+    }
+    if (this.state.weather === "あられ") {
+      return "#00ffff"
+    }
+    return "#ffffff"
+  }
+  renderOptions = () => {
+    if (this.state.attack && this.state.defence) {
       return (
-      <FormControl component="fieldset" style={{ marginLeft: 20 }}>
-        <FormLabel component="legend">Defence Side Options</FormLabel>
-        {/* <Grid item> */}
-          <Grid container>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox checked={this.state.checkOption.defenceItem} onChange={this.handleChangeDIOption} value="defenceItem" disabled={this.state.defence.item === "なし"} />}
-                label="アイテム"
-                style={{width: 100}}
-              />
-              <FormControlLabel
-                control={<Checkbox checked={this.state.checkOption.defenceNature} onChange={this.handleChangeDNOption} value="defenceNature" disabled={!this.checkNature("defence")} />}
-                label="特性"
-                style={{width: 100}}
-              />
+        <Grid>
+          <FormControl component="fieldset" style={{ marginLeft: 20, marginTop: 5 }}>
+            <FormLabel component="legend">Options</FormLabel>
+            <FormGroup row>
+              <Checkbox checked={this.state.checkOption.attackNature && this.checkNature("attack")} onChange={this.handleChangeANOption} value="attackNature" style={{margin: 0}} disabled={!this.checkNature("attack")} />
+              <Typography style={{width: 90, marginTop: this.state.attack.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.attack.nature.length)}}>{this.state.attack.nature.length > 7 ? "とう..." + this.state.attack.nature.slice(-4) : this.state.attack.nature}</Typography>
+              <Checkbox checked={this.state.checkOption.defenceNature && this.checkNature("defence")} onChange={this.handleChangeDNOption} value="defenceNature" style={{margin: 0}} disabled={!this.checkNature("defence")} />
+              <Typography style={{width: 90, marginTop: this.state.defence.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.defence.nature.length)}}>{this.state.defence.nature.length > 7 ? "とう..." + this.state.defence.nature.slice(-4) : this.state.defence.nature}</Typography>
             </FormGroup>
-          </Grid>
-        {/* </Grid> */}
-      </FormControl>
+          </FormControl>
+          <Button onClick={this.openField} variant="outlined" style={{height: 35,width: 250, backgroundColor: this.fieldColor()}}>
+            {this.state.field === "なし" ? "フィールド: なし" : this.state.field + "フィールド"}▼
+          </Button>
+          <Menu
+            id="long-menu"
+            anchorEl={this.state.isOpenField}
+            open={Boolean(this.state.isOpenField)}
+            onClose={this.closeField}
+            PaperProps={{
+              style: {
+                maxHeight: 216,
+                width: 300,
+              },
+            }}
+          >
+            {allField.map((field: string) => {
+              return (
+                <MenuItem selected={field === this.state.field} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleField(field);this.closeField(event);}}>
+                  {field === "なし" ? field : field + "フィールド"}
+                </MenuItem>
+              )
+            })}
+          </Menu>
+          <Button onClick={this.openWeather} variant="outlined" style={{height: 35,width: 250, backgroundColor: this.weatherColor()}}>
+            {this.state.weather === "なし" ? "天候: なし" : this.state.weather}▼
+          </Button>
+          <Menu
+            id="long-menu"
+            anchorEl={this.state.isOpenWeather}
+            open={Boolean(this.state.isOpenWeather)}
+            onClose={this.closeWeather}
+            PaperProps={{
+              style: {
+                maxHeight: 216,
+                width: 300,
+              },
+            }}
+          >
+            {allWeather.map((weather: string) => {
+              return (
+                <MenuItem selected={weather === this.state.weather} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleWeather(weather);this.closeWeather(event);}}>
+                  {weather}
+                </MenuItem>
+              )
+            })}
+          </Menu>
+          <Button onClick={this.openOthers} variant="outlined" style={{height: 35,width: 250}}>
+            その他▼
+          </Button>
+          <Menu
+            id="long-menu"
+            anchorEl={this.state.isOpenOthers}
+            open={Boolean(this.state.isOpenOthers)}
+            onClose={this.closeOthers}
+            PaperProps={{
+              style: {
+                maxHeight: 216,
+                width: 300,
+              },
+            }}
+          >
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.reflect} onChange={this.handleReflect} style={{margin: 0}}/>
+              <Typography onClick={this.handleReflect} style={{width: 90, marginTop: 9, marginLeft: 0}}>リフレクター</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.light} onChange={this.handleLight} style={{margin: 0}}/>
+              <Typography onClick={this.handleLight} style={{width: 90, marginTop: 9, marginLeft: 0}}>ひかりのかべ</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.aurora} onChange={this.handleAurora} style={{margin: 0}}/>
+              <Typography onClick={this.handleAurora} style={{width: 90, marginTop: 9, marginLeft: 0}}>オーロラベール</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.scald} onChange={this.handleScald} style={{margin: 0}}/>
+              <Typography onClick={this.handleScald} style={{width: 90, marginTop: 9, marginLeft: 0}}>やけど(攻撃側)</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.many} onChange={this.handleMany} style={{margin: 0}}/>
+              <Typography onClick={this.handleMany} style={{width: 90, marginTop: 9, marginLeft: 0}}>ダブルバトル</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.water} onChange={this.handleWater} style={{margin: 0}}/>
+              <Typography onClick={this.handleWater} style={{width: 90, marginTop: 9, marginLeft: 0}}>みずあそび</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.mad} onChange={this.handleMad} style={{margin: 0}}/>
+              <Typography onClick={this.handleMad} style={{width: 90, marginTop: 9, marginLeft: 0}}>どろあそび</Typography>
+            </MenuItem>
+            <MenuItem>
+              <Checkbox checked={this.state.checkOption.cross} onChange={this.handleCross} style={{margin: 0}}/>
+              <Typography onClick={this.handleCross} style={{width: 90, marginTop: 9, marginLeft: 0}}>ダブルバトル</Typography>
+            </MenuItem>
+          </Menu>
+        </Grid>
       )
     }
   }
@@ -430,34 +560,33 @@ export default class Calculate extends React.Component<Props,State> {
     if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
       if (this.state.attack.waza.type !== "ダミー") {
         return (
-          <Grid item>
-          <Typography align="center">
-            ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
-          </Typography>
-          <Typography align="center">
-            急所ダメージ: {Math.round(this.damage()[2] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[3] * this.state.defence.status.statusH)}
-          </Typography>
-          <Typography align="center">
-            {this.renderRansu(this.damage()[4], this.damage()[5], this.damage()[6])}
-          </Typography>
-        </Grid>
+          <Grid item >
+            <Typography align='center'>
+              ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
+            </Typography>
+            <Typography align='center'>
+              急所ダメージ: {Math.round(this.damage()[2] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[3] * this.state.defence.status.statusH)}
+            </Typography>
+            <Typography align='center'>
+              {this.renderRansu(this.damage()[4], this.damage()[5], this.damage()[6])}
+            </Typography>
+          </Grid>
         )
       }
     }
   }
-  
   render() {
     return (
-      <Grid container className="root" spacing={2}>
+      <Grid>
         <Grid container>
           {this.renderAttack()}
           {this.renderDefence()}
         </Grid>
         <HPbar confirmHP={this.damage()[1] ? this.damage()[1] : 0} lostHP={this.damage()[0] ? this.damage()[0] : 0}  style={{marginLeft: 60}} time={this.state.attack ? this.state.attack.time : 0} />
         {this.renderDamage()}
-        {this.renderAttackOptions()}
-        {this.renderDefenceOptions()}
-        <div>{this.state.checkOption.attackItem }</div>
+        <Grid container>
+          {this.renderOptions()}
+        </Grid>
       </Grid>
     );
   }

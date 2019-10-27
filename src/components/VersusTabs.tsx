@@ -189,7 +189,7 @@ export default class VersusTabs extends React.Component<Props,State> {
               </Paper>
             </Grid>
             <Grid item>
-              <Paper style={{ height: 430,width: 300, marginTop: 8 }}>
+              <Paper style={{ height: 430,width: 300, marginTop: 0 }}>
                 <Calculate myStatus={this.state.myStatus} myWaza={this.state.myWaza} myTime={this.state.myTime} mySelect={this.state.mySelect} oppoItem={this.state.oppoItem} myItem={this.state.myItem} myNature={this.state.myNature} oppoNature={this.state.oppoNature} oppoStatus={this.state.oppoStatus} oppoWaza={this.state.oppoWaza} oppoTime={this.state.oppoTime} oppoSelect={this.state.oppoSelect} />
               </Paper>
             </Grid>

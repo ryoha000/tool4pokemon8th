@@ -7,9 +7,12 @@ import MonsterBall from '@material-ui/icons/Restaurant';
 import Versus from '@material-ui/icons/SmokeFree';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import ComputerIcon from '@material-ui/icons/Computer';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
+import Register from './Register'
 import { waza, PokemonData } from './shared'
+import { register } from '../serviceWorker';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -74,6 +77,7 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         >
           <Tab icon={<Versus />} aria-label="versus" {...a11yProps(0)} />
           <Tab icon={<MonsterBall />} aria-label="pokemon" {...a11yProps(5)} />
+          <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} />
           <Tab icon={<DescriptionOutlinedIcon />} aria-label="log" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
@@ -81,10 +85,13 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         <VersusTabs wazas={props.wazas} pokemons={props.pokemons}/>
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Register wazas={props.wazas} pokemons={props.pokemons}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        Item Four
       </TabPanel>
     </div>
   );

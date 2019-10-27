@@ -23,6 +23,9 @@ export interface CheckOptions {
 	light: boolean
 	aurora: boolean
 	scald: boolean
+	water: boolean
+	mad: boolean
+	cross: boolean
 }
 
 export const natures: Nature[] = [
@@ -221,32 +224,29 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
     return pokemon
 }
 
-export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, other: string, weather: string): number[][] {
+export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, weather: string): number[][] {
 	// level=50
 	const level: number = 50 * 2 / 5 + 2
 	console.log(level)
-	let power: number = attackWaza.power
+	let power: number = attackWaza.power * 4096
 	let item = powerItem.find((element) => {return(element.name === attackItem)})
 	if (checkOptions.attackItem) {
 		if (item) {
 			power = Math.round(power * item.number / 4096)
 		}
 	}
-	if (power < 1) {power = 1}
 	item = powerItem.find((element) => {return(element.name === defenceItem)})
 	if(checkOptions.defenceItem) {
 		if (item) {
 			power = Math.round(power * item.number / 4096)
 		}
 	}
-	if (power < 1) {power = 1}
 	let nature = powerNature.find((element) => {return(element.name === attackNature)})
 	if (checkOptions.attackNature) {
 		if (nature) {
 			power = Math.round(power * nature.number / 4096)
 		}
 	}
-  if (power < 1) {power = 1}
   // 例外 とうそうしん
 	nature = powerNature.find((element) => {return(element.name === defenceNature)})
 	if (checkOptions.defenceNature) {
@@ -254,26 +254,21 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			power = Math.round(power * nature.number / 4096)
 		}
 	}
-	if (power < 1) {power = 1}
 	let waza = powerWaza.find((element) => {return(element.name === attackWaza.name)})
 	if (checkOptions.attackWaza) {
 		if (waza) {
 			power = Math.round(power * waza.number / 4096)
 		}
 	}
-	if (power < 1) {power = 1}
-	if (other === "みずあそび" || attackWaza.type === "ほのお") {
+	if (checkOptions.water || attackWaza.type === "ほのお") {
 		power = Math.round(power * 1352 / 4096)
 	}
-	if (power < 1) {power = 1}
-	if (other === "どろあそび" || attackWaza.type === "でんき") {
+	if (checkOptions.mad || attackWaza.type === "でんき") {
 		power = Math.round(power * 1352 / 4096)
 	}
-	if (power < 1) {power = 1}
-	if (other === "クロスサンダー+クロスフレイムの後") {
+	if (checkOptions.cross) {
 		power = Math.round(power * 8192 / 4096)
 	}
-	if (power < 1) {power = 1}
 	if (field === "エレキ") {
 		if (attackWaza.type === "でんき") {
 			power = Math.round(power * 6144 / 4096)
@@ -282,7 +277,6 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			attackWaza = {name:"10まんボルト",	type:"でんき",	power:90,	accuracy:100,	species:"特殊"}
 		}
 	}
-	if (power < 1) {power = 1}
 	if (field === "グラス") {
 		if (attackWaza.type === "くさ") {
 			power = Math.round(power * 6144 / 4096)
@@ -294,7 +288,6 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			power = Math.round(power * 2048 / 4096)
 		}
 	}
-	if (power < 1) {power = 1}
 	if (field === "ミスト") {
 		if (attackWaza.type === "ドラゴン") {
 			power = Math.round(power * 2048 / 4096)
@@ -303,7 +296,6 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			attackWaza = {name:"ムーンフォース",	type:"フェアリー",	power:95,	accuracy:100,	species:"特殊"}
 		}
 	}
-	if (power < 1) {power = 1}
 	if (field === "サイコ") {
 		if (attackWaza.type === "エスパー") {
 			power = Math.round(power * 6144 / 4096)
@@ -312,7 +304,7 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 		  attackWaza = {name:"サイコキネシス",	type:"エスパー",	power:90,	accuracy:100,	species:"特殊"}
 		}
 	}
-	if (power < 1) {power = 1}
+	power = pushOver5(power / 4096)
 	let AorC: number = 0
 	let BorD: number = 0
 	if (attackWaza.species === "物理") {
@@ -322,6 +314,9 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	if (attackWaza.species === "特殊") {
 		AorC = attackStatus.statusC
 		BorD = defenceStatus.statusD
+	}
+	if (attackWaza.name !== "しぜんのちから" && attackWaza.species === "変化") {
+		return [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 	}
 	let rankA: number = 1
 	let rankD: number = 1
@@ -339,9 +334,10 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	}
 	AorC = Math.floor(AorC * rankA)
 	BorD = Math.floor(BorD * rankD)
-	if (attackNature === "はりきり" || checkOptions.attackNature) {
+	if (attackNature === "はりきり" && checkOptions.attackNature && attackWaza.species === "物理") {
 		AorC = Math.floor(AorC * 6144 / 4096)
-  }
+	}
+	AorC = AorC * 4096
 	// 例外 すいほう
 	nature = attackNatures.find((element) => {return(element.name === attackNature)})
 	if (checkOptions.attackNature) {
@@ -349,69 +345,66 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			AorC = Math.round(AorC * nature.number / 4096)
 		}
 	}
-	if (AorC < 1) {AorC = 1}
 	nature = attackNatures.find((element) => {return(element.name === defenceNature)})
 	if (checkOptions.defenceNature) {
 		if (nature) {
 			AorC = Math.round(AorC * nature.number / 4096)
 		}
 	}
-	if (AorC < 1) {AorC = 1}
 	item = attackItems.find((element) => {return(element.name === attackItem)})
 	if (checkOptions.attackItem) {
 		if (item) {
 			AorC = Math.round(AorC * item.number / 4096)
 		}
 	}
-	if (AorC < 1) {AorC = 1}
 	item = attackItems.find((element) => {return(element.name === defenceItem)})
 	if (checkOptions.defenceItem) {
 		if (item) {
 			AorC = Math.round(AorC * item.number / 4096)
 		}
 	}
-	if (AorC < 1) {AorC = 1}
 	if (weather === "すなあらし") {
 		if (defencePokemon.type1 === "いわ" || defencePokemon.type2 === "いわ") {
 			BorD = Math.floor(BorD * 6144 / 4096)
 		}
 	}
+	BorD = BorD * 4096
 	nature = defenceNatures.find((element) => {return(element.name === defenceNature)})
 	if (checkOptions.defenceNature) {
 		if (nature) {
 			BorD = Math.round(BorD * nature.number / 4096)
 		}
 	}
-	if (BorD < 1) {BorD = 1}
 	item = defenceItems.find((element) => {return(element.name === defenceItem)})
 	if (checkOptions.defenceNature) {
 		if (item) {
 			BorD = Math.round(BorD * item.number / 4096)
 		}
 	}
-	if (BorD < 1) {BorD = 1}
+	AorC = pushOver5(AorC / 4096)
+	BorD = pushOver5(BorD / 4096)
 	let damage: number = Math.floor(level * power * AorC / BorD)
 	damage = Math.floor(damage / 50 + 2)
 	if (checkOptions.many) {
-		damage = Math.round(damage * 3072 / 4096)
+		damage = pushOver5(damage * 3072 / 4096)
 	}
 	if (weather === "はれ") {
 		if (attackWaza.type === "ほのお") {
-			damage = Math.round(damage * 6144 / 4096)
+			damage = pushOver5(damage * 6144 / 4096)
 		}
 		if (attackWaza.type === "みず") {
-			damage = Math.round(damage * 2048 / 4096)
+			damage = pushOver5(damage * 2048 / 4096)
 		}
 	}
 	if (weather === "あめ") {
 		if (attackWaza.type === "ほのお") {
-			damage = Math.round(damage * 2048 / 4096)
+			damage = pushOver5(damage * 2048 / 4096)
 		}
 		if (attackWaza.type === "みず") {
-			damage = Math.round(damage * 6144 / 4096)
+			damage = pushOver5(damage * 6144 / 4096)
 		}
 	}
-	let criticalDamage: number = Math.round(damage * 6144 / 4096)
+	let criticalDamage: number = pushOver5(damage * 6144 / 4096)
 	let damages: number[] = []
 	for (let i = 0; i < 16; i++) {
 		damages.push(Math.floor(damage * (0.85 + i * 0.01)))
@@ -423,17 +416,17 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	if (attackWaza.type === attackPokemon.type1 || attackWaza.type === attackPokemon.type2) {
 		if (attackNature === "てきおうりょく" && checkOptions.attackNature) {
 			for (let i = 0; i < 16; i++) {
-				damages[i] = Math.round(damages[i] * 8192 / 4096)
+				damages[i] = pushOver5(damages[i] * 8192 / 4096)
 			}
 			for (let i = 0; i < 16; i++) {
-				criticalDamages[i] = Math.round(criticalDamages[i] * 8192 / 4096)
+				criticalDamages[i] = pushOver5(criticalDamages[i] * 8192 / 4096)
 			}
 		} else {
 			for (let i = 0; i < 16; i++) {
-				damages[i] = Math.round(damages[i] * 6144 / 4096)
+				damages[i] = pushOver5(damages[i] * 6144 / 4096)
 			}
 			for (let i = 0; i < 16; i++) {
-				criticalDamages[i] = Math.round(criticalDamages[i] * 6144 / 4096)
+				criticalDamages[i] = pushOver5(criticalDamages[i] * 6144 / 4096)
 			}
 		}
 	}
@@ -445,11 +438,17 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	}
 	if (checkOptions.scald && attackWaza.species === "物理") {
 		for (let i = 0; i < 16; i++) {
-			damages[i] = Math.round(damages[i] * 2048 / 4096)
+			damages[i] = pushOver5(damages[i] * 2048 / 4096)
 		}
 		for (let i = 0; i < 16; i++) {
 			criticalDamages[i] = Math.round(criticalDamages[i] * 2048 / 4096)
 		}
+	}
+	for (let i = 0; i < 16; i++) {
+		damages[i] = damages[i] * 4096
+	}
+	for (let i = 0; i < 16; i++) {
+		criticalDamages[i] = criticalDamages[i] * 4096
 	}
 	if (checkOptions.reflect && attackWaza.species === "物理") {
 		for (let i = 0; i < 16; i++) {
@@ -511,6 +510,12 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 		for (let i = 0; i < 16; i++) {
 			criticalDamages[i] = Math.round(criticalDamages[i] * item.number / 4096)
 		}
+	}
+	for (let i = 0; i < 16; i++) {
+		damages[i] = pushOver5(damages[i] / 4096)
+	}
+	for (let i = 0; i < 16; i++) {
+		criticalDamages[i] = pushOver5(criticalDamages[i] / 4096)
 	}
 	return [damages, criticalDamages]
 }
@@ -644,4 +649,13 @@ export function TypeCompatibility(attackType: string, defencePokemon: PokemonDat
 		return 2
 	}
 	return 1
+}
+
+export function pushOver5(n: number): number {
+	let afterN: number = Math.floor(n)
+	if (n - afterN > 0.5) {
+		return Math.ceil(n)
+	} else {
+		return Math.floor(n)
+	}
 }

@@ -203,6 +203,36 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   renderAbility = () => {
     if (this.state.pokemonData.ability2 != "") {
       if (this.state.pokemonData.ability3 != "") {
+        if (this.state.pokemonData.ability2 === "とうそうしん") {
+          return (
+            <div>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(弱化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(弱化)");this.closeAbility(event);}}>
+                とうそうしん(弱化)
+              </MenuItem>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(強化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(強化)");this.closeAbility(event);}}>
+                とうそうしん(強化)
+              </MenuItem>
+              <MenuItem selected={this.state.pokemonData.ability3 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
+                {this.state.pokemonData.ability3}
+              </MenuItem>
+            </div>
+          )
+        }
+        if (this.state.pokemonData.ability3 === "とうそうしん") {
+          return (
+            <div>
+              <MenuItem selected={this.state.pokemonData.ability2 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
+                {this.state.pokemonData.ability2}
+              </MenuItem>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(弱化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(弱化)");this.closeAbility(event);}}>
+                とうそうしん(弱化)
+              </MenuItem>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(強化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(強化)");this.closeAbility(event);}}>
+                とうそうしん(強化)
+              </MenuItem>
+            </div>
+          )
+        }
         return (
           <div>
             <MenuItem selected={this.state.pokemonData.ability2 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
@@ -210,6 +240,18 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
             </MenuItem>
             <MenuItem selected={this.state.pokemonData.ability3 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability3);this.closeAbility(event);}}>
               {this.state.pokemonData.ability3}
+            </MenuItem>
+          </div>
+        )
+      }
+      if (this.state.pokemonData.ability2 === "とうそうしん") {
+        return (
+          <div>
+            <MenuItem selected={this.state.selectedAbility === "とうそうしん(弱化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(弱化)");this.closeAbility(event);}}>
+              とうそうしん(弱化)
+            </MenuItem>
+            <MenuItem selected={this.state.selectedAbility === "とうそうしん(強化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(強化)");this.closeAbility(event);}}>
+              とうそうしん(強化)
             </MenuItem>
           </div>
         )
@@ -602,6 +644,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   }
   handleAbility = (name: string) => {
     this.setState({ selectedAbility: name })
+    this.props.decidion(this.state.status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem, name)
   }
   handleItem = (name: string) => {
     const item: any = availableItems.find((element) => {
@@ -891,9 +934,18 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
               },
             }}
           >
-            <MenuItem selected={this.state.pokemonData.ability1 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability1);this.closeAbility(event);}}>
-              {this.state.pokemonData.ability1}
-            </MenuItem>
+            {this.state.pokemonData.ability1 === "とうそうしん" ? 
+            <div>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(弱化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(弱化)");this.closeAbility(event);}}>
+                とうそうしん(弱化)
+              </MenuItem>
+              <MenuItem selected={this.state.selectedAbility === "とうそうしん(強化)"} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility("とうそうしん(強化)");this.closeAbility(event);}}>
+                とうそうしん(強化)
+              </MenuItem> 
+            </div> :
+              <MenuItem selected={this.state.pokemonData.ability1 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability1);this.closeAbility(event);}}>
+                {this.state.pokemonData.ability1}
+              </MenuItem>}
             {this.renderAbility()}
           </Menu>
         </div>
