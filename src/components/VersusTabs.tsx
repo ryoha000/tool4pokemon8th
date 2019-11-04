@@ -17,6 +17,8 @@ import PokemonInBattle, { PokemonInBattleState } from './PokemonInBattle'
 import { PokemonData, waza, Status } from './shared';
 import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
+import ClearIcon from '@material-ui/icons/Clear';
+import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
 
 interface Props{
   wazas: waza[];
@@ -40,7 +42,6 @@ interface State{
   oppoItem?: string
   myNature?: string
   oppoNature?: string
-  // selectedY: Pokemon;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -125,6 +126,36 @@ export default class VersusTabs extends React.Component<Props,State> {
     this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime, oppoItem: myItem, oppoNature: nature })
     console.log("oppowaza:" + myWaza + "time:" + myTime)
   };
+  clickMyClear = (pokemon: PokemonData) => {
+    let num: number = -1
+    const target: PokemonData | undefined = this.state.myParty.find((element: PokemonData, i: number) => {
+      if (pokemon.name === element.name) {
+        num = i
+      }
+      return element.name === pokemon.name
+    })
+    let newArray: PokemonData[] = this.state.myParty
+    if (num !== -1) {
+      newArray.splice(num, 1)
+      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"})
+      this.setState({ myParty: newArray })
+    }
+  }
+  clickOppoClear = (pokemon: PokemonData) => {
+    let num: number = -1
+    const target: PokemonData | undefined = this.state.oppoParty.find((element: PokemonData, i: number) => {
+      if (pokemon.name === element.name) {
+        num = i
+      }
+      return element.name === pokemon.name
+    })
+    let newArray: PokemonData[] = this.state.oppoParty
+    if (num !== -1) {
+      newArray.splice(num, 1)
+      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"})
+      this.setState({ oppoParty: newArray })
+    }
+  }
   renderPartyListMy = () => {
     return <List
                 component="nav"
@@ -144,6 +175,11 @@ export default class VersusTabs extends React.Component<Props,State> {
                         <PokemonIcon number={element.number}/>
                       </ListItemAvatar>
                       <ListItemText primary={element.name} />
+                      <ListItemSecondaryAction>
+                        <IconButton edge="end" onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickMyClear(element)}}>
+                          <ClearIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
                     </ListItem>
                   )
                 })}
@@ -168,6 +204,11 @@ export default class VersusTabs extends React.Component<Props,State> {
                       <PokemonIcon number={element.number}/>
                     </ListItemAvatar>
                     <ListItemText primary={element.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton edge="end"  onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickOppoClear(element)}}>
+                        <ClearIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
                   </ListItem>
                 )
               })}

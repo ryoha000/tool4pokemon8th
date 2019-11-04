@@ -1,9 +1,9 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { datas, waza } from './shared'
 import { TextField, Menu } from '@material-ui/core';
 import { wazaData } from './WazaData';
+import {AllItem, Item} from './ItemData'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,18 +18,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   handleInput: any
-  datas: waza[]
-  banish?: boolean
 }
 
 interface State {
   isOpenSuggest?: any
-  nowSuggest: waza[]
+  nowSuggest: Item[]
   nowInput: string
   open: boolean
 }
 
-export default class InputAuto extends React.Component<Props,State> {
+export default class InputAutoItem extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {
@@ -40,7 +38,7 @@ export default class InputAuto extends React.Component<Props,State> {
     };
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    let updateSuggest: waza[] = []
+    let updateSuggest: Item[] = []
     let str: string = event.target.value
     const pst: string = event.target.value
     str = str.replace(/[\u3041-\u3096]/g, function(match) {
@@ -53,7 +51,7 @@ export default class InputAuto extends React.Component<Props,State> {
           return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1)
         })
       } else {
-        updateSuggest = this.props.datas.filter((element) => {
+        updateSuggest = AllItem.filter((element) => {
           return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1)
         })
       }
@@ -70,9 +68,9 @@ export default class InputAuto extends React.Component<Props,State> {
     }, 800)
   }
 
-  handleSelect = (pokemon: waza) => {
-    this.props.handleInput(pokemon)
-    this.setState({ nowInput: "" })
+  handleSelect = (nature: Item) => {
+    this.props.handleInput(nature.name)
+    this.setState({ nowInput: nature.name })
   }
   openSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenSuggest: event.currentTarget})
@@ -88,7 +86,7 @@ export default class InputAuto extends React.Component<Props,State> {
           value={this.state.nowInput}
           style={{margin: 0, zIndex: 10, marginTop: 3}}
           onChange={this.handleInput()}
-          placeholder="技名"
+          placeholder="アイテム"
           type="search"
         />
           <Menu
@@ -106,7 +104,7 @@ export default class InputAuto extends React.Component<Props,State> {
               },
             }}
           >
-            {this.state.nowSuggest.map((element: waza, indec: number, array: waza[]) => {
+            {this.state.nowSuggest.map((element: Item, indec: number, array: Item[]) => {
               return (
                 <MenuItem onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleSelect(element);this.closeSuggest(event);}} key={indec}>{element.name}</MenuItem>
               )

@@ -5,7 +5,7 @@ import { element } from 'prop-types';
 import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
 import { border } from '@material-ui/system';
 
-interface Nature{
+export interface Nature{
     id: number;
     name: string;
     upStatus: string;

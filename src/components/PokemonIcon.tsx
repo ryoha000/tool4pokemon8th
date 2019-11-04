@@ -45,13 +45,14 @@ export default class PokemonIcon extends React.Component<Props,State> {
       }
     } 
   }
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  componentDidUpdate = (prevProps: Props, prevState: State) => {
     if (this.props.number != this.state.propsNumber) {
       this.setState({loading: true})
       console.log(this.state.number)
       console.log(this.props.number)
       this.setState({propsNumber: this.props.number})
       if (this.props.number.length === 1) {
+        console.log("length === 1")
         this.setState({number: "00" + this.props.number})
       }
       if (this.props.number.length === 2) {
@@ -62,12 +63,12 @@ export default class PokemonIcon extends React.Component<Props,State> {
       }
       this.setState({loading: false})
       console.log(this.state.number)
-      if (this.props.number === "7") {
-        this.setState({ number: "007" })
-      }
-      if (this.props.number === "1") {
-        this.setState({ number: "001" })
-      }
+      // if (this.props.number === "7") {
+      //   this.setState({ number: "007" })
+      // }
+      // if (this.props.number === "1") {
+      //   this.setState({ number: "001" })
+      // }
     }
   }
   render() {
@@ -76,10 +77,9 @@ export default class PokemonIcon extends React.Component<Props,State> {
         <CircularProgress/>
       )
     } else {
-        return (
-            <Avatar src={"/assets/" + this.state.number + ".png"}/>
-        );
-
+      return (
+        <Avatar src={"/assets/" + this.state.number + ".png"}/>
+      );
     }
   }
 }
