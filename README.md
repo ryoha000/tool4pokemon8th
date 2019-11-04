@@ -46,3 +46,9 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 import MonsterBall from '@material-ui/icons/Restaurant';
 import Versus from '@material-ui/icons/SmokeFree';
 ="""heavy"":"""&N1&"""}"
+
+create table pokemons (id int auto_increment, name varchar(10), number varchar(10), user_id int, effort_h int, effort_a int, effort_b int, effort_c int, effort_d int, effort_s int, move_1 varchar(10), move_2 varchar(10), move_3 varchar(10), move_4 varchar(10), nature varchar(10), ability varchar(10), memo varchar(255), created_at datetime, updated_at datetime, deleted_at datetime, index(id));
+
+create table parties (id int auto_increment, name varchar(10), user_id int, pokemon_id_1 int, pokemon_id_2 int, pokemon_id_3 int, pokemon_id_4 int, pokemon_id_5 int, pokemon_id_6 int, memo varchar(255), created_at datetime, updated_at datetime, deleted_at datetime, index(id));
+
+create table logs (id int auto_increment, name varchar(10), user_id int, party_id int, pokemon_num_1 varchar(10), pokemon_num_2 varchar(10), pokemon_num_3 varchar(10), pokemon_num_4 varchar(10), pokemon_num_5 varchar(10), pokemon_num_6 varchar(10), my_select_1 boolean, my_select_2 boolean, my_select_3 boolean, my_select_4 boolean, my_select_5 boolean, my_select_6 boolean, oppo_select_1 boolean, oppo_select_2 boolean, oppo_select_3 boolean, oppo_select_4 boolean, oppo_select_5 boolean, oppo_select_6 boolean, result boolean, my_first int, oppo_first varchar(10), memo varchar(255), created_at datetime, updated_at datetime, deleted_at datetime, index(id));
