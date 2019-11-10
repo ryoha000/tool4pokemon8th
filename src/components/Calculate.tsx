@@ -90,7 +90,7 @@ export default class Calculate extends React.Component<Props,State> {
       }
       if (myState.time > oppoState.time) {
         if (this.state.attack) {
-          if (this.state.attack.pokemon.name != myState.pokemon.name || this.state.attack.waza != myState.waza || this.state.attack.status != myState.status) {
+          if (this.state.attack.pokemon.name !== myState.pokemon.name || this.state.attack.waza !== myState.waza || this.state.attack.status !== myState.status) {
             this.setState({ attack: myState , defence: oppoState})
           }
         } else {
@@ -99,7 +99,7 @@ export default class Calculate extends React.Component<Props,State> {
       }
       if (myState.time < oppoState.time) {
         if (this.state.attack) {
-          if (this.state.attack.pokemon.name != oppoState.pokemon.name || this.state.attack.waza != oppoState.waza || this.state.attack.status != oppoState.status) {
+          if (this.state.attack.pokemon.name !== oppoState.pokemon.name || this.state.attack.waza !== oppoState.waza || this.state.attack.status !== oppoState.status) {
             this.setState({ attack: oppoState , defence: myState})
           }
         } else {

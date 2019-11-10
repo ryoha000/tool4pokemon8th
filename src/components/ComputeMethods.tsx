@@ -1,9 +1,6 @@
-import React from 'react';
 import { PokemonData, Status, waza } from '../components/shared'
 import { PokemonInBattleState } from './PokemonInBattle';
-import { element } from 'prop-types';
 import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
-import { border } from '@material-ui/system';
 
 export interface Nature{
     id: number;

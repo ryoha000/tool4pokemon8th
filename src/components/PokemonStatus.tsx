@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import  {name2Pokemon, PokemonData, makeDB, waza, Status}  from './shared';
 import  {getPokemonByName, getWazas}  from './shared_js';
 import { computeStatus, natures } from './ComputeMethods'
-import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select, Icon, TextField } from '@material-ui/core';
+import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select, Icon, TextField, Divider } from '@material-ui/core';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import InputAuto from './InputAuto';
@@ -23,7 +23,8 @@ interface Props{
   pokemon?: PokemonData;
   pokemons: PokemonData[];
   wazas: waza[];
-  color: string
+  color: string;
+  sendPokemonStatus: any;
 }
 
 export default class PokemonStatus extends React.Component<Props,PokemonInBattleState> {
@@ -65,6 +66,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
     };
   }
   componentDidUpdate = () => {
+    this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
     if (this.props.pokemon) {
       if (this.props.pokemon !== this.state.pokemonData) {
         this.setState({ pokemonData: this.props.pokemon})
@@ -111,6 +113,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
             status: status,
             selectedAbility: pokemon.pokemonData.ability1
           })
+          
         },50)
       }
     }
@@ -475,6 +478,10 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       // this.props.decidion(status, this.state.selectedWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
     }, 300)
   }
+  handlePokemonName = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const name: string = event.target.value
+    this.setState({pokemonName: name})
+  }
   handleChangeEffortForm = () => (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
     this.setState({ effortForm: value })
   }
@@ -711,12 +718,19 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       subheader={this.state.pokemonData.base_h + "-" +  this.state.pokemonData.base_a + "-" +  this.state.pokemonData.base_b + "-" +  this.state.pokemonData.base_c + "-" +  this.state.pokemonData.base_d + "-" +  this.state.pokemonData.base_s}
       style={{height: 26}}
       />
+      <TextField
+        label="Name"
+        value={this.state.pokemonName? this.state.pokemonName : ''}
+        onChange={this.handlePokemonName()}
+        margin="normal"
+      />
+      <InputAutoNature handleInput={this.handleNature} />
+      <Divider style={{marginTop: 3}} />
       <ListItem>
         <ListItemText primary="努力値" />
       </ListItem>
 			{this.renderOver508()}
       {this.renderEffortForm()}
-      <InputAutoNature handleInput={this.handleNature} />
     </Card>
     );
   }

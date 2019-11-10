@@ -1,19 +1,14 @@
+/* eslint-disable import/first */
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Grid, { GridSpacing } from '@material-ui/core/Grid';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import ListItemText from '@material-ui/core/ListItemText';;
 import Calculate from './Calculate'
-import PokemonInBattle, { PokemonInBattleState } from './PokemonInBattle'
+import PokemonInBattle from './PokemonInBattle'
 import { PokemonData, waza, Status } from './shared';
 import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
@@ -43,22 +38,6 @@ interface State{
   myNature?: string
   oppoNature?: string
 }
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-    paper: { height: 430,width: 300 },
-    nested: { paddingLeft: theme.spacing(4) },
-    control: { padding: theme.spacing(2) },
-    avatar: {
-      margin: 10,
-      width: 30,
-      height: 30,
-    },
-  }),
-);
 
 export default class VersusTabs extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {

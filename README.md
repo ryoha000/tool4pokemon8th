@@ -52,3 +52,26 @@ create table pokemons (id int auto_increment, name varchar(10), number varchar(1
 create table parties (id int auto_increment, name varchar(10), user_id int, pokemon_id_1 int, pokemon_id_2 int, pokemon_id_3 int, pokemon_id_4 int, pokemon_id_5 int, pokemon_id_6 int, memo varchar(255), created_at datetime, updated_at datetime, deleted_at datetime, index(id));
 
 create table logs (id int auto_increment, name varchar(10), user_id int, party_id int, pokemon_num_1 varchar(10), pokemon_num_2 varchar(10), pokemon_num_3 varchar(10), pokemon_num_4 varchar(10), pokemon_num_5 varchar(10), pokemon_num_6 varchar(10), my_select_1 boolean, my_select_2 boolean, my_select_3 boolean, my_select_4 boolean, my_select_5 boolean, my_select_6 boolean, oppo_select_1 boolean, oppo_select_2 boolean, oppo_select_3 boolean, oppo_select_4 boolean, oppo_select_5 boolean, oppo_select_6 boolean, result boolean, my_first int, oppo_first varchar(10), memo varchar(255), created_at datetime, updated_at datetime, deleted_at datetime, index(id));
+
+{"pokemon":
+	{
+	"name": "name3",
+	"number": "num",
+	"user_id": 1,
+	"effort_h": 4,
+	"effort_a": 252,
+	"effort_b": 0,
+	"effort_c": 0,
+	"effort_d": 0,
+	"effort_s": 252,
+	"move_1": "10万",
+	"move_2": "waza",
+	"move_3": "move",
+	"move_4": "mive",
+	"nature": "nature",
+	"ability": "ability",
+	"memo": "これはメモだよ～"
+	}
+}
+
+__class__ __delattr__ __dict__ __dir__ __doc__ __eq__ __format__ __ge__ __getattribute__ __gt__ __hash__ __init__ __init_subclass__ __le__ __lt__ __mapper__ __module__ __ne__ __new__ __reduce__ __reduce_ex__ __repr__ __setattr__ __sizeof__ __str__ __subclasshook__ __table__ __tablename__ __weakref__ _decl_class_registry _sa_class_manager _sa_instance_state ability created_at deleted_at effort_a effort_b effort_c effort_d effort_h effort_s id logs memo metadata move_1 move_2 move_3 move_4 name nature number parties updated_at user user_id

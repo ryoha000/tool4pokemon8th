@@ -12,7 +12,6 @@ import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
 import Register from './Register'
 import { waza, PokemonData } from './shared'
-import { register } from '../serviceWorker';
 
 interface TabPanelProps {
   children?: React.ReactNode;

@@ -1,30 +1,24 @@
-import React, { ChangeEvent } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React from 'react';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography'
-import  {name2Pokemon, PokemonData, makeDB, waza, Status}  from './shared';
-import  {getPokemonByName, getWazas}  from './shared_js';
-import { computeStatus, natures } from './ComputeMethods'
-import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select, Icon, TextField, ListItemSecondaryAction } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import  { PokemonData, waza, Status }  from './shared';
+import { computeStatus } from './ComputeMethods'
+import { CircularProgress, ListItem, ListItemText, List, Button, Grid, Menu, MenuItem, ListItemSecondaryAction } from '@material-ui/core';
 import InputAuto from './InputAuto';
-import { AllItem, availableItems, Item } from './ItemData';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import PokemonIcon from './PokemonIcon'
+import { AllItem } from './ItemData';
 import {PokemonInBattleState} from './PokemonInBattle'
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAutoItem from './InputAutoItem'
+import axios from 'axios'
 
 interface Props{
   pokemon?: PokemonData;
   pokemons: PokemonData[];
   wazas: waza[];
-  color: string
+  color: string;
+  openModal: any;
+  sendPokeMove: any;
 }
 
 export default class PokemonMove extends React.Component<Props,PokemonInBattleState> {
@@ -83,9 +77,12 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       wazaLabels.push({lanel: element.name})
     })
     this.setState({ wazaLabel: wazaLabels })
-    this.setState({ customizedWazas: [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]})
+    const customizedWaza = [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]
+    this.setState({ customizedWazas: customizedWaza})
+    // this.props.sendPokeMove(customizedWaza[0], customizedWaza[1], customizedWaza[2], customizedWaza[3], this.state.selectedItem, this.state.selectedAbility)
   }
   componentDidUpdate = () => {
+    this.props.sendPokeMove(this.state.customizedWazas[0], this.state.customizedWazas[1], this.state.customizedWazas[2], this.state.customizedWazas[3], this.state.selectedItem, this.state.selectedAbility)
     if (this.props.pokemon) {
       if (this.state.pokemonData.name !== this.props.pokemon.name) {
         this.setState({ pokemonData: this.props.pokemon, selectedAbility: this.props.pokemon.ability1 })
@@ -93,8 +90,8 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
     }
   }
   renderAbility = () => {
-    if (this.state.pokemonData.ability2 != "") {
-      if (this.state.pokemonData.ability3 != "") {
+    if (this.state.pokemonData.ability2 !== "") {
+      if (this.state.pokemonData.ability3 !== "") {
         return (
           <div>
             <MenuItem selected={this.state.pokemonData.ability2 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability2);this.closeAbility(event);}}>
@@ -115,6 +112,26 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       )
     }
     return
+  }
+  openModal = (event: React.MouseEvent<HTMLElement>) => {
+    this.props.openModal()
+  }
+  sendPokemon = (memo: string) => {
+    axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {
+      ability: this.state.selectedAbility,
+      effort_h: this.state.effortHP,
+      effort_a: this.state.effortA,
+      effort_b: this.state.effortB,
+      effort_c: this.state.effortC,
+      effort_d: this.state.effortD,
+      effort_s: this.state.effortS,
+      memo: memo,
+      move_1: this.state.customizedWazas[0],
+      move_2: this.state.customizedWazas[1],
+      move_3: this.state.customizedWazas[2],
+      move_4: this.state.customizedWazas[3],
+      name: this.state
+    })
   }
   openAbility = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenAbility: event.currentTarget})
@@ -211,13 +228,34 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
 		}
     return (
     <Card style={{ height: 430, width: 300 }}>
+      <InputAutoItem handleInput={this.handleItem} />
+      <Button onClick={this.openAbility} variant="outlined" color={this.props.color === "primary" ? "primary" : 'secondary'	} style={{height: 35,width: 182, marginTop: 5}}>
+        {this.state.selectedAbility}▼
+      </Button>
+      <Menu
+        id="long-menu"
+        anchorEl={this.state.isOpenAbility}
+        open={Boolean(this.state.isOpenAbility)}
+        onClose={this.closeAbility}
+        PaperProps={{
+          style: {
+            maxHeight: 216,
+            width: 182,
+          },
+        }}
+      >
+        <MenuItem selected={this.state.pokemonData.ability1 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability1);this.closeAbility(event);}}>
+          {this.state.pokemonData.ability1}
+        </MenuItem>
+        {this.renderAbility()}
+      </Menu>
       <Grid item>
         <List>
           <InputAuto datas={this.props.wazas.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
             {this.state.customizedWazas.map((waza: waza, i: number) => {
               if (i > 4) {return true}
               return (
-                <ListItem key={i}>
+                <ListItem key={i} style={{height: 48}}>
                   <ListItemText
                     style={{marginLeft: 0, whiteSpace: 'pre-line'}}
                   >
@@ -232,27 +270,9 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
             })}
         </List>
       </Grid>
-      <InputAutoItem handleInput={this.handleItem} />
-      <Button onClick={this.openAbility} variant="outlined" color={this.props.color === "primary" ? "primary" : 'secondary'	} style={{height: 35,width: 200}}>
-        {this.state.selectedAbility}▼
+      <Button onClick={this.openModal} variant="outlined" style={{height: 35,width: 200, marginTop: 50}}>
+        ポケモン単体を登録
       </Button>
-      <Menu
-        id="long-menu"
-        anchorEl={this.state.isOpenAbility}
-        open={Boolean(this.state.isOpenAbility)}
-        onClose={this.closeAbility}
-        PaperProps={{
-          style: {
-            maxHeight: 216,
-            width: 200,
-          },
-        }}
-      >
-        <MenuItem selected={this.state.pokemonData.ability1 === this.state.selectedAbility} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleAbility(this.state.pokemonData.ability1);this.closeAbility(event);}}>
-          {this.state.pokemonData.ability1}
-        </MenuItem>
-        {this.renderAbility()}
-      </Menu>
     </Card>
     );
   }

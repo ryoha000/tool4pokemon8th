@@ -58,6 +58,7 @@ export interface PokemonInBattleState{
   customizedWazas: waza[];
   selectedAbility: string;
   selectedItem: Item;
+  pokemonName?: string
 }
  
 export default class PokemonInBattle extends React.Component<Props,PokemonInBattleState> {
@@ -120,7 +121,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     })
     this.setState({ wazaLabel: wazaLabels })
     if (this.props.name) {
-      if (this.state.pokemonData.name != this.props.name.name) {
+      if (this.state.pokemonData.name !== this.props.name.name) {
         this.setState({ loading: true })
         const pokemon: PokemonData = this.props.name
         console.log(pokemon)
@@ -201,8 +202,8 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     }
   }
   renderAbility = () => {
-    if (this.state.pokemonData.ability2 != "") {
-      if (this.state.pokemonData.ability3 != "") {
+    if (this.state.pokemonData.ability2 !== "") {
+      if (this.state.pokemonData.ability3 !== "") {
         if (this.state.pokemonData.ability2 === "とうそうしん") {
           return (
             <div>
@@ -873,19 +874,19 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     return (
     <Card style={{ height: 430, width: 300 }}>
       <CardHeader
-      avatar={
-        <Grid item>
-          <Grid container>
-            <IconButton style={{marginLeft: 0}}onClick={this.onAvatarClickHandler} >
-              <ArrowBackIcon />
-            </IconButton>
-            <PokemonIcon number={this.state.pokemonData.number}/>
+        avatar={
+          <Grid item>
+            <Grid container>
+              <IconButton style={{marginLeft: 0}} onClick={this.onAvatarClickHandler} >
+                <ArrowBackIcon />
+              </IconButton>
+              <PokemonIcon number={this.state.pokemonData.number}/>
+            </Grid>
           </Grid>
-        </Grid>
-      }
-      title={this.state.pokemonData.name}
-      subheader={this.state.pokemonData.base_h + "-" +  this.state.pokemonData.base_a + "-" +  this.state.pokemonData.base_b + "-" +  this.state.pokemonData.base_c + "-" +  this.state.pokemonData.base_d + "-" +  this.state.pokemonData.base_s}
-      style={{height: 26}}
+        }
+        title={this.state.pokemonData.name}
+        subheader={this.state.pokemonData.base_h + "-" +  this.state.pokemonData.base_a + "-" +  this.state.pokemonData.base_b + "-" +  this.state.pokemonData.base_c + "-" +  this.state.pokemonData.base_d + "-" +  this.state.pokemonData.base_s}
+        style={{height: 26}}
       />
       <ListItem button onClick={this.handleClickWaza}>
         <ListItemText primary="わざ" />

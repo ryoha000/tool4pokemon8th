@@ -12,6 +12,8 @@
     "@types/react-dom": "16.9.1",
     "@types/react-rnd": "^7.4.4",
     "@types/react-select": "^3.0.5",
+    "axios": "^0.19.0",
+    "http-proxy-middleware": "^0.20.0",
     "nedb": "^1.8.0",
     "nedb-promise": "^2.0.1",
     "react": "^16.10.2",
