@@ -5,17 +5,6 @@ import { TextField, Menu } from '@material-ui/core';
 import { wazaData } from './WazaData';
 import {AllItem, Item} from './ItemData'
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    paper: {
-      marginRight: theme.spacing(2),
-    },
-  }),
-);
-
 interface ITree {
   [key: string]: ITree | string;
 }

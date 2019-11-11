@@ -11,7 +11,7 @@ import ComputerIcon from '@material-ui/icons/Computer';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
 import Register from './Register'
-import { waza, PokemonData } from './shared'
+import { waza, PokemonData, MyPokemon, MyParty, MyLog } from './shared'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -21,6 +21,12 @@ interface TabPanelProps {
 
 interface Props {
   wazas: waza[];
+  username: string;
+  password: string;
+  myPokemons: MyPokemon[];
+  myParties: MyParty[];
+  myLogs: MyLog[];
+  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
   pokemons: PokemonData[];
 }
 
@@ -64,6 +70,10 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
     setValue(newValue);
   };
 
+  const handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
+    props.handleAllData(datas)
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -81,10 +91,10 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <VersusTabs wazas={props.wazas} pokemons={props.pokemons}/>
+        <VersusTabs myPokemons={props.myPokemons} myParties={props.myParties} myLogs={props.myLogs} handleAllData={handleAllData} wazas={props.wazas} pokemons={props.pokemons} username={props.username} password={props.password} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Register wazas={props.wazas} pokemons={props.pokemons}/>
+        <Register myPokemons={props.myPokemons} myParties={props.myParties} myLogs={props.myLogs} handleAllData={handleAllData} wazas={props.wazas} pokemons={props.pokemons} password={props.password} username={props.username}/>
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

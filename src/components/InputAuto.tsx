@@ -5,17 +5,6 @@ import { datas, waza } from './shared'
 import { TextField, Menu } from '@material-ui/core';
 import { wazaData } from './WazaData';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    paper: {
-      marginRight: theme.spacing(2),
-    },
-  }),
-);
-
 interface ITree {
   [key: string]: ITree | string;
 }
@@ -146,6 +135,7 @@ export default class InputAuto extends React.Component<Props,State> {
     };
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    // console.log('test')
     let updateSuggest: waza[] = []
     let str: string = event.target.value
     const pst: string = event.target.value
@@ -209,7 +199,7 @@ export default class InputAuto extends React.Component<Props,State> {
     this.setState({ nowSuggest: updateSuggest , isOpenSuggest: event.currentTarget})
     this.setState({ nowInput: event.target.value })
     setTimeout(() => {
-      if (this.state.nowInput === pst && this.state.nowSuggest.length !== 0) {
+      if (this.state.nowInput === pst && this.state.nowSuggest.length != 0) {
         this.setState({ open: true })
       }
     }, 800)

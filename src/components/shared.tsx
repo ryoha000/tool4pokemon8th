@@ -20,6 +20,89 @@ export interface PokemonData{
     _id?: string;
 }
 
+export interface MyPokemon {
+    ability: string
+    effort_a: number
+    effort_b: number
+    effort_c: number
+    effort_d: number
+    effort_s: number
+    effort_h: number
+    memo: string
+    item: string
+    move_1: string
+    move_2: string
+    move_3: string
+    move_4: string
+    name: string
+    nature: string
+    number: string
+    user_id?: number
+    id?: number
+    created_at?: string
+    updated_at?: string
+    deleted_at?: string
+}
+
+export interface MyParty {
+    pokemon_1_id?: number
+    pokemon_2_id?: number
+    pokemon_3_id?: number
+    pokemon_4_id?: number
+    pokemon_5_id?: number
+    pokemon_6_id?: number
+    pokemon_1?: MyPokemon
+    pokemon_2?: MyPokemon
+    pokemon_3?: MyPokemon
+    pokemon_4?: MyPokemon
+    pokemon_5?: MyPokemon
+    pokemon_6?: MyPokemon
+    memo: string
+    name: string
+    user_id?: number
+    logs?: MyLog[]
+    id?: number
+    created_at?: string
+    updated_at?: string
+    deleted_at?: string
+    // 下はsendのときのみ
+    pokemons?: MyPokemon[]
+}
+
+export interface MyLog {
+    pokemon_num_1?: string
+    pokemon_num_2?: string
+    pokemon_num_3?: string
+    pokemon_num_4?: string
+    pokemon_num_5?: string
+    pokemon_num_6?: string
+    party_id?: number
+    party?: MyParty
+    my_select_1: boolean
+    my_select_2: boolean
+    my_select_3: boolean
+    my_select_4: boolean
+    my_select_5: boolean
+    my_select_6: boolean
+    oppo_select_1: boolean
+    oppo_select_2: boolean
+    oppo_select_3: boolean
+    oppo_select_4: boolean
+    oppo_select_5: boolean
+    oppo_select_6: boolean
+    my_first: number
+    oppo_first: string
+    memo: string
+    name: string
+    user_id?: number
+    id?: number
+    created_at?: string
+    updated_at?: string
+    deleted_at?: string
+    // 下はsendのときのみ
+    pokemons?: MyPokemon[]
+}
+
 export interface waza{
     name: string;
     type: string;

@@ -9,15 +9,22 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';;
 import Calculate from './Calculate'
 import PokemonInBattle from './PokemonInBattle'
-import { PokemonData, waza, Status } from './shared';
+import { PokemonData, waza, Status, MyPokemon, MyParty, MyLog } from './shared';
 import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
 import ClearIcon from '@material-ui/icons/Clear';
 import { ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import FolderIcon from '@material-ui/icons/Folder';
 
 interface Props{
   wazas: waza[];
   pokemons: PokemonData[];
+  username: string
+  password: string
+  myPokemons: MyPokemon[];
+  myParties: MyParty[];
+  myLogs: MyLog[];
+  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
 }
 
 interface State{
@@ -146,7 +153,14 @@ export default class VersusTabs extends React.Component<Props,State> {
                 }
                 style={{flexGrow: 1}}
               >
-                <InputAutoPokemon handleInput={this.handleChangeInputMyPokemon} />
+                <ListItem>
+                  <InputAutoPokemon handleInput={this.handleChangeInputMyPokemon} />
+                  <ListItemSecondaryAction>
+                    <IconButton>
+                      <FolderIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
                 {this.state.myParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
                   return (
                     <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickMyPoke();this.handleMySelect(element);}} key={i} disabled={element.number === "000"}>
@@ -155,6 +169,9 @@ export default class VersusTabs extends React.Component<Props,State> {
                       </ListItemAvatar>
                       <ListItemText primary={element.name} />
                       <ListItemSecondaryAction>
+                        <IconButton>
+                          <FolderIcon />
+                        </IconButton>
                         <IconButton edge="end" onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickMyClear(element)}}>
                           <ClearIcon />
                         </IconButton>
@@ -175,7 +192,14 @@ export default class VersusTabs extends React.Component<Props,State> {
               }
               style={{flexGrow: 1}}
             >
-              <InputAutoPokemon handleInput={this.handleChangeInputOppoPokemon} />
+              <ListItem>
+                <InputAutoPokemon handleInput={this.handleChangeInputOppoPokemon} />
+                <ListItemSecondaryAction>
+                  <IconButton>
+                    <FolderIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
               {this.state.oppoParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
                 return (
                   <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element);}} key={i} disabled={element.number === "000"}>
@@ -184,6 +208,9 @@ export default class VersusTabs extends React.Component<Props,State> {
                     </ListItemAvatar>
                     <ListItemText primary={element.name} />
                     <ListItemSecondaryAction>
+                      <IconButton>
+                        <FolderIcon />
+                      </IconButton>
                       <IconButton edge="end"  onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickOppoClear(element)}}>
                         <ClearIcon />
                       </IconButton>

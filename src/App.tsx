@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import ParentTabs from './components/ParentTabs'
-import { PokemonData, waza } from './components/shared'
+import { PokemonData, waza, MyPokemon, MyParty, MyLog } from './components/shared'
 import { Grid, Paper, Card, CardHeader, Button, Icon, TextField, Typography, Fab, CardContent, CardActions } from '@material-ui/core';
 import axios from 'axios'
 import NavigationIcon from '@material-ui/icons/Navigation';
@@ -21,6 +21,9 @@ interface State {
   partyInit: boolean;
   logInit:boolean;
   loading: boolean;
+  myPokemons: MyPokemon[]
+  myParties: MyParty[]
+  myLogs: MyLog[]
 }
 
 export default class App extends React.Component<Props,State>{
@@ -37,8 +40,14 @@ export default class App extends React.Component<Props,State>{
       pokeInit: false,
       partyInit: false,
       logInit: false,
-      loading: false
+      loading: false,
+      myLogs: [],
+      myParties: [],
+      myPokemons: []
     };
+  }
+  componentDidMount = () => {
+    this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
   }
   handleUserName = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const userName: string = event.target.value
@@ -50,14 +59,16 @@ export default class App extends React.Component<Props,State>{
       axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/user?login', {name: this.state.username, pass: this.state.password})
         .then(() => {
           axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.state.username, pass: this.state.password})
-            .then(() => this.setState({pokeInit: true}))
+            .then((res) => this.setState({pokeInit: true, myPokemons: res.data.pokemons}))
           axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/party', {name: this.state.username, pass: this.state.password})
-            .then(() => this.setState({partyInit: true}))
+            .then((res) => this.setState({partyInit: true, myParties: res.data.parties}))
           axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/log', {name: this.state.username, pass: this.state.password})
-            .then(() => this.setState({logInit: true}))
+            .then((res) => this.setState({logInit: true, myLogs: res.data.logs}))
         })
         .catch((e: any) => {
-          alert(e.response.data.message)
+          if (e.data) {
+            alert(e.response.data.message)
+          }
           this.setState({loading: false, username: '', password: '', confirmPass: ''})
       })
     }
@@ -84,14 +95,16 @@ export default class App extends React.Component<Props,State>{
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/user?login', {name: this.state.username, pass: this.state.password})
       .then(() => {
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({pokeInit: true}))
+          .then((res) => this.setState({pokeInit: true, myPokemons: res.data.pokemons}))
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/party', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({partyInit: true}))
+          .then((res) => this.setState({partyInit: true, myParties: res.data.parties}))
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/log', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({logInit: true}))
+          .then((res) => this.setState({logInit: true, myLogs: res.data.logs}))
       })
       .catch((e: any) => {
-        alert(e.response.data.message)
+        if (e.data) {
+          alert(e.response.data.message)
+        }
         this.setState({loading: false, username: '', password: '', confirmPass: ''})
       })
   }
@@ -109,18 +122,33 @@ export default class App extends React.Component<Props,State>{
   clickSignup = () => () => {
     this.setState({loading: true})
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/user?signup', {name: this.state.username, pass: this.state.password})
-      .then((res: any) => {
+      .then(() => {
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({pokeInit: true}))
+          .then((res) => this.setState({pokeInit: true, myPokemons: res.data.pokemons}))
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/party', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({partyInit: true}))
+          .then((res) => this.setState({partyInit: true, myParties: res.data.parties}))
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/log', {name: this.state.username, pass: this.state.password})
-          .then(() => this.setState({logInit: true}))
+          .then((res) => this.setState({logInit: true, myLogs: res.data.logs}))
       })
       .catch((e: any) => {
-        alert(e.response.data.message)
+        if (e.data) {
+          alert(e.response.data.message)
+        }
         this.setState({loading: false, username: '', password: '', confirmPass: ''})
       })
+  }
+  handleAllData = (datas: any) => {
+    if (datas.length> 0) {
+      if (typeof datas[0].effort_h === 'number') {
+        this.setState({myPokemons: datas})
+      }
+      if (typeof datas[0].pokemon_1_id === 'number') {
+        this.setState({myParties: datas})
+      }
+      if (typeof datas[0].pokemon_num_1 === 'number') {
+        this.setState({myLogs: datas})
+      }
+    }
   }
   renderLogin() {
     return (
@@ -260,7 +288,16 @@ export default class App extends React.Component<Props,State>{
     } else {
       return (
         <div className="App">
-          <ParentTabs pokemons={this.state.pokemons} wazas={this.state.wazas}/>
+          <ParentTabs
+            pokemons={this.state.pokemons}
+            wazas={this.state.wazas}
+            username={this.state.username}
+            password={this.state.password}
+            myPokemons={this.state.myPokemons}
+            myParties={this.state.myParties}
+            myLogs={this.state.myLogs}
+            handleAllData={this.handleAllData}
+          />
         </div>
       )
     }

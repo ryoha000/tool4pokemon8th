@@ -1,23 +1,14 @@
-import React, { ChangeEvent } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import  {name2Pokemon, PokemonData, makeDB, waza, Status}  from './shared';
-import  {getPokemonByName, getWazas}  from './shared_js';
+import  { PokemonData, waza, Status}  from './shared';
 import { computeStatus, natures } from './ComputeMethods'
 import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select, Icon, TextField, Divider } from '@material-ui/core';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import InputAuto from './InputAuto';
-import { AllItem, availableItems, Item } from './ItemData';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PokemonIcon from './PokemonIcon'
 import {PokemonInBattleState} from './PokemonInBattle'
 import InputAutoNature from './InputAutoNature'
+import { SendData } from './Register'
 
 interface Props{
   pokemon?: PokemonData;
@@ -25,6 +16,7 @@ interface Props{
   wazas: waza[];
   color: string;
   sendPokemonStatus: any;
+  nowDetail?: SendData
 }
 
 export default class PokemonStatus extends React.Component<Props,PokemonInBattleState> {
@@ -66,7 +58,6 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
     };
   }
   componentDidUpdate = () => {
-    this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
     if (this.props.pokemon) {
       if (this.props.pokemon !== this.state.pokemonData) {
         this.setState({ pokemonData: this.props.pokemon})
@@ -79,6 +70,34 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
             selectedAbility: pokemon.pokemonData.ability1
           })
         },50)
+        this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+      }
+    } else {
+      if (this.state.pokemonData.name !== "ダミー") {
+        this.setState({pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}})
+      }
+    }
+    if (this.props.nowDetail) {
+      if (this.props.nowDetail.id) {
+        this.setState({pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}})
+      } else {
+        if (this.props.nowDetail.efforts) {
+          let efforts = this.props.nowDetail.efforts
+          if (
+            efforts.effort_a !== this.state.effortA ||
+            efforts.effort_b !== this.state.effortB ||
+            efforts.effort_c !== this.state.effortC ||
+            efforts.effort_d !== this.state.effortD ||
+            efforts.effort_s !== this.state.effortS ||
+            efforts.effort_h !== this.state.effortHP ||
+            this.props.nowDetail.name !== this.state.pokemonName ||
+            this.props.nowDetail.nature !== this.state.natureName
+          ) {
+            this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+          }
+        } else {
+          this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+        }
       }
     }
   } 
@@ -111,7 +130,9 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           this.setState({
             loading: false,
             status: status,
-            selectedAbility: pokemon.pokemonData.ability1
+            selectedAbility: pokemon.pokemonData.ability1,
+            pokemonName: undefined,
+            natureName: "ようき"
           })
           
         },50)
@@ -719,16 +740,13 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       style={{height: 26}}
       />
       <TextField
-        label="Name"
+        placeholder='登録名'
         value={this.state.pokemonName? this.state.pokemonName : ''}
         onChange={this.handlePokemonName()}
         margin="normal"
       />
       <InputAutoNature handleInput={this.handleNature} />
       <Divider style={{marginTop: 3}} />
-      <ListItem>
-        <ListItemText primary="努力値" />
-      </ListItem>
 			{this.renderOver508()}
       {this.renderEffortForm()}
     </Card>

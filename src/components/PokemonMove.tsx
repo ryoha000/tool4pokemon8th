@@ -10,7 +10,8 @@ import { AllItem } from './ItemData';
 import {PokemonInBattleState} from './PokemonInBattle'
 import ClearIcon from '@material-ui/icons/Clear';
 import InputAutoItem from './InputAutoItem'
-import axios from 'axios'
+import { SendData } from './Register'
+import { wazaData } from './WazaData';
 
 interface Props{
   pokemon?: PokemonData;
@@ -19,6 +20,7 @@ interface Props{
   color: string;
   openModal: any;
   sendPokeMove: any;
+  nowDetail?: SendData
 }
 
 export default class PokemonMove extends React.Component<Props,PokemonInBattleState> {
@@ -69,23 +71,54 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
     this.setState({
       status: status
     })
-    // this.props.decidion(status, this.state.selectedWaza, 0, this.state.selectedItem.name, this.state.selectedAbility)
   }
   componentDidMount() {
     const wazaLabels: any = []
     this.props.wazas.forEach((element) => {
       wazaLabels.push({lanel: element.name})
     })
-    this.setState({ wazaLabel: wazaLabels })
-    const customizedWaza = [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]
-    this.setState({ customizedWazas: customizedWaza})
-    // this.props.sendPokeMove(customizedWaza[0], customizedWaza[1], customizedWaza[2], customizedWaza[3], this.state.selectedItem, this.state.selectedAbility)
+    const dammywaza: waza = {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
+    this.setState({ wazaLabel: wazaLabels, customizedWazas: [dammywaza, dammywaza, dammywaza, dammywaza]})
+    this.props.sendPokeMove(dammywaza, dammywaza, dammywaza, dammywaza, this.state.selectedItem, this.state.selectedAbility)
   }
   componentDidUpdate = () => {
-    this.props.sendPokeMove(this.state.customizedWazas[0], this.state.customizedWazas[1], this.state.customizedWazas[2], this.state.customizedWazas[3], this.state.selectedItem, this.state.selectedAbility)
+    const dammywaza: waza = {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
     if (this.props.pokemon) {
       if (this.state.pokemonData.name !== this.props.pokemon.name) {
-        this.setState({ pokemonData: this.props.pokemon, selectedAbility: this.props.pokemon.ability1 })
+        this.setState({ pokemonData: this.props.pokemon, selectedAbility: this.props.pokemon.ability1, selectedItem: {name: "なし"}, customizedWazas: [dammywaza, dammywaza, dammywaza, dammywaza]})
+      }
+    } else {
+      if (this.state.pokemonData.name !== "ダミー") {
+        this.setState(
+          {
+            pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
+            customizedWazas: [dammywaza, dammywaza, dammywaza, dammywaza],
+            selectedAbility: ''
+          }
+        )
+      }
+    }
+    console.log('sendw1')
+    if (this.props.nowDetail) {
+      console.log('sendw2')
+      const wazas: waza[] = this.state.customizedWazas
+      if (this.props.nowDetail.moves) {
+        console.log('sendw3')
+        let moves = this.props.nowDetail.moves
+        if (
+          moves[0] !== this.state.customizedWazas[0] ||
+          moves[1] !== this.state.customizedWazas[1] ||
+          moves[2] !== this.state.customizedWazas[2] ||
+          moves[3] !== this.state.customizedWazas[3] ||
+          this.props.nowDetail.item !== this.state.selectedItem ||
+          this.props.nowDetail.ability !== this.state.selectedAbility
+        ) {
+          console.log('sendw5')
+          this.props.sendPokeMove(wazas[0], wazas[1], wazas[2], wazas[3], this.state.selectedItem, this.state.selectedAbility)
+        }
+      } else {
+        console.log('sendw4')
+        this.props.sendPokeMove(wazas[0], wazas[1], wazas[2], wazas[3], this.state.selectedItem, this.state.selectedAbility)
       }
     }
   }
@@ -116,23 +149,6 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
   openModal = (event: React.MouseEvent<HTMLElement>) => {
     this.props.openModal()
   }
-  sendPokemon = (memo: string) => {
-    axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {
-      ability: this.state.selectedAbility,
-      effort_h: this.state.effortHP,
-      effort_a: this.state.effortA,
-      effort_b: this.state.effortB,
-      effort_c: this.state.effortC,
-      effort_d: this.state.effortD,
-      effort_s: this.state.effortS,
-      memo: memo,
-      move_1: this.state.customizedWazas[0],
-      move_2: this.state.customizedWazas[1],
-      move_3: this.state.customizedWazas[2],
-      move_4: this.state.customizedWazas[3],
-      name: this.state
-    })
-  }
   openAbility = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenAbility: event.currentTarget})
   }
@@ -145,11 +161,6 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
   closeItem = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenItem: null})
   }
-  // handleChangeInputWaza = (waza: waza) => {
-  //   this.setState({ inputWaza: waza , selectedWaza: waza , wazaTime: new Date().getTime()})
-  //   console.log(waza)
-  //   // this.props.decidion(this.state.status, waza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
-  // }
   handleCheckWaza = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     const selectWaza: any = this.props.wazas.find((element: waza) => {
       return element.name === event.target.value
@@ -251,7 +262,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       </Menu>
       <Grid item>
         <List>
-          <InputAuto datas={this.props.wazas.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
+          <InputAuto datas={wazaData} handleInput={this.handleChangeInputWaza} />
             {this.state.customizedWazas.map((waza: waza, i: number) => {
               if (i > 4) {return true}
               return (
@@ -270,7 +281,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
             })}
         </List>
       </Grid>
-      <Button onClick={this.openModal} variant="outlined" style={{height: 35,width: 200, marginTop: 50}}>
+      <Button onClick={this.openModal} variant="contained" style={{height: 35,width: 200, marginTop: 50}}>
         ポケモン単体を登録
       </Button>
     </Card>
