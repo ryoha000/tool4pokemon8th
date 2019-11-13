@@ -72,6 +72,7 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
 
   const handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
     props.handleAllData(datas)
+    console.log('reload')
   }
 
   return (

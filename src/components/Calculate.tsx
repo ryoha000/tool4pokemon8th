@@ -1,18 +1,5 @@
 import React from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Grid, { GridSpacing } from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import PokemonInBattle, { PokemonInBattleState } from './PokemonInBattle'
 import { PokemonData, waza, Status } from './shared';
 import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
@@ -152,6 +139,21 @@ export default class Calculate extends React.Component<Props,State> {
         }
         return false
       }
+    }
+    return true
+  }
+  checkWaza = () => {
+    if (this.state.attack) {
+      const now: DamageInfo = this.state.attack
+      if (!now.waza) {
+        return true
+      }
+      if (now.waza !== undefined) {
+        if (powerWaza.find((element) => {return(now.waza ? element.name === now.waza.name : element.name === 'aaaaaaaaa')})) {
+          return true
+        }
+      }
+      return false
     }
     return true
   }
@@ -449,13 +451,24 @@ export default class Calculate extends React.Component<Props,State> {
     if (this.state.attack && this.state.defence) {
       return (
         <Grid>
-          <FormControl component="fieldset" style={{ marginLeft: 20, marginTop: 5 }}>
-            <FormLabel component="legend">Options</FormLabel>
+          <FormControl component="fieldset" style={{ marginLeft: 17, marginTop: 3, marginBottom: 0 }}>
             <FormGroup row>
               <Checkbox checked={this.state.checkOption.attackNature && this.checkNature("attack")} onChange={this.handleChangeANOption} value="attackNature" style={{margin: 0}} disabled={!this.checkNature("attack")} />
               <Typography style={{width: 90, marginTop: this.state.attack.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.attack.nature.length)}}>{this.state.attack.nature.length > 7 ? "とう..." + this.state.attack.nature.slice(-4) : this.state.attack.nature}</Typography>
               <Checkbox checked={this.state.checkOption.defenceNature && this.checkNature("defence")} onChange={this.handleChangeDNOption} value="defenceNature" style={{margin: 0}} disabled={!this.checkNature("defence")} />
               <Typography style={{width: 90, marginTop: this.state.defence.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.defence.nature.length)}}>{this.state.defence.nature.length > 7 ? "とう..." + this.state.defence.nature.slice(-4) : this.state.defence.nature}</Typography>
+            </FormGroup>
+            <FormGroup row>
+              <Checkbox
+                checked={this.state.checkOption.attackWaza && this.checkWaza()}
+                onChange={this.handleChangeWOption} value="attackWaza" style={{margin: 0}}
+                disabled={!this.checkWaza()}
+              />
+              <Typography
+                style={{marginTop: 11, marginLeft: 0}}
+              >
+                技の威力変化効果
+              </Typography>
             </FormGroup>
           </FormControl>
           <Button onClick={this.openField} variant="outlined" style={{height: 35,width: 250, backgroundColor: this.fieldColor()}}>

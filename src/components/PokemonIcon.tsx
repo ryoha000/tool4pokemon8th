@@ -78,7 +78,7 @@ export default class PokemonIcon extends React.Component<Props,State> {
       )
     } else {
       return (
-        <Avatar src={"/assets/" + this.state.number + ".png"}/>
+        <Avatar style={{marginLeft: 1, marginRight: 1}} src={"/assets/" + this.state.number + ".png"}/>
       );
     }
   }

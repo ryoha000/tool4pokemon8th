@@ -17,7 +17,7 @@ export interface PokemonData{
     type1: string;
     type2: string;
     heavy: string;
-    _id?: string;
+    id?: number;
 }
 
 export interface MyPokemon {

@@ -113,6 +113,7 @@ const tree: ITree = {
 
 interface Props {
   handleInput: any
+  disabled: boolean
 }
 
 interface State {
@@ -179,14 +180,18 @@ export default class InputAutoItem extends React.Component<Props,State> {
     tmp = tmp.replace(/n$/, 'ン'); // 末尾のnは変換する
     push(tmp);
     const eistr: string = result;
+    const hira: string = eistr.replace(/[\u30a1-\u30f6]/g, function(match) {
+      var chr = match.charCodeAt(0) - 0x60;
+      return String.fromCharCode(chr);
+    });
     if (event.target.value.length > 0) {
       if (this.state.nowSuggest.length > 0) {
         updateSuggest = this.state.nowSuggest.filter((element) => {
-          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1 || element.name.indexOf(eistr) > -1)
+          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1 || element.name.indexOf(eistr) > -1 || element.name.indexOf(hira) > -1)
         })
       } else {
         updateSuggest = AllItem.filter((element) => {
-          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1 || element.name.indexOf(eistr) > -1)
+          return (element.name.indexOf(str) > -1 || element.name.indexOf(pst) > -1 || element.name.indexOf(eistr) > -1 || element.name.indexOf(hira) > -1)
         })
       }
     }
@@ -217,6 +222,7 @@ export default class InputAutoItem extends React.Component<Props,State> {
     return (
       <div>
         <TextField
+          disabled={this.props.disabled}
           value={this.state.nowInput}
           style={{margin: 0, zIndex: 10, marginTop: 3}}
           onChange={this.handleInput()}

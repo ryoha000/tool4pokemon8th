@@ -24,6 +24,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
     super(props);
     console.log(this.props.pokemon)
     this.state = {
+      memo: '',
       expanded: false,
       isOpenEffort: false,
       isOpenWaza: false,
@@ -35,12 +36,12 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
       loading: false,
       natureName: "ようき",
-      effortHP: 4,
-      effortA: 252,
+      effortHP: 0,
+      effortA: 0,
       effortB: 0,
       effortC: 0,
       effortD: 0,
-      effortS: 252,
+      effortS: 0,
       status: { statusH: 0, statusA: 0, statusB: 0, statusC: 0, statusD: 0, statusS: 0,},
       IndividualH: 31,
       IndividualA: 31,
@@ -61,46 +62,98 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
     if (this.props.pokemon) {
       if (this.props.pokemon !== this.state.pokemonData) {
         this.setState({ pokemonData: this.props.pokemon})
-        setTimeout(() => {
-          const pokemon: PokemonInBattleState = computeStatus(this.state)
-          const status: Status = { statusH: Math.floor(pokemon.status.statusH), statusA: Math.floor(pokemon.status.statusA), statusB: Math.floor(pokemon.status.statusB), statusC: Math.floor(pokemon.status.statusC), statusD: Math.floor(pokemon.status.statusD), statusS: Math.floor(pokemon.status.statusS)}
-          this.setState({
-            loading: false,
-            status: status,
-            selectedAbility: pokemon.pokemonData.ability1
-          })
-        },50)
-        this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
-      }
-    } else {
-      if (this.state.pokemonData.name !== "ダミー") {
-        this.setState({pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}})
-      }
-    }
-    if (this.props.nowDetail) {
-      if (this.props.nowDetail.id) {
-        this.setState({pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}})
-      } else {
-        if (this.props.nowDetail.efforts) {
-          let efforts = this.props.nowDetail.efforts
+        let state: PokemonInBattleState = this.state
+        state.pokemonData = this.props.pokemon
+        const pokemon: PokemonInBattleState = computeStatus(state)
+        const status: Status = { statusH: Math.floor(pokemon.status.statusH), statusA: Math.floor(pokemon.status.statusA), statusB: Math.floor(pokemon.status.statusB), statusC: Math.floor(pokemon.status.statusC), statusD: Math.floor(pokemon.status.statusD), statusS: Math.floor(pokemon.status.statusS)}
+        this.setState({
+          loading: false,
+          status: status,
+          selectedAbility: pokemon.pokemonData.ability1
+        })
+        if (this.props.nowDetail) {
+          const det: SendData = this.props.nowDetail
+          if (!det.efforts) {
+            det.efforts =  {effort_h: 0, effort_a: 0, effort_b: 0, effort_c: 0, effort_d: 0, effort_s: 0}
+          }
           if (
-            efforts.effort_a !== this.state.effortA ||
-            efforts.effort_b !== this.state.effortB ||
-            efforts.effort_c !== this.state.effortC ||
-            efforts.effort_d !== this.state.effortD ||
-            efforts.effort_s !== this.state.effortS ||
-            efforts.effort_h !== this.state.effortHP ||
-            this.props.nowDetail.name !== this.state.pokemonName ||
-            this.props.nowDetail.nature !== this.state.natureName
+            det.efforts.effort_a !== this.state.effortA ||
+            det.efforts.effort_b !== this.state.effortB ||
+            det.efforts.effort_c !== this.state.effortC ||
+            det.efforts.effort_d !== this.state.effortD ||
+            det.efforts.effort_s !== this.state.effortS ||
+            det.efforts.effort_h !== this.state.effortHP ||
+            det.name !== this.state.pokemonName ||
+            det.nature !== this.state.natureName
           ) {
-            this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+            this.setState({
+              pokemonData: this.props.pokemon,
+              selectedAbility: det.ability ? det.ability : '',
+              pokemonName: det.name,
+              natureName: det.nature ? det.nature : 'ようき',
+              effortA: det.efforts.effort_a,
+              effortB: det.efforts.effort_b,
+              effortC: det.efforts.effort_c,
+              effortD: det.efforts.effort_d,
+              effortS: det.efforts.effort_s,
+              effortHP: det.efforts.effort_h,
+            })
+            return
+          }
+        } else {
+          this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+        }
+      } else {
+        if (this.props.nowDetail) {
+          const det: SendData = this.props.nowDetail
+          if (!det.efforts) {
+            det.efforts =  {effort_h: 0, effort_a: 0, effort_b: 0, effort_c: 0, effort_d: 0, effort_s: 0}
+          }
+          if (this.props.nowDetail.id) {
+            if (
+              det.efforts.effort_a !== this.state.effortA ||
+              det.efforts.effort_b !== this.state.effortB ||
+              det.efforts.effort_c !== this.state.effortC ||
+              det.efforts.effort_d !== this.state.effortD ||
+              det.efforts.effort_s !== this.state.effortS ||
+              det.efforts.effort_h !== this.state.effortHP ||
+              det.name !== this.state.pokemonName ||
+              det.nature !== this.state.natureName
+            ) {
+              this.setState({
+                pokemonData: this.props.pokemon,
+                selectedAbility: det.ability ? det.ability : '',
+                pokemonName: det.name,
+                natureName: det.nature ? det.nature : 'ようき',
+                effortA: det.efforts.effort_a,
+                effortB: det.efforts.effort_b,
+                effortC: det.efforts.effort_c,
+                effortD: det.efforts.effort_d,
+                effortS: det.efforts.effort_s,
+                effortHP: det.efforts.effort_h,
+              })
+              return
+            }
+          } else {
+            if (
+              det.efforts.effort_a !== this.state.effortA ||
+              det.efforts.effort_b !== this.state.effortB ||
+              det.efforts.effort_c !== this.state.effortC ||
+              det.efforts.effort_d !== this.state.effortD ||
+              det.efforts.effort_s !== this.state.effortS ||
+              det.efforts.effort_h !== this.state.effortHP ||
+              det.name !== this.state.pokemonName ||
+              det.nature !== this.state.natureName
+            ) {
+              this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
+            }
           }
         } else {
           this.props.sendPokemonStatus(this.state.effortHP, this.state.effortA, this.state.effortB, this.state.effortC, this.state.effortD, this.state.effortS, this.state.pokemonName, this.state.natureName)
         }
       }
     }
-  } 
+  }
   handleExpandClick = () => {
     this.setState({ expanded: !this.state.expanded })
   };
@@ -158,6 +211,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               <Grid container>
                 <RadioGroup aria-label="position" name="position" value={this.state.effortForm} onChange={this.handleChangeEffortForm()} row>
                   <FormControlLabel
+                    disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
                     value="slider"
                     control={<Radio color={this.props.color === "primary" ? "primary" : 'secondary'	} />}
                     label="Slider"
@@ -165,6 +219,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
                   />
                   <FormControlLabel
                     value="input"
+                    disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
                     control={<Radio color={this.props.color === "primary" ? "primary" : 'secondary'	} />}
                     label="Input"
                     labelPlacement="end"
@@ -184,6 +239,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>H:{this.state.effortHP}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortHP"
               value={this.state.effortHP}
@@ -199,6 +255,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>A:{this.state.effortA}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortA"
               value={this.state.effortA}
@@ -214,6 +271,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>B:{this.state.effortB}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortB"
               value={this.state.effortB}
@@ -229,6 +287,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>C:{this.state.effortC}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortC"
               value={this.state.effortC}
@@ -244,6 +303,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>D:{this.state.effortD}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortD"
               value={this.state.effortD}
@@ -259,6 +319,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <ListItem className="nested">
             <Typography style={{whiteSpace: 'break-spaces', width: 70}}>S:{this.state.effortS}    </Typography>
             <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               aria-labelledby="effortS"
               value={this.state.effortS}
@@ -280,6 +341,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <Typography style={{marginTop: 10, marginBottom: 0}}>努力値から入力</Typography>
           <Grid container>
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="HP"
               value={this.state.effortHP}
               onChange={this.handleEffortHPInput()}
@@ -291,6 +353,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Attack"
               value={this.state.effortA}
               onChange={this.handleEffortAInput()}
@@ -302,6 +365,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Block"
               value={this.state.effortB}
               onChange={this.handleEffortBInput()}
@@ -313,6 +377,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Contact"
               value={this.state.effortC}
               onChange={this.handleEffortCInput()}
@@ -324,6 +389,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Defence"
               value={this.state.effortD}
               onChange={this.handleEffortDInput()}
@@ -335,6 +401,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Speed"
               value={this.state.effortS}
               onChange={this.handleEffortSInput()}
@@ -349,6 +416,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <Typography style={{marginTop: 0, marginBottom: 0}}>実数値から入力</Typography>
           <Grid container>
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="HP"
               value={this.state.status.statusH}
               onChange={this.handleStatusHPInput()}
@@ -360,6 +428,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Attack"
               value={this.state.status.statusA}
               onChange={this.handleStatusAInput()}
@@ -371,6 +440,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Block"
               value={this.state.status.statusB}
               onChange={this.handleStatusBInput()}
@@ -382,6 +452,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Contact"
               value={this.state.status.statusC}
               onChange={this.handleStatusCInput()}
@@ -393,6 +464,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Defence"
               value={this.state.status.statusD}
               onChange={this.handleStatusDInput()}
@@ -404,6 +476,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Speed"
               value={this.state.status.statusS}
               onChange={this.handleStatusSInput()}
@@ -418,6 +491,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
           <Typography style={{marginTop: 0, marginBottom: 0}}>個体値を入力</Typography>
           <Grid container>
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="HP"
               value={this.state.IndividualH}
               onChange={this.handleIndividualHPInput()}
@@ -429,6 +503,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Attack"
               value={this.state.IndividualA}
               onChange={this.handleIndividualAInput()}
@@ -440,6 +515,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Block"
               value={this.state.IndividualB}
               onChange={this.handleIndividualBInput()}
@@ -451,6 +527,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Contact"
               value={this.state.IndividualC}
               onChange={this.handleIndividualCInput()}
@@ -462,6 +539,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Defence"
               value={this.state.IndividualD}
               onChange={this.handleIndividualDInput()}
@@ -473,6 +551,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
               style={{width: 50, marginTop: 0, marginBottom: 0 }}
             />
             <TextField
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
               label="Speed"
               value={this.state.IndividualS}
               onChange={this.handleIndividualSInput()}
@@ -740,12 +819,13 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       style={{height: 26}}
       />
       <TextField
+        disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
         placeholder='登録名'
         value={this.state.pokemonName? this.state.pokemonName : ''}
         onChange={this.handlePokemonName()}
         margin="normal"
       />
-      <InputAutoNature handleInput={this.handleNature} />
+      <InputAutoNature handleInput={this.handleNature} disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}/>
       <Divider style={{marginTop: 3}} />
 			{this.renderOver508()}
       {this.renderEffortForm()}

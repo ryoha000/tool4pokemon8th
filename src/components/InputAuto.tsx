@@ -115,6 +115,7 @@ interface Props {
   handleInput: any
   datas: waza[]
   banish?: boolean
+  disable?: boolean
 }
 
 interface State {
@@ -224,6 +225,7 @@ export default class InputAuto extends React.Component<Props,State> {
           style={{margin: 0, zIndex: 10, marginTop: 3}}
           onChange={this.handleInput()}
           placeholder="技名"
+          disabled={this.props.disable}
           type="search"
         />
           <Menu

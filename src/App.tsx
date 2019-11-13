@@ -138,14 +138,18 @@ export default class App extends React.Component<Props,State>{
       })
   }
   handleAllData = (datas: any) => {
+    console.log('reload')
     if (datas.length> 0) {
       if (typeof datas[0].effort_h === 'number') {
+        console.log('pokemons')
         this.setState({myPokemons: datas})
       }
       if (typeof datas[0].pokemon_1_id === 'number') {
+        console.log('parties')
         this.setState({myParties: datas})
       }
       if (typeof datas[0].pokemon_num_1 === 'number') {
+        console.log('logs')
         this.setState({myLogs: datas})
       }
     }
