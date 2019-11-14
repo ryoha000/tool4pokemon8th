@@ -12,6 +12,7 @@ import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
 import Register from './Register'
 import { waza, PokemonData, MyPokemon, MyParty, MyLog } from './shared'
+import LogTab from './LogTab'
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -92,16 +93,41 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
-        <VersusTabs myPokemons={props.myPokemons} myParties={props.myParties} myLogs={props.myLogs} handleAllData={handleAllData} wazas={props.wazas} pokemons={props.pokemons} username={props.username} password={props.password} />
+        <VersusTabs
+          myPokemons={props.myPokemons}
+          myParties={props.myParties}
+          myLogs={props.myLogs}
+          handleAllData={handleAllData}
+          wazas={props.wazas}
+          pokemons={props.pokemons}
+          username={props.username}
+          password={props.password}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Register myPokemons={props.myPokemons} myParties={props.myParties} myLogs={props.myLogs} handleAllData={handleAllData} wazas={props.wazas} pokemons={props.pokemons} password={props.password} username={props.username}/>
+        <Register
+          myPokemons={props.myPokemons}
+          myParties={props.myParties}
+          myLogs={props.myLogs}
+          handleAllData={handleAllData}
+          wazas={props.wazas}
+          pokemons={props.pokemons}
+          password={props.password}
+          username={props.username}
+        />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three
       </TabPanel>
       <TabPanel value={value} index={3}>
-        Item Four
+        <LogTab
+          username={props.username}
+          password={props.password}
+          handleAllData={handleAllData}
+          myPokemons={props.myPokemons}
+          myParties={props.myParties}
+          myLogs={props.myLogs}
+        />
       </TabPanel>
     </div>
   );

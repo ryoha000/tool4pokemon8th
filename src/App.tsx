@@ -148,7 +148,7 @@ export default class App extends React.Component<Props,State>{
         console.log('parties')
         this.setState({myParties: datas})
       }
-      if (typeof datas[0].pokemon_num_1 === 'number') {
+      if (typeof datas[0].pokemon_num_1 === 'string') {
         console.log('logs')
         this.setState({myLogs: datas})
       }

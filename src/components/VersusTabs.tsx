@@ -613,7 +613,8 @@ export default class VersusTabs extends React.Component<Props,State> {
       oppo_select_6: this.state.oppoSelect6,
       oppo_first: oppoFirst.number,
       my_first: this.state.myfirst,
-      pokemons: pokemonDatas
+      pokemons: pokemonDatas,
+      result: this.state.result
     }
     if (this.state.party_id) {
       logInfo.party_id = this.state.party_id

@@ -94,6 +94,7 @@ export interface MyLog {
     oppo_first: string
     memo: string
     name: string
+    result: boolean
     user_id?: number
     id?: number
     created_at?: string
