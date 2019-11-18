@@ -346,7 +346,7 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
         {suggestLogs.map((element: MyLog) => {
           return (
               <ListItem
-                style={{backgroundColor: element.result ? '#ffa500' : '#add8e6', marginTop: 1}}
+                style={{backgroundColor: element.result ? '#ffa500' : '#add8e6', marginTop: 1, paddingRight: 50}}
                 button
                 onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => {this.props.selectLog(element)}}
               >
@@ -356,6 +356,7 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
               </ListItem>
           )
         })}
+        <ListItem />
       </List>
     )
   }
@@ -386,7 +387,7 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
             value={this.state.nowInput}
             onChange={this.handleInput()}
           />
-          <IconButton onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleReload()}} edge="end">
+          <IconButton onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleReload()}} edge="end" disabled={this.state.loading}>
             <CachedIcon />
           </IconButton>
         </CardActions>

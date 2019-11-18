@@ -17,8 +17,6 @@ import { AllItem, availableItems, Item } from './ItemData';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import PokemonIcon from './PokemonIcon'
 import { wazaData }from './WazaData';
-import { elementType, element } from 'prop-types';
-import { all } from 'q';
 
 interface Props {
     myLogs: MyLog[]
@@ -69,18 +67,17 @@ export default class Analytics extends React.Component<Props,State> {
                     AllNumber.push(element.pokemon_num_6)
                 }
             })
-            let allKP: KP[] = AllNumber.map((element: string) => {
-                return {
-                    number: element,
-                    KP: AllNumber.filter((num: string) => {
-                        return num === element
-                    }).length
+            let allKP: KP[] = []
+            AllNumber.forEach((element: string) => {
+                if (allKP.filter((kp: KP) => {return kp.number === element}).length === 0) {
+                    allKP.push({
+                        number: element,
+                        KP: AllNumber.filter((num: string) => {
+                            return num === element
+                        }).length
+                    })
                 }
             })
-            allKP = allKP.filter(function (x, i, self) {
-                let kp: KP = {number: x.number, KP: x.KP}
-                return self.indexOf(kp) === i;
-            });
             allKP.sort(function(a, b) {
                 if (a.KP > b.KP) {
                     return -1;
@@ -107,23 +104,6 @@ export default class Analytics extends React.Component<Props,State> {
             this.setState({isOpenRate: !this.state.isOpenRate})
         }
     }
-    renderKP = () => {
-        const kp: KP[] = this.state.nowKP
-        return (
-            <List>
-                {kp.map((element: KP, i: number) => {
-                    return (
-                        <ListItem key={i}>
-                            <ListItemText>{i + 1}.&nbsp;&nbsp;{element.KP}/{this.props.myLogs.length}</ListItemText>
-                            <ListItemAvatar>
-                                <PokemonIcon number={element.number} />
-                            </ListItemAvatar>
-                        </ListItem>
-                    )
-                })}
-            </List>
-        )
-    }
     render() {
         return (
             <Card style={{ height: 430, width: 300 }}>
@@ -132,11 +112,46 @@ export default class Analytics extends React.Component<Props,State> {
                 {this.state.isOpenKP ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={this.state.isOpenKP} timeout="auto" unmountOnExit>
-                <Typography>KP</Typography>
-                {this.renderKP()}
+                <Grid item container>
+                    <List dense={true} style={{width: 140}} >
+                        {this.state.nowKP.map((element: KP, i: number) => {
+                            if (i < 6) {
+                                return (
+                                    <ListItem key={i}>
+                                        <ListItemText>{i + 1}.&nbsp;&nbsp;{element.KP}&nbsp;/{this.props.myLogs.length}</ListItemText>
+                                        <ListItemAvatar>
+                                            <PokemonIcon number={element.number} />
+                                        </ListItemAvatar>
+                                    </ListItem>
+                                )
+                            } else {
+                                return
+                            }
+                        })}
+                    </List>
+                    <List dense={true} style={{width: 140}} >
+                        {this.state.nowKP.map((element: KP, i: number) => {
+                            if (i > 5) {
+                                if ( i < 12) {
+                                    return (
+                                        <ListItem key={i}>
+                                            <ListItemText>{i + 1}.&nbsp;&nbsp;{element.KP}&nbsp;/{this.props.myLogs.length}</ListItemText>
+                                            <ListItemAvatar>
+                                                <PokemonIcon number={element.number} />
+                                            </ListItemAvatar>
+                                        </ListItem>
+                                    )
+                                }
+                            } else {
+                                return
+                            }
+                        })}
+                        <ListItem />
+                    </List>
+                </Grid>
             </Collapse>
             <ListItem button onClick={this.handleClickRate}>
-            <ListItemText primary="勝率" />
+            <ListItemText primary="勝率" style={{marginTop: 3}} />
                 {this.state.isOpenRate ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={this.state.isOpenRate} timeout="auto" unmountOnExit>
