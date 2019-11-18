@@ -4,7 +4,6 @@ import { TextField, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListIte
 import PokemonIcon from './PokemonIcon';
 import CachedIcon from '@material-ui/icons/Cached';
 import axios from 'axios';
-import { thisTypeAnnotation } from '@babel/types';
 
 interface ITree {
   [key: string]: ITree | string;
@@ -343,12 +342,11 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     })
     console.log(suggestLogs)
     return (
-      <FixedSizeList height={400} width={360} itemSize={46} itemCount={200}>
+      <List style={{maxHeight: 380}}>
         {suggestLogs.map((element: MyLog) => {
           return (
-            <div>
               <ListItem
-                style={{backgroundColor: element.result ? '#ffa500' : '#add8e6'}}
+                style={{backgroundColor: element.result ? '#ffa500' : '#add8e6', marginTop: 1}}
                 button
                 onClick={(event: React.MouseEvent<HTMLElement, MouseEvent>) => {this.props.selectLog(element)}}
               >
@@ -356,11 +354,9 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
                   {this.searchPartyIcon(element)}
                 </ListItemAvatar>
               </ListItem>
-              <Divider />
-            </div>
           )
         })}
-      </FixedSizeList>
+      </List>
     )
   }
   renderContent = () => {
@@ -372,9 +368,9 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
       )
     } else {
       return (
-        <CardContent>
+        <DialogContent>
           {this.renderPartySearch()}
-        </CardContent>
+        </DialogContent>
       )
     }
   }
@@ -394,6 +390,7 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
             <CachedIcon />
           </IconButton>
         </CardActions>
+        <Typography>My Party&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opponent Party</Typography>
         {this.renderContent()}
       </Card>
     )

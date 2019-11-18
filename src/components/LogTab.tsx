@@ -5,7 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { Item } from './ItemData'
 import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Analytics from './Analytics'
 import axios from 'axios'
 import { PokemonData, waza, MyParty, MyPokemon, MyLog, datas } from './shared';
 import LogDetailDialog from './LogDetailDialog'
@@ -107,6 +107,7 @@ export default class LogTab extends React.Component<Props,State> {
             </Grid>
             <Grid item>
               <Paper style={{ height: 430,width: 300 }}>
+                <Analytics myLogs={this.props.myLogs} />
               </Paper>
             </Grid>
           </Grid>
