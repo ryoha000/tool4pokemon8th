@@ -53,7 +53,7 @@ export default class Analytics extends React.Component<Props,State> {
         };
     }
     componentDidUpdate = () => {
-        if (this.state.pastLogs !== this.props.myLogs && this.props.myLogs.length === 0) {
+        if (this.state.pastLogs !== this.props.myLogs) {
             const logs: MyLog[] = this.props.myLogs
             let AllNumber: string[] = []
             logs.forEach((element: MyLog) => {
@@ -115,7 +115,14 @@ export default class Analytics extends React.Component<Props,State> {
     }
     renderWinRate = () => {
         const lastLog: MyLog = this.state.pastLogs.slice(-1)[0];
-        if (!lastLog.created_at) {
+        console.log(this.state.pastLogs)
+        console.log(lastLog)
+        if (!lastLog) {
+            console.log('err1')
+            return
+        }
+        if (lastLog.created_at === undefined) {
+            console.log('err2')
             return
         }
         const lastY: number = Number(lastLog.created_at.substr(0, 4))
@@ -140,65 +147,105 @@ export default class Analytics extends React.Component<Props,State> {
         })
         let result: WinRatePerM[] = winRates
         this.props.myLogs.forEach((element: MyLog) => {
-            if (element.created_at) {
+            if (element.created_at !== undefined) {
                 let thisY: number = Number(element.created_at.substr(0, 4));
                 let thisM: number = Number(element.created_at.substr(5, 7));
                 winRates.forEach((rate: WinRatePerM, i: number) => {
                     if (rate.year === thisY && rate.month === thisM) {
                         if (element.result) {
                             let n: number = rate.win + 1
+                            let sum: number = rate.win + rate.lose + 1
                             result[i] = {
                                 year: rate.year,
                                 month: rate.month,
                                 win: n,
                                 lose: rate.lose,
-                                sum: rate.win + 1 + rate.lose,
-                                rate: Math.round( n / rate.lose )
+                                sum: sum,
+                                rate: Math.round( n / sum )
                             }
                         } else if (!element.result) {
                             let n: number = rate.lose + 1
+                            let sum: number = rate.win + rate.lose + 1
                             result[i] = {
                                 year: rate.year,
                                 month: rate.month,
                                 win: rate.win,
                                 lose: rate.lose + 1,
-                                sum: rate.win + 1 + rate.lose,
-                                rate: Math.round( rate.win / n )
+                                sum: sum,
+                                rate: Math.round( rate.win / sum )
                             }
                         }
                     }
                 })
             }
         })
+        console.log(result)
+        const dataGraph = [
+            {month: '1月', '売上': 800, '総売上': 1400},
+            {month: '2月', '売上': 967, '総売上': 1506},
+            {month: '3月', '売上': 1098, '総売上': 989},
+            {month: '4月', '売上': 1200, '総売上': 1228},
+            {month: '5月', '売上': 1108, '総売上': 1100},
+            {month: '6月', '売上': 680, '総売上': 1700}
+        ];
         return (
+            // <ComposedChart //グラフ全体のサイズや位置、データを指定。場合によってmarginで上下左右の位置を指定する必要あり。
+            //     width={600}  //グラフ全体の幅を指定
+            //     height={280}  //グラフ全体の高さを指定
+            //     data={result} //ここにArray型のデータを指定
+            //     margin={{ top: 20, right: 0, bottom: 0, left: 0 }}  //marginを指定
+            // >
+            // <XAxis
+            //     dataKey="month"  //Array型のデータの、X軸に表示したい値のキーを指定
+            // />
+            // <YAxis />
+            // {/* <Tooltip /> //hoverした時に各パラメーターの詳細を見れるように設定 */}
+            // {/* <Legend /> */}
+            // <CartesianGrid />
+            // <Area //面積を表すグラフ
+            //     dataKey="rate" //Array型のデータの、Y軸に表示したい値のキーを指定
+            //     stroke="#6495ed" ////グラフの線の色を指定
+            //     fillOpacity={1}  ////グラフの中身の薄さを指定
+            //     fill="#87cefa"  //グラフの色を指定
+            // />
+            // <Bar //棒グラフ
+            //     dataKey="sum"　//Array型のデータの、Y軸に表示したい値のキーを指定
+            //     barSize={20}  //棒の太さを指定
+            //     stroke="#0000cd" ////レーダーの線の色を指定 
+            //     fillOpacity={1}  //レーダーの中身の色の薄さを指定
+            //     fill="#0000ff" ////レーダーの中身の色を指定
+            // />
+            // </ComposedChart>
             <ComposedChart //グラフ全体のサイズや位置、データを指定。場合によってmarginで上下左右の位置を指定する必要あり。
                 width={600}  //グラフ全体の幅を指定
                 height={280}  //グラフ全体の高さを指定
-                data={result} //ここにArray型のデータを指定
-                margin={{ top: 20, right: 0, bottom: 0, left: 0 }}  //marginを指定
+                data={dataGraph} //ここにArray型のデータを指定
+                margin={{ top: 20, right: 60, bottom: 0, left: 0 }}  //marginを指定
             >
             <XAxis
                 dataKey="month"  //Array型のデータの、X軸に表示したい値のキーを指定
             />
             <YAxis />
-            {/* <Tooltip /> //hoverした時に各パラメーターの詳細を見れるように設定 */}
-            {/* <Legend /> */}
-            <CartesianGrid />
+            {/* <Tooltip /> */}
+            <Legend />
+            <CartesianGrid //グラフのグリッドを指定
+                stroke="#f5f5f5" //グリッド線の色を指定
+            />
             <Area //面積を表すグラフ
-                dataKey="rate" //Array型のデータの、Y軸に表示したい値のキーを指定
-                stroke="#6495ed" ////グラフの線の色を指定
+                type="monotone"  //グラフが曲線を描くように指定。default値は折れ線グラフ
+                dataKey="総売上" //Array型のデータの、Y軸に表示したい値のキーを指定
+                stroke="#00aced" ////グラフの線の色を指定
                 fillOpacity={1}  ////グラフの中身の薄さを指定
-                fill="#87cefa"  //グラフの色を指定
+                fill="rgba(0, 172, 237, 0.2)"  //グラフの色を指定
             />
             <Bar //棒グラフ
-                dataKey="sum"　//Array型のデータの、Y軸に表示したい値のキーを指定
+                dataKey="売上"　//Array型のデータの、Y軸に表示したい値のキーを指定
                 barSize={20}  //棒の太さを指定
-                stroke="#0000cd" ////レーダーの線の色を指定 
+                stroke="rgba(34, 80, 162, 0.2)" ////レーダーの線の色を指定 
                 fillOpacity={1}  //レーダーの中身の色の薄さを指定
-                fill="#0000ff" ////レーダーの中身の色を指定
+                fill="#2250A2" ////レーダーの中身の色を指定
             />
             </ComposedChart>
-
         )
     }
     render() {
@@ -252,6 +299,7 @@ export default class Analytics extends React.Component<Props,State> {
                 {this.state.isOpenRate ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={this.state.isOpenRate} timeout="auto" unmountOnExit>
+                {this.renderWinRate()}
             </Collapse>
         </Card>
         )
