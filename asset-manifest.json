@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/tool4pokemon8th/static/css/main.afab1654.chunk.css",
+    "main.js": "/tool4pokemon8th/static/js/main.0929cbce.chunk.js",
+    "main.js.map": "/tool4pokemon8th/static/js/main.0929cbce.chunk.js.map",
+    "runtime-main.js": "/tool4pokemon8th/static/js/runtime-main.e9d11c73.js",
+    "runtime-main.js.map": "/tool4pokemon8th/static/js/runtime-main.e9d11c73.js.map",
+    "static/js/2.f90bea66.chunk.js": "/tool4pokemon8th/static/js/2.f90bea66.chunk.js",
+    "static/js/2.f90bea66.chunk.js.map": "/tool4pokemon8th/static/js/2.f90bea66.chunk.js.map",
+    "index.html": "/tool4pokemon8th/index.html",
+    "precache-manifest.f1a01006efa4fdb4e9ba904c21e4fa38.js": "/tool4pokemon8th/precache-manifest.f1a01006efa4fdb4e9ba904c21e4fa38.js",
+    "service-worker.js": "/tool4pokemon8th/service-worker.js",
+    "static/css/main.afab1654.chunk.css.map": "/tool4pokemon8th/static/css/main.afab1654.chunk.css.map"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e9d11c73.js",
+    "static/js/2.f90bea66.chunk.js",
+    "static/css/main.afab1654.chunk.css",
+    "static/js/main.0929cbce.chunk.js"
+  ]
+}
