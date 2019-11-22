@@ -249,7 +249,7 @@ export default class Register extends React.Component<Props,State> {
           pokemon.efforts = {effort_h: 0, effort_a: 0, effort_b: 0, effort_c: 0, effort_d: 0, effort_s: 0}
         }
         if (!pokemon.moves) {
-          const dammywaza: waza = {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
+          const dammywaza: waza = {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー"}
           pokemon.moves = [dammywaza, dammywaza, dammywaza, dammywaza]
         }
         // let pokemonData: JSON
@@ -300,10 +300,10 @@ export default class Register extends React.Component<Props,State> {
       }).catch((e: any) => {
         if (e.response.data.message) {
           alert(e.response.data.message)
+          this.setState({isOpenModal: false, loading: false, modalTitle: ''})
         }
       })
     }
-    this.setState({isOpenModal: false, loading: false, modalTitle: ''})
   }
   handleChangeInputPokemon = (pokemon: PokemonData) => {
     let newArray: PokemonData[] = this.state.party
@@ -397,10 +397,10 @@ export default class Register extends React.Component<Props,State> {
       }
       nowDetail[index].item = {name: pokemon.item}
       nowDetail[index].memo = pokemon.memo
-      const move_1: waza = {name: pokemon.move_1,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
-      const move_2: waza = {name: pokemon.move_2,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
-      const move_3: waza = {name: pokemon.move_3,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
-      const move_4: waza = {name: pokemon.move_4,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}
+      const move_1: waza = {name: pokemon.move_1,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー"}
+      const move_2: waza = {name: pokemon.move_2,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー"}
+      const move_3: waza = {name: pokemon.move_3,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー"}
+      const move_4: waza = {name: pokemon.move_4,	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー"}
       nowDetail[index].moves = [move_1, move_2, move_3, move_4]
       nowDetail[index].nature = pokemon.nature
       this.setState({party: nowParty, partyDetail: nowDetail, selectedPokemon: pokemonData})
