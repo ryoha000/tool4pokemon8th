@@ -76,27 +76,25 @@ export default class Register extends React.Component<Props,State> {
       dialogType: '',
       isOpenDialog: false,
       partyDetail: [{index: 0}, {index: 1}, {index: 2}, {index: 3}, {index: 4}, {index: 5}],
-      party: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}],
+      party: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0}],
     };
   }
   componentDidUpdate = () => {
-    console.log(this.state.partyDetail)
   }
   handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
     this.props.handleAllData(datas)
-    console.log('reload')
   }
   renderModal = () => {
     if (this.state.modalTitle === 'ポケモン単体の登録') {
-      const i: number = this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : -1
+      const i: number = this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : 0
       if (i === -1) {
         alert('内部エラーです。報告してくれたらうれしいです')
       }
-      this.setState({memo: this.state.partyDetail[i].memo, pokemonName: this.state.partyDetail[i].name})
+      const pokemonName = this.state.partyDetail[i].name
       return (
         <Dialog maxWidth='xs' fullWidth onClose={this.closeModal} open={this.state.isOpenModal}>
           <DialogTitle>{this.state.modalTitle}</DialogTitle>
-          <DialogContent>
+          {/* <DialogContent>
             <TextField
               label='ポケモン名'
               value={this.state.pokemonName? this.state.pokemonName : ''}
@@ -105,7 +103,7 @@ export default class Register extends React.Component<Props,State> {
               multiline={true}
               fullWidth
             />
-          </DialogContent>
+          </DialogContent> */}
           <DialogContent>
             <TextField
               label='メモ'
@@ -178,15 +176,12 @@ export default class Register extends React.Component<Props,State> {
     this.setState({isOpenModal: false, modalTitle: ''})
   }
   selectPokeStatus = (effort_h: number, effort_a: number, effort_b: number, effort_c: number, effort_d: number, effort_s: number, name: string | undefined, nature: string) => {
-    console.log('selectPokeStatus1')
     if (this.state.selectedPokemonIndex !== undefined) {
-      console.log('selectPokeStatus2')
       let nowParty: SendData[] = this.state.partyDetail
       const i: number = this.state.selectedPokemonIndex
       nowParty[i].efforts = {effort_h: effort_h, effort_a: effort_a, effort_b: effort_b, effort_c: effort_c, effort_d: effort_d, effort_s: effort_s}
       nowParty[i].name = name
       nowParty[i].nature = nature
-      console.log(this.state.selectedPokemonIndex)
       this.setState({partyDetail: nowParty})
     }
   }
@@ -198,17 +193,14 @@ export default class Register extends React.Component<Props,State> {
       nowParty[i].item = item
       nowParty[i].ability = ability
       nowParty[i].memo = memo
-      console.log(this.state.selectedPokemonIndex)
       this.setState({partyDetail: nowParty})
     }
   }
   send = () => {
-    if (this.state.modalTitle === 'ポケモン単体の登録' && this.state.selectedPokemonIndex !== undefined) {
-      console.log('send', this.state.selectedPokemonIndex)
+    if (this.state.modalTitle === 'ポケモン単体の登録') {
       this.setState({loading: true})
-      const pokemon: SendData = this.state.partyDetail[this.state.selectedPokemonIndex]
+      const pokemon: SendData = this.state.partyDetail[this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : 0]
       if (pokemon.ability && pokemon.efforts && pokemon.item && pokemon.moves && pokemon.nature && !pokemon.id) {
-        console.log('send')
         const name: string = pokemon.name ? pokemon.name : new Date().toISOString()
         const pokemonData = {
           ability: pokemon.ability,
@@ -226,7 +218,7 @@ export default class Register extends React.Component<Props,State> {
           move_4: pokemon.moves[3].name,
           name: name,
           nature: pokemon.nature,
-          number: this.state.party[this.state.selectedPokemonIndex].number
+          number: this.state.party[this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : 0].number
         }
         axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon',
           {
@@ -235,8 +227,8 @@ export default class Register extends React.Component<Props,State> {
             pokemon: pokemonData
           }
         ).then((res: any) => {
-          if (this.state.selectedPokemonIndex) {
-            alert(name + '(' + this.state.party[this.state.selectedPokemonIndex].name + ')が登録されました')
+          if (this.state.selectedPokemonIndex !== undefined) {
+            alert(name + '(' + this.state.party[this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : 0].name + ')が登録されました')
             this.setState({isOpenModal: false, modalTitle: '', loading: false})
           }
         }).catch((e: any) => {
@@ -252,7 +244,6 @@ export default class Register extends React.Component<Props,State> {
       const pokemons: SendData[] = this.state.partyDetail
       let pokemonDatas: MyPokemon[] = []
       pokemons.map((pokemon: SendData, i: number) => {
-        console.log('send')
         const name: string = pokemon.name ? pokemon.name : new Date().toISOString()
         if (!pokemon.efforts) {
           pokemon.efforts = {effort_h: 0, effort_a: 0, effort_b: 0, effort_c: 0, effort_d: 0, effort_s: 0}
@@ -360,7 +351,7 @@ export default class Register extends React.Component<Props,State> {
         item: undefined,
         memo: undefined
       }
-      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"})
+      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0})
       this.setState({ party: newArray, selectedPokemon: undefined, selectedPokemonIndex: undefined, partyDetail: newDetail })
     }
   }

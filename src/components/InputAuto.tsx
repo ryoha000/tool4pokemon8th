@@ -208,7 +208,7 @@ export default class InputAuto extends React.Component<Props,State> {
 
   handleSelect = (pokemon: waza) => {
     this.props.handleInput(pokemon)
-    this.setState({ nowInput: "" })
+    this.setState({ nowInput: pokemon.name })
   }
   openSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenSuggest: event.currentTarget})

@@ -207,7 +207,6 @@ export default class InputAutoPokemon extends React.Component<Props,State> {
 
   openSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenSuggest: event.currentTarget})
-    console.log(event.currentTarget)
   }
   closeSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ open: false })

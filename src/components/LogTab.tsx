@@ -24,6 +24,7 @@ interface State{
   loading: boolean
   isOpenDetail: boolean
   selectedLog?: MyLog
+  selectedId?: number
 }
 
 export default class LogTab extends React.Component<Props,State> {
@@ -77,7 +78,7 @@ export default class LogTab extends React.Component<Props,State> {
     this.setState({isOpenDetail: true, selectedLog: log})
   }
   spoilLogByParty = (partyID: number) => {
-    this.setState({isOpenDetail: false})
+    this.setState({isOpenDetail: false, selectedId: partyID})
   }
   render() {
     return (
@@ -94,6 +95,7 @@ export default class LogTab extends React.Component<Props,State> {
                   handleAllData={this.props.handleAllData}
                   myPokemons={this.props.myPokemons}
                   myLogs={this.props.myLogs}
+                  partyId={this.state.selectedId}
                 />
                 {this.state.selectedLog ? 
                   <LogDetailDialog

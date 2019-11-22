@@ -174,6 +174,14 @@ export const powerWaza: Hosei[] = [
 		name: "かたきうち",
 		number: 8192
 	},
+	{
+		name: "エラがみ",
+		number: 8192
+	},
+	{
+		name: "でんげきくちばし",
+		number: 8192
+	},
 ]
 
 export const attackNatures: Hosei[] = [

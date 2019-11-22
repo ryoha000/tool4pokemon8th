@@ -4,6 +4,7 @@ import { TextField, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListIte
 import PokemonIcon from './PokemonIcon';
 import CachedIcon from '@material-ui/icons/Cached';
 import axios from 'axios';
+import SortIcon from '@material-ui/icons/Sort';
 
 interface ITree {
   [key: string]: ITree | string;
@@ -122,6 +123,7 @@ interface Props {
   handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
   username: string
   password: string
+  partyId?: number
 }
 
 interface State {
@@ -131,6 +133,7 @@ interface State {
   pokeinit: boolean
   partyinit: boolean
   loginit: boolean
+  sort: boolean
 }
 
 export default class FromRegisteredDialog extends React.Component<Props,State> {
@@ -142,7 +145,8 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
       loading: false,
       loginit: false,
       pokeinit: false,
-      partyinit: false
+      partyinit: false,
+      sort: true
     };
   }
   componentDidUpdate = () => {
@@ -154,21 +158,20 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     this.setState({nowInput: event.target.value})
   }
   handleReload = () => {
-    console.log('aaa')
-    this.setState({ loading: true, loginit: true, partyinit: true, pokeinit: true })
-    axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.props.username, pass: this.props.password})
-      .then((res) => {
-        this.setState({pokeinit: false})
-        this.props.handleAllData(res.data.pokemons)
-      })
-      .catch((e) => {
-        if (e.response.data.message) {
-          alert(e.response.data.message)
-        } else {
-          alert(e)
-        }
-        this.setState({pokeinit: false})
-      })
+    this.setState({ loading: true, loginit: true, partyinit: true, pokeinit: false })
+    // axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.props.username, pass: this.props.password})
+    //   .then((res) => {
+    //     this.setState({pokeinit: false})
+    //     this.props.handleAllData(res.data.pokemons)
+    //   })
+    //   .catch((e) => {
+    //     if (e.response.data.message) {
+    //       alert(e.response.data.message)
+    //     } else {
+    //       alert(e)
+    //     }
+    //     this.setState({pokeinit: false})
+    //   })
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/party', {name: this.props.username, pass: this.props.password})
       .then((res) => {
         this.setState({partyinit: false})
@@ -216,19 +219,19 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     }
     return (
       <Grid item container>
-        <PokemonIcon number={myparty.pokemon_1 ? myparty.pokemon_1.number : ''} />
-        <PokemonIcon number={myparty.pokemon_2 ? myparty.pokemon_2.number : ''} />
-        <PokemonIcon number={myparty.pokemon_3 ? myparty.pokemon_3.number : ''} />
-        <PokemonIcon number={myparty.pokemon_4 ? myparty.pokemon_4.number : ''} />
-        <PokemonIcon number={myparty.pokemon_5 ? myparty.pokemon_5.number : ''} />
-        <PokemonIcon number={myparty.pokemon_6 ? myparty.pokemon_6.number : ''} />
+        <PokemonIcon dot={log.my_select_1} big={log.my_first === 1} number={myparty.pokemon_1 ? myparty.pokemon_1.number : ''} />
+        <PokemonIcon dot={log.my_select_2} big={log.my_first === 2} number={myparty.pokemon_2 ? myparty.pokemon_2.number : ''} />
+        <PokemonIcon dot={log.my_select_3} big={log.my_first === 3} number={myparty.pokemon_3 ? myparty.pokemon_3.number : ''} />
+        <PokemonIcon dot={log.my_select_4} big={log.my_first === 4} number={myparty.pokemon_4 ? myparty.pokemon_4.number : ''} />
+        <PokemonIcon dot={log.my_select_5} big={log.my_first === 5} number={myparty.pokemon_5 ? myparty.pokemon_5.number : ''} />
+        <PokemonIcon dot={log.my_select_6} big={log.my_first === 6} number={myparty.pokemon_6 ? myparty.pokemon_6.number : ''} />
         <Typography style={{fontSize: 20, marginTop: 10}}>VS</Typography>
-        <PokemonIcon number={log.pokemon_num_1 ? log.pokemon_num_1 : ''} />
-        <PokemonIcon number={log.pokemon_num_2 ? log.pokemon_num_2 : ''} />
-        <PokemonIcon number={log.pokemon_num_3 ? log.pokemon_num_3 : ''} />
-        <PokemonIcon number={log.pokemon_num_4 ? log.pokemon_num_4 : ''} />
-        <PokemonIcon number={log.pokemon_num_5 ? log.pokemon_num_5 : ''} />
-        <PokemonIcon number={log.pokemon_num_6 ? log.pokemon_num_6 : ''} />
+        <PokemonIcon dot={log.oppo_select_1} big={log.oppo_first === log.pokemon_num_1} number={log.pokemon_num_1 ? log.pokemon_num_1 : ''} />
+        <PokemonIcon dot={log.oppo_select_2} big={log.oppo_first === log.pokemon_num_2} number={log.pokemon_num_2 ? log.pokemon_num_2 : ''} />
+        <PokemonIcon dot={log.oppo_select_3} big={log.oppo_first === log.pokemon_num_3} number={log.pokemon_num_3 ? log.pokemon_num_3 : ''} />
+        <PokemonIcon dot={log.oppo_select_4} big={log.oppo_first === log.pokemon_num_4} number={log.pokemon_num_4 ? log.pokemon_num_4 : ''} />
+        <PokemonIcon dot={log.oppo_select_5} big={log.oppo_first === log.pokemon_num_5} number={log.pokemon_num_5 ? log.pokemon_num_5 : ''} />
+        <PokemonIcon dot={log.oppo_select_6} big={log.oppo_first === log.pokemon_num_6} number={log.pokemon_num_6 ? log.pokemon_num_6 : ''} />
       </Grid>
     )
   }
@@ -327,23 +330,25 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     // }
     let suggestLogs: MyLog[] = []
     let suggestLog: MyLog[]
-    console.log(updateSuggest, str, pst, eistr)
     updateSuggest.forEach((party: MyParty) => {
-      console.log('a')
       suggestLog = this.props.myLogs.filter((element: MyLog) => {
-        console.log('b')
         return (element.party_id === party.id)
       })
-      console.log(suggestLog)
       suggestLog.forEach((onelog: MyLog) => {
-        console.log('d')
         suggestLogs.push(onelog)
       })
     })
-    console.log(suggestLogs)
+    if (this.props.partyId) {
+      suggestLogs = this.props.myLogs.reverse().filter((element: MyLog) => {
+        return element.party_id === this.props.partyId
+      })
+    }
+    if (!this.state.sort) {
+      suggestLogs = this.props.myLogs.reverse()
+    }
     return (
       <List style={{maxHeight: 380}}>
-        {suggestLogs.map((element: MyLog) => {
+        {suggestLogs.reverse().map((element: MyLog) => {
           return (
               <ListItem
                 style={{backgroundColor: element.result ? '#ffa500' : '#add8e6', marginTop: 1, paddingRight: 50}}
@@ -375,6 +380,9 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
       )
     }
   }
+  handleSort = () => {
+    this.setState({sort: !this.state.sort})
+  }
   render() {
     return (
       <Card style={{ height: 430 }}>
@@ -387,6 +395,9 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
             value={this.state.nowInput}
             onChange={this.handleInput()}
           />
+          <IconButton onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleSort()}} edge="end" color={this.state.sort ? 'primary' : 'default'}>
+            <SortIcon />
+          </IconButton>
           <IconButton onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleReload()}} edge="end" disabled={this.state.loading}>
             <CachedIcon />
           </IconButton>

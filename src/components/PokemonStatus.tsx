@@ -22,7 +22,6 @@ interface Props{
 export default class PokemonStatus extends React.Component<Props,PokemonInBattleState> {
   constructor(props: any) {
     super(props);
-    console.log(this.props.pokemon)
     this.state = {
       memo: '',
       expanded: false,
@@ -33,7 +32,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       isOpenItem: null,
       isOpenNatureBool: false,
       effortForm: "slider",
-      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
+      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},
       loading: false,
       natureName: "ようき",
       effortHP: 0,
@@ -174,7 +173,6 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       if (this.state.pokemonData.name != this.props.pokemon.name) {
         this.setState({ loading: true })
         const pokemon: PokemonData = this.props.pokemon
-        console.log(pokemon)
         this.setState({ pokemonData: pokemon })
         if (!pokemon) { alert("指定されたポケモン名が不正です。再起動してみてください") }
         setTimeout(() => {

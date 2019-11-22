@@ -66,18 +66,18 @@ export default class Calculate extends React.Component<Props,State> {
     }
   }
   componentDidUpdate() {
-    if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect && this.props.myItem && this.props.oppoItem && this.props.myNature && this.props.oppoNature) {
-      const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: 0, rank: 0, or: "my", item: this.props.myItem, nature: this.props.myNature}
+    if (this.props.myStatus && this.props.oppoStatus && this.props.myWaza && this.props.mySelect && this.props.oppoWaza && this.props.oppoSelect) {
+      const myState: DamageInfo = {status: this.props.myStatus, pokemon: this.props.mySelect, waza: this.props.myWaza, time: 0, rank: 0, or: "my", item: this.props.myItem ? this.props.myItem : 'なし', nature: this.props.myNature ? this.props.myNature : this.props.mySelect.ability1}
       if (this.props.myTime) {
         myState.time = this.props.myTime
       }
-      const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: 0, rank: 0, or: "oppo", item: this.props.oppoItem, nature: this.props.oppoNature}
+      const oppoState: DamageInfo = {status: this.props.oppoStatus, pokemon: this.props.oppoSelect, waza: this.props.oppoWaza, time: 0, rank: 0, or: "oppo", item: this.props.oppoItem ? this.props.oppoItem : 'なし', nature: this.props.oppoNature ? this.props.oppoNature : this.props.oppoSelect.ability1}
       if (this.props.oppoTime) {
         oppoState.time = this.props.oppoTime
       }
       if (myState.time > oppoState.time) {
         if (this.state.attack) {
-          if (this.state.attack.pokemon.name !== myState.pokemon.name || this.state.attack.waza !== myState.waza || this.state.attack.status !== myState.status) {
+          if (this.state.attack.pokemon.name !== myState.pokemon.name || this.state.attack.waza !== myState.waza || this.state.attack.status !== myState.status || this.state.attack.item !== myState.item || this.state.attack.nature !== myState.nature || this.state.attack.rank !== myState.rank) {
             this.setState({ attack: myState , defence: oppoState})
           }
         } else {
@@ -86,7 +86,7 @@ export default class Calculate extends React.Component<Props,State> {
       }
       if (myState.time < oppoState.time) {
         if (this.state.attack) {
-          if (this.state.attack.pokemon.name !== oppoState.pokemon.name || this.state.attack.waza !== oppoState.waza || this.state.attack.status !== oppoState.status) {
+          if (this.state.attack.pokemon.name !== oppoState.pokemon.name || this.state.attack.waza !== oppoState.waza || this.state.attack.status !== oppoState.status || this.state.attack.item !== oppoState.item || this.state.attack.nature !== oppoState.nature || this.state.attack.rank !== oppoState.rank) {
             this.setState({ attack: oppoState , defence: myState})
           }
         } else {
@@ -96,6 +96,9 @@ export default class Calculate extends React.Component<Props,State> {
     }
     if (this.props.mySelect) {
       const myState: DamageInfo = {pokemon: this.props.mySelect, time: 0, rank: 0, or: "my", item: "なし", nature: this.props.mySelect.ability1}
+      if (this.props.myWaza) {
+        myState.waza = this.props.myWaza
+      }
       if (!this.state.attack) {
         this.setState({ attack: myState })
       }
@@ -105,11 +108,14 @@ export default class Calculate extends React.Component<Props,State> {
     }
     if (this.props.oppoSelect) {
       const oppoState: DamageInfo = {pokemon: this.props.oppoSelect, time: 0, rank: 0, or: "oppo", item: "なし", nature: this.props.oppoSelect.ability1}
+      if (this.props.oppoWaza) {
+        oppoState.waza = this.props.oppoWaza
+      }
       if (!this.state.attack) {
         this.setState({ attack: oppoState })
       }
-        if (this.state.attack && !this.state.defence && this.state.attack.or !== "oppo") {
-          this.setState({ defence: oppoState })
+      if (this.state.attack && !this.state.defence && this.state.attack.or !== "oppo") {
+        this.setState({ defence: oppoState })
       }
     }
   }
@@ -571,7 +577,7 @@ export default class Calculate extends React.Component<Props,State> {
   }
   renderDamage = () => {
     if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
-      if (this.state.attack.waza.type !== "ダミー") {
+      if (this.state.attack.waza.name !== "ダミー") {
         return (
           <Grid item >
             <Typography align='center'>

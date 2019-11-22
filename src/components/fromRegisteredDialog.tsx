@@ -244,13 +244,11 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
       .then((res) => {
         if (this.props.type === 'pokemon') {
           if (res.data.pokemons) {
-            console.log('reload2')
             this.props.handleAllData(res.data.pokemons)
           }
         }
         if (this.props.type === 'party') {
           if (res.data.parties) {
-            console.log('reload')
             this.props.handleAllData(res.data.parties)
           }
         }

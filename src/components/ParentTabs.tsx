@@ -73,7 +73,6 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
 
   const handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
     props.handleAllData(datas)
-    console.log('reload')
   }
 
   return (
@@ -88,7 +87,7 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         >
           <Tab icon={<Versus />} aria-label="versus" {...a11yProps(0)} />
           <Tab icon={<MonsterBall />} aria-label="pokemon" {...a11yProps(5)} />
-          <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} />
+          {/* <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} /> */}
           <Tab icon={<DescriptionOutlinedIcon />} aria-label="log" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
@@ -116,10 +115,10 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
           username={props.username}
         />
       </TabPanel>
-      <TabPanel value={value} index={2}>
+      {/* <TabPanel value={value} index={2}>
         Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
+      </TabPanel> */}
+      <TabPanel value={value} index={2}>
         <LogTab
           username={props.username}
           password={props.password}

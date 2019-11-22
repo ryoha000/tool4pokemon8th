@@ -101,8 +101,8 @@ export default class VersusTabs extends React.Component<Props,State> {
       openMy: false,
       openOppo: false,
       loading: false,
-      myParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}],
-      oppoParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"}],
+      myParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0}],
+      oppoParty: [{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},{number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0}],
     };
   }
   handleClickMyPoke = () => {
@@ -110,7 +110,6 @@ export default class VersusTabs extends React.Component<Props,State> {
   };
   handleClickMyPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, myItem: string, myNature: string) => {
     this.setState({myStatus: myStatus, myWaza: myWaza, myTime: myTime, myItem: myItem, myNature: myNature })
-    console.log("mywaza:" + myWaza + "time:" + myTime)
   };
   handleChangeInputMyPokemon = (pokemon: PokemonData) => {
     let newArray: PokemonData[] = this.state.myParty
@@ -145,7 +144,6 @@ export default class VersusTabs extends React.Component<Props,State> {
       }
     }
     this.setState({ oppoParty: newArray })
-    console.log(this.state.oppoParty)
   }
   handleMySelect = (pokemon: PokemonData) => {
     this.setState({ mySelect: pokemon })
@@ -158,7 +156,6 @@ export default class VersusTabs extends React.Component<Props,State> {
   };
   handleClickOppoPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, myItem: string, nature: string) => {
     this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime, oppoItem: myItem, oppoNature: nature })
-    console.log("oppowaza:" + myWaza + "time:" + myTime)
   };
   clickMyClear = (pokemon: PokemonData) => {
     let num: number = -1
@@ -171,7 +168,7 @@ export default class VersusTabs extends React.Component<Props,State> {
     let newArray: PokemonData[] = this.state.myParty
     if (num !== -1) {
       newArray.splice(num, 1)
-      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"})
+      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0})
       this.setState({ myParty: newArray, party_id: undefined })
     }
   }
@@ -186,7 +183,7 @@ export default class VersusTabs extends React.Component<Props,State> {
     let newArray: PokemonData[] = this.state.oppoParty
     if (num !== -1) {
       newArray.splice(num, 1)
-      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"})
+      newArray.push({number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0})
       this.setState({ oppoParty: newArray })
     }
   }
@@ -196,7 +193,6 @@ export default class VersusTabs extends React.Component<Props,State> {
       let pokemonData: PokemonData | undefined = datas.find((element: PokemonData) => {
         return element.number === pokemon.number
       })
-      console.log(pokemon.number)
       if (pokemonData === undefined) {
         alert('指定されたポケモンが不適切です')
         return
@@ -235,7 +231,6 @@ export default class VersusTabs extends React.Component<Props,State> {
     }
     if (party.pokemon_3) {
       pokemon = party.pokemon_3
-      console.log(pokemon)
       let pokemonData: PokemonData | undefined = datas.find((element: PokemonData) => {
         return element.number === pokemon.number
       })
@@ -554,7 +549,6 @@ export default class VersusTabs extends React.Component<Props,State> {
     const mypokemons: PokemonData[] = this.state.myParty
     let pokemonDatas: MyPokemon[] = []
     mypokemons.map((pokemon: PokemonData, i: number) => {
-      console.log('send')
       const name: string = new Date().toISOString()
       const efforts = {effort_h: 0, effort_a: 0, effort_b: 0, effort_c: 0, effort_d: 0, effort_s: 0}
       const dammywaza: waza = {name:"ダミー",	type:"ダミー",	power:0,	accuracy:0,	species:"ダミー", _id: "000000"}

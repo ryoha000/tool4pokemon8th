@@ -26,7 +26,6 @@ interface Props{
 export default class PokemonMove extends React.Component<Props,PokemonInBattleState> {
   constructor(props: any) {
     super(props);
-    console.log(this.props.pokemon)
     this.state = {
       memo: '',
       expanded: false,
@@ -37,7 +36,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       isOpenItem: null,
       isOpenNatureBool: false,
       effortForm: "slider",
-      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
+      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},
       loading: false,
       natureName: "ようき",
       effortHP: 4,
@@ -223,7 +222,6 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       }
     }
     this.setState({ customizedWazas: newArray })
-    console.log(this.state.customizedWazas)
   }
   clickClear = (waza: waza) => {
     let num: number = -1

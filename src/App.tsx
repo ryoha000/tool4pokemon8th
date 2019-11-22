@@ -46,9 +46,9 @@ export default class App extends React.Component<Props,State>{
       myPokemons: []
     };
   }
-  // componentDidMount = () => {
-  //   this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
-  // }
+  componentDidMount = () => {
+    this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
+  }
   handleUserName = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const userName: string = event.target.value
     this.setState({username: userName})
@@ -138,18 +138,14 @@ export default class App extends React.Component<Props,State>{
       })
   }
   handleAllData = (datas: any) => {
-    console.log('reload')
     if (datas.length> 0) {
       if (typeof datas[0].effort_h === 'number') {
-        console.log('pokemons')
         this.setState({myPokemons: datas})
       }
       if (typeof datas[0].pokemon_1_id === 'number') {
-        console.log('parties')
         this.setState({myParties: datas})
       }
       if (typeof datas[0].pokemon_num_1 === 'string') {
-        console.log('logs')
         this.setState({myLogs: datas})
       }
     }

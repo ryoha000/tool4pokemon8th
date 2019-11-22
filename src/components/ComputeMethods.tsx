@@ -224,7 +224,6 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
 export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, weather: string): number[][] {
 	// level=50
 	const level: number = 50 * 2 / 5 + 2
-	console.log(level)
 	let power: number = attackWaza.power * 4096
 	let item = powerItem.find((element) => {return(element.name === attackItem)})
 	if (checkOptions.attackItem) {
@@ -312,6 +311,9 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 		AorC = attackStatus.statusC
 		BorD = defenceStatus.statusD
 	}
+	if (attackWaza.name === 'ボディプレス') {
+		AorC = attackStatus.statusB
+	}
 	if (attackWaza.name !== "しぜんのちから" && attackWaza.species === "変化") {
 		return [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
 	}
@@ -380,6 +382,7 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	}
 	AorC = pushOver5(AorC / 4096)
 	BorD = pushOver5(BorD / 4096)
+	console.log(power)
 	let damage: number = Math.floor(level * power * AorC / BorD)
 	damage = Math.floor(damage / 50 + 2)
 	if (checkOptions.many) {
@@ -427,9 +430,12 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			}
 		}
 	}
+	console.log(damages)
+	console.log(TypeCompatibility(attackWaza.type, defencePokemon))
 	for (let i = 0; i < 16; i++) {
 		damages[i] = Math.floor(damages[i] * TypeCompatibility(attackWaza.type, defencePokemon))
 	}
+	console.log(damages)
 	for (let i = 0; i < 16; i++) {
 		criticalDamages[i] = Math.floor(criticalDamages[i] * TypeCompatibility(attackWaza.type, defencePokemon))
 	}
@@ -610,11 +616,9 @@ export function TypeCompatibility(attackType: string, defencePokemon: PokemonDat
 		batugun = ["あく","かくとう","ドラゴン"]
 	}
 	if (attackType === "ダミー") {
-		console.log("ダミー")
 		return 0
 	}
 	if (imahitotu.length === 0) {
-		console.log("ダミー1")
 		alert("attackType is null")
 		return 0
   }
@@ -635,15 +639,15 @@ export function TypeCompatibility(attackType: string, defencePokemon: PokemonDat
 	}
 	if (batugun.find((element) => {return (element === defencePokemon.type1)})) {
 		if (batugun.find((element) => {return (element === defencePokemon.type2)})) {
-			return 4
+			return 4.0
 		}
-		return 2
+		return 2.0
 	}
 	if (batugun.find((element) => {return (element === defencePokemon.type2)})) {
 		if (batugun.find((element) => {return (element === defencePokemon.type1)})) {
-			return 4
+			return 4.0
 		}
-		return 2
+		return 2.0
 	}
 	return 1
 }

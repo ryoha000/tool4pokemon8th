@@ -16,10 +16,7 @@ export default class HPbar extends Component {
     };
   }
   componentDidUpdate() {
-    console.log("hpbar1", this.state.remainHP , Math.floor(this.props.confirmHP * 240), Math.floor(this.props.lostHP * 240))
-    console.log("hpbar2", this.props.confirmHP, this.props.lostHP)
     if (this.state.confirmHP !== Math.floor(this.props.confirmHP * 240) && this.props.time > this.state.time) {
-      console.log("hpbar2")
       this.setState({ confirmHP: Math.floor(this.props.confirmHP * 240), randomHPRange: Math.floor(this.props.lostHP * 240), lostHP: Math.floor(this.props.lostHP * 240) })
       if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120) {
         this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
@@ -29,7 +26,6 @@ export default class HPbar extends Component {
         this.setState({ confirmHPColor: "red", randomHPColor: "#8B0000"})
       }
     }
-    console.log(this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 , this.state.confirmHPColor !== "greenyellow")
     if (this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 && this.state.confirmHPColor !== "greenyellow") {
       this.setState({ confirmHPColor: "greenyellow", randomHPColor: "rgb(100, 150, 26)"})
     } else if (!this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 120 && this.state.remainHP - Math.floor(this.props.confirmHP * 240) > 48 && this.state.confirmHPColor !== "yellow") {
@@ -103,7 +99,6 @@ export default class HPbar extends Component {
             }}
             dragAxis="none"
             onResizeStop={(e, direction, ref, delta, position) => {
-              console.log(ref.style.width.slice( 0, -2 ), this.state.confirmHP)
               this.setState({
                 remainHP: ref.style.width.slice( 0, -2 ),
                 time: new Date().getTime()

@@ -76,7 +76,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       isOpenItem: null,
       isOpenNatureBool: false,
       effortForm: "slider",
-      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:"f"},
+      pokemonData: {number:"0",name:"ダミー",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0},
       loading: false,
       natureName: "ようき",
       effortHP: 4,
@@ -118,7 +118,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     this.props.decidion(status, this.state.selectedWaza, 0, this.state.selectedItem.name, this.state.selectedAbility)
   }
   componentDidUpdate = () => {
-    console.log(this.state.selectedWaza)
   }
   componentDidMount() {
     const wazaLabels: any = []
@@ -178,7 +177,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
             move_4 = dammywaza
           }
           state.customizedWazas = [move_1,move_2,move_3,move_4]
-          console.log()
           state = computeStatus(state)
           const status: Status = { statusH: Math.floor(state.status.statusH), statusA: Math.floor(state.status.statusA), statusB: Math.floor(state.status.statusB), statusC: Math.floor(state.status.statusC), statusD: Math.floor(state.status.statusD), statusS: Math.floor(state.status.statusS)}
           this.setState({
@@ -208,7 +206,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
             pokemonData: state.pokemonData
           })
           this.props.decidion(status, this.state.selectedWaza, this.state.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
-          this.setState({ customizedWazas: [{ name:"げきりん",	type:"ドラゴン", power:120,	accuracy:100,	species:"物理"}, {name:"じしん", type:"じめん",	power:100, accuracy:100, species:"物理"}, {name:"つるぎのまい",	type:"ノーマル", power:0,	accuracy:0,	species:"変化"}, {name:"ほのおのキバ", type:"ほのお",	power:65,	accuracy:95, species:"物理"}]})
+          this.setState({ customizedWazas: [dammywaza, dammywaza, dammywaza, dammywaza]})
         }
       }
     }
@@ -695,7 +693,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   }
   handleChangeInputWaza = (waza: waza) => {
     this.setState({ inputWaza: waza , selectedWaza: waza , wazaTime: new Date().getTime()})
-    console.log(waza)
     this.props.decidion(this.state.status, waza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleCheckWaza = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
@@ -707,7 +704,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       return
     }
     this.setState({ selectedWaza: selectWaza , wazaTime: new Date().getTime()})
-    console.log(selectWaza)
     this.props.decidion(this.state.status, selectWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleCheckWazaGroup = (event: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -719,7 +715,6 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       return
     }
     this.setState({ selectedWaza: selectWaza , wazaTime: new Date().getTime()})
-    console.log(selectWaza)
     this.props.decidion(this.state.status, selectWaza, new Date().getTime(), this.state.selectedItem.name, this.state.selectedAbility)
   }
   handleAbility = (name: string) => {
@@ -979,16 +974,18 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
               onChange={this.handleCheckWaza}
               value={this.state.inputWaza.name}
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
-              disabled={this.state.inputWaza.name === "ダミー"}
+              disabled={this.state.inputWaza.name === ""}
             />
             <InputAuto datas={wazaData.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
+          </Grid>
+          <Grid container>
             <RadioGroup onChange={this.handleCheckWazaGroup}>
               {this.state.customizedWazas.map((waza: waza, i: number) => {
                 if (i > 4) {return true}
                 return (<FormControlLabel
-                  value={waza.name === 'ダミー' ? '' : waza.name}
+                  value={waza.name === 'ダミー' ? '   ' : waza.name}
                   control={<Radio color={this.props.color === "primary" ? "primary" : 'secondary'	} />}
-                  label={waza.name === 'ダミー' ? '' : waza.name}
+                  label={waza.name === 'ダミー' ? '   ' : waza.name}
                   labelPlacement="end"
                   style={{marginLeft: 0}}
                   key={i}
