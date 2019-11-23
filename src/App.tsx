@@ -46,9 +46,9 @@ export default class App extends React.Component<Props,State>{
       myPokemons: []
     };
   }
-  componentDidMount = () => {
-    this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
-  }
+  // componentDidMount = () => {
+  //   this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
+  // }
   handleUserName = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const userName: string = event.target.value
     this.setState({username: userName})
