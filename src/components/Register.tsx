@@ -230,12 +230,12 @@ export default class Register extends React.Component<Props,State> {
           if (this.state.selectedPokemonIndex !== undefined) {
             alert(name + '(' + this.state.party[this.state.selectedPokemonIndex ? this.state.selectedPokemonIndex : 0].name + ')が登録されました')
             this.setState({isOpenModal: false, modalTitle: '', loading: false})
-          }
-        }).catch((e: any) => {
-          if (e.data) {
-            alert(e.response.data.message)
+          } else {
             this.setState({isOpenModal: false, modalTitle: '', loading: false})
           }
+        }).catch((e: any) => {
+          alert(e)
+          this.setState({isOpenModal: false, modalTitle: '', loading: false})
         })
       }
     }
