@@ -76,18 +76,18 @@ export default class PokemonIcon extends React.Component<Props,State> {
     } else if (this.props.big) {
       return (
         <Badge color="primary" overlap='circle' badgeContent=" ">
-          <Avatar style={{marginLeft: 1, marginRight: 1}} src={"/assets/" + this.state.propsNumber + ".png"}/>
+          <Avatar style={{marginLeft: 1, marginRight: 1}} src={"https://ryoha000.github.io/tool4pokemon8th/assets/" + this.state.propsNumber + ".png"}/>
         </Badge>
       );
     } else if (this.props.dot) {
       return (
         <Badge color="primary" overlap='circle' badgeContent=" " variant="dot">
-          <Avatar style={{marginLeft: 1, marginRight: 1}} src={"/assets/" + this.state.propsNumber + ".png"}/>
+          <Avatar style={{marginLeft: 1, marginRight: 1}} src={"https://ryoha000.github.io/tool4pokemon8th/assets/" + this.state.propsNumber + ".png"}/>
         </Badge>
       );
     } else {
       return (
-        <Avatar style={{marginLeft: 1, marginRight: 1}} src={"/assets/" + this.state.propsNumber + ".png"}/>
+        <Avatar style={{marginLeft: 1, marginRight: 1}} src={"https://ryoha000.github.io/tool4pokemon8th/assets/" + this.state.propsNumber + ".png"}/>
       );
     }
   }

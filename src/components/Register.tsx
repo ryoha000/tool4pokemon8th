@@ -289,19 +289,15 @@ export default class Register extends React.Component<Props,State> {
           party: partyInfo
         }
       ).then((res: any) => {
-        if (this.state.selectedPokemonIndex) {
-          let pokemonNames: string = ''
-          this.state.party.forEach((element: PokemonData, i: number) => {
-            pokemonNames += element.name
-          })
-          alert(partyName + '(' + pokemonNames[-1] + ')が登録されました')
-          this.setState({isOpenModal: false, modalTitle: '', loading: false})
-        }
+        let pokemonNames: string = ''
+        this.state.party.forEach((element: PokemonData, i: number) => {
+          pokemonNames += element.name
+        })
+        alert(partyName + '(' + pokemonNames[-1] + ')が登録されました')
+        this.setState({isOpenModal: false, modalTitle: '', loading: false})
       }).catch((e: any) => {
-        if (e.response.data.message) {
-          alert(e.response.data.message)
-          this.setState({isOpenModal: false, loading: false, modalTitle: ''})
-        }
+        alert(e)
+        this.setState({isOpenModal: false, loading: false, modalTitle: ''})
       })
     }
   }

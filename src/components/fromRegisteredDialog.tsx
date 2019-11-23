@@ -238,21 +238,27 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     this.setState({nowInput: event.target.value})
   }
   handleReload = () => {
-    console.log('aaa')
     this.setState({ loading: true })
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/' + this.props.type, {name: this.props.username, pass: this.props.password})
       .then((res) => {
         if (this.props.type === 'pokemon') {
           if (res.data.pokemons) {
             this.props.handleAllData(res.data.pokemons)
+            this.setState({ loading: false })
           }
         }
         if (this.props.type === 'party') {
           if (res.data.parties) {
             this.props.handleAllData(res.data.parties)
+            axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.props.username, pass: this.props.password})
+            .then((res) => {
+              if (res.data.pokemons) {
+                this.props.handleAllData(res.data.pokemons)
+                this.setState({ loading: false })
+              }
+            })
           }
         }
-        this.setState({ loading: false })
       })
       .catch(e => {
         if (e.data.message) {

@@ -7,7 +7,7 @@ import MonsterBall from '@material-ui/icons/Restaurant';
 import Versus from '@material-ui/icons/SmokeFree';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import ComputerIcon from '@material-ui/icons/Computer';
+import CreateIcon from '@material-ui/icons/Create';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
 import Register from './Register'
@@ -85,8 +85,8 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
           variant="fullWidth"
           aria-label="scrollable prevent tabs example"
         >
-          <Tab icon={<Versus />} aria-label="versus" {...a11yProps(0)} />
-          <Tab icon={<MonsterBall />} aria-label="pokemon" {...a11yProps(5)} />
+          <Tab label='VS' aria-label="versus" {...a11yProps(0)} />
+          <Tab icon={<CreateIcon />} aria-label="pokemon" {...a11yProps(5)} />
           {/* <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} /> */}
           <Tab icon={<DescriptionOutlinedIcon />} aria-label="log" {...a11yProps(5)} />
         </Tabs>

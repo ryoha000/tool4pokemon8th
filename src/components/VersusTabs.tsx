@@ -199,7 +199,7 @@ export default class VersusTabs extends React.Component<Props,State> {
       }
       pokemonData.id = pokemon.id
       myParty[index] = pokemonData
-      this.setState({myParty: myParty})
+      this.setState({myParty: myParty, isOpenSelectDialog: false})
     }
   }
   handleMyParty = (party: MyParty) => {
@@ -285,7 +285,7 @@ export default class VersusTabs extends React.Component<Props,State> {
     myParty[3].id = party.pokemon_4_id
     myParty[4].id = party.pokemon_5_id
     myParty[5].id = party.pokemon_6_id
-    this.setState({party_id: party.id, myParty: myParty})
+    this.setState({party_id: party.id, myParty: myParty, isOpenSelectDialog: false})
   }
   handleOpenSelectDialog = (i: number, type: string) => {
     this.setState({isOpenSelectDialog: true, dialogType: type, registerIndex: i})
