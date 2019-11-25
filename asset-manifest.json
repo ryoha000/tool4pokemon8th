@@ -1,21 +1,21 @@
 {
   "files": {
     "main.css": "/tool4pokemon8th/static/css/main.95fe5f59.chunk.css",
-    "main.js": "/tool4pokemon8th/static/js/main.d07f9434.chunk.js",
-    "main.js.map": "/tool4pokemon8th/static/js/main.d07f9434.chunk.js.map",
+    "main.js": "/tool4pokemon8th/static/js/main.f88c4437.chunk.js",
+    "main.js.map": "/tool4pokemon8th/static/js/main.f88c4437.chunk.js.map",
     "runtime-main.js": "/tool4pokemon8th/static/js/runtime-main.e9d11c73.js",
     "runtime-main.js.map": "/tool4pokemon8th/static/js/runtime-main.e9d11c73.js.map",
-    "static/js/2.7047fc5b.chunk.js": "/tool4pokemon8th/static/js/2.7047fc5b.chunk.js",
-    "static/js/2.7047fc5b.chunk.js.map": "/tool4pokemon8th/static/js/2.7047fc5b.chunk.js.map",
+    "static/js/2.4b6a3286.chunk.js": "/tool4pokemon8th/static/js/2.4b6a3286.chunk.js",
+    "static/js/2.4b6a3286.chunk.js.map": "/tool4pokemon8th/static/js/2.4b6a3286.chunk.js.map",
     "index.html": "/tool4pokemon8th/index.html",
-    "precache-manifest.1a2c85ec28b9411f23fba311dc1159a3.js": "/tool4pokemon8th/precache-manifest.1a2c85ec28b9411f23fba311dc1159a3.js",
+    "precache-manifest.17c3a87d37169b397870d04fabbd3f89.js": "/tool4pokemon8th/precache-manifest.17c3a87d37169b397870d04fabbd3f89.js",
     "service-worker.js": "/tool4pokemon8th/service-worker.js",
     "static/css/main.95fe5f59.chunk.css.map": "/tool4pokemon8th/static/css/main.95fe5f59.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.e9d11c73.js",
-    "static/js/2.7047fc5b.chunk.js",
+    "static/js/2.4b6a3286.chunk.js",
     "static/css/main.95fe5f59.chunk.css",
-    "static/js/main.d07f9434.chunk.js"
+    "static/js/main.f88c4437.chunk.js"
   ]
 }
