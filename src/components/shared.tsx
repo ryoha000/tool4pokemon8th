@@ -5648,9 +5648,9 @@ export const datas = [
     "ability3": "",
     "base_h": 60,
     "base_a": 50,
-    "base_b": 0,
+    "base_b": 140,
     "base_c": 50,
-    "base_d": 0,
+    "base_d": 140,
     "base_s": 60,
     "heavy": 53.0
     },
@@ -5663,9 +5663,9 @@ export const datas = [
     "ability2": "",
     "ability3": "",
     "base_h": 60,
-    "base_a": 0,
+    "base_a": 140,
     "base_b": 50,
-    "base_c": 0,
+    "base_c": 140,
     "base_d": 50,
     "base_s": 60,
     "heavy": 53.0

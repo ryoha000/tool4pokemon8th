@@ -21,6 +21,11 @@ interface Props{
   openModal: any;
   sendPokeMove: (move_1: waza, move_2: waza, move_3: waza, move_4: waza, item: Item, ability: string, memo: string) => void;
   nowDetail?: SendData
+  buttonLabel: string
+  buttonNone?: boolean
+  loading?: boolean
+  deleteExist?: boolean
+  deleteFunc?: () => void
 }
 
 export default class PokemonMove extends React.Component<Props,PokemonInBattleState> {
@@ -242,6 +247,41 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
     const str: string = event.target.value
     this.setState({memo: str})
   }
+  checkButton = (): boolean => {
+    if (this.props.nowDetail) {
+      if (this.props.nowDetail.id === undefined) {
+        return true
+      } else {
+        return this.props.loading ? true : false
+      }
+    } else {
+      return false
+    }
+  }
+  renderButton = () => {
+    if (this.props.deleteExist && this.props.deleteFunc) {
+      return (
+        <Grid item>
+          <Grid container>
+            <Button disabled={this.checkButton()} onClick={this.openModal} variant="contained" style={{height: 35,width: 180, marginTop: 5}}>
+              {this.props.buttonLabel}
+            </Button>
+            <Button disabled={this.checkButton()} onClick={this.props.deleteFunc} color='secondary' variant="contained" style={{height: 35,width: 70, marginTop: 5}}>
+              削除
+            </Button>
+          </Grid>
+        </Grid>
+      )
+    } else if (this.props.buttonNone) {
+      return
+    } else {
+      return (
+        <Button disabled={this.checkButton()} onClick={this.openModal} variant="contained" style={{height: 35,width: 200, marginTop: 5}}>
+          {this.props.buttonLabel}
+        </Button>
+      )
+    }
+  }
   render() {
     if (this.state.loading) {
       return (
@@ -260,7 +300,11 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
 		}
     return (
     <Card style={{ height: 430, width: 300 }}>
-      <InputAutoItem handleInput={this.handleItem} disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}/>
+      <InputAutoItem
+        handleInput={this.handleItem}
+        disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+        value={this.state.selectedItem.name}
+      />
       <Button disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false} onClick={this.openAbility} variant="outlined" color={this.props.color === "primary" ? "primary" : 'secondary'	} style={{height: 35,width: 182, marginTop: 5}}>
         {this.state.selectedAbility}▼
       </Button>
@@ -287,7 +331,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
       </Menu>
       <Grid item>
         <List>
-          <InputAuto datas={wazaData} handleInput={this.handleChangeInputWaza} disable={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}/>
+          <InputAuto banish={true} datas={wazaData} handleInput={this.handleChangeInputWaza} disable={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}/>
             {this.state.customizedWazas.map((waza: waza, i: number) => {
               if (i > 4) {return true}
               return (
@@ -315,9 +359,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
         placeholder="メモ"
         multiline={true}
       />
-      <Button disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false} onClick={this.openModal} variant="contained" style={{height: 35,width: 200, marginTop: 5}}>
-        ポケモン単体を登録
-      </Button>
+      {this.renderButton()}
     </Card>
     );
   }

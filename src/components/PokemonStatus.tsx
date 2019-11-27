@@ -823,7 +823,11 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
         onChange={this.handlePokemonName()}
         margin="normal"
       />
-      <InputAutoNature handleInput={this.handleNature} disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}/>
+      <InputAutoNature
+        handleInput={this.handleNature}
+        disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+        value={this.state.natureName}
+      />
       <Divider style={{marginTop: 3}} />
 			{this.renderOver508()}
       {this.renderEffortForm()}

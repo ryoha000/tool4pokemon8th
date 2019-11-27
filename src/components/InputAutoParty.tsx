@@ -219,19 +219,19 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     }
     return (
       <Grid item container>
-        <PokemonIcon dot={log.my_select_1} big={log.my_first === 1} number={myparty.pokemon_1 ? myparty.pokemon_1.number : ''} />
-        <PokemonIcon dot={log.my_select_2} big={log.my_first === 2} number={myparty.pokemon_2 ? myparty.pokemon_2.number : ''} />
-        <PokemonIcon dot={log.my_select_3} big={log.my_first === 3} number={myparty.pokemon_3 ? myparty.pokemon_3.number : ''} />
-        <PokemonIcon dot={log.my_select_4} big={log.my_first === 4} number={myparty.pokemon_4 ? myparty.pokemon_4.number : ''} />
-        <PokemonIcon dot={log.my_select_5} big={log.my_first === 5} number={myparty.pokemon_5 ? myparty.pokemon_5.number : ''} />
-        <PokemonIcon dot={log.my_select_6} big={log.my_first === 6} number={myparty.pokemon_6 ? myparty.pokemon_6.number : ''} />
+        <PokemonIcon dot={log.my_select_1} big={log.my_first === 1} number={myparty.pokemon_1 ? myparty.pokemon_1.number : '000'} />
+        <PokemonIcon dot={log.my_select_2} big={log.my_first === 2} number={myparty.pokemon_2 ? myparty.pokemon_2.number : '000'} />
+        <PokemonIcon dot={log.my_select_3} big={log.my_first === 3} number={myparty.pokemon_3 ? myparty.pokemon_3.number : '000'} />
+        <PokemonIcon dot={log.my_select_4} big={log.my_first === 4} number={myparty.pokemon_4 ? myparty.pokemon_4.number : '000'} />
+        <PokemonIcon dot={log.my_select_5} big={log.my_first === 5} number={myparty.pokemon_5 ? myparty.pokemon_5.number : '000'} />
+        <PokemonIcon dot={log.my_select_6} big={log.my_first === 6} number={myparty.pokemon_6 ? myparty.pokemon_6.number : '000'} />
         <Typography style={{fontSize: 20, marginTop: 10}}>VS</Typography>
-        <PokemonIcon dot={log.oppo_select_1} big={log.oppo_first === log.pokemon_num_1} number={log.pokemon_num_1 ? log.pokemon_num_1 : ''} />
-        <PokemonIcon dot={log.oppo_select_2} big={log.oppo_first === log.pokemon_num_2} number={log.pokemon_num_2 ? log.pokemon_num_2 : ''} />
-        <PokemonIcon dot={log.oppo_select_3} big={log.oppo_first === log.pokemon_num_3} number={log.pokemon_num_3 ? log.pokemon_num_3 : ''} />
-        <PokemonIcon dot={log.oppo_select_4} big={log.oppo_first === log.pokemon_num_4} number={log.pokemon_num_4 ? log.pokemon_num_4 : ''} />
-        <PokemonIcon dot={log.oppo_select_5} big={log.oppo_first === log.pokemon_num_5} number={log.pokemon_num_5 ? log.pokemon_num_5 : ''} />
-        <PokemonIcon dot={log.oppo_select_6} big={log.oppo_first === log.pokemon_num_6} number={log.pokemon_num_6 ? log.pokemon_num_6 : ''} />
+        <PokemonIcon dot={log.oppo_select_1} big={log.oppo_first === '1'} number={log.pokemon_num_1 ? log.pokemon_num_1 : '000'} />
+        <PokemonIcon dot={log.oppo_select_2} big={log.oppo_first === '2'} number={log.pokemon_num_2 ? log.pokemon_num_2 : '000'} />
+        <PokemonIcon dot={log.oppo_select_3} big={log.oppo_first === '3'} number={log.pokemon_num_3 ? log.pokemon_num_3 : '000'} />
+        <PokemonIcon dot={log.oppo_select_4} big={log.oppo_first === '4'} number={log.pokemon_num_4 ? log.pokemon_num_4 : '000'} />
+        <PokemonIcon dot={log.oppo_select_5} big={log.oppo_first === '5'} number={log.pokemon_num_5 ? log.pokemon_num_5 : '000'} />
+        <PokemonIcon dot={log.oppo_select_6} big={log.oppo_first === '6'} number={log.pokemon_num_6 ? log.pokemon_num_6 : '000'} />
       </Grid>
     )
   }
@@ -338,14 +338,20 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
         suggestLogs.push(onelog)
       })
     })
-    if (this.props.partyId) {
-      suggestLogs = this.props.myLogs.reverse().filter((element: MyLog) => {
-        return element.party_id === this.props.partyId
-      })
+    suggestLogs = suggestLogs.reverse()
+    if (this.state.sort) {
+      if (this.props.partyId) {
+        suggestLogs = this.props.myLogs.reverse().filter((element: MyLog) => {
+          return element.party_id === this.props.partyId
+        })
+      }
     }
     if (!this.state.sort) {
       suggestLogs = this.props.myLogs.reverse()
     }
+    suggestLogs = suggestLogs.filter((element: MyLog) => {
+      return element.deleted_at === "None"
+    })
     return (
       <List style={{maxHeight: 380}}>
         {suggestLogs.reverse().map((element: MyLog) => {

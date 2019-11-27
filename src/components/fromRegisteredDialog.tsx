@@ -5,6 +5,7 @@ import { TextField, Dialog, DialogTitle, List, ListItem, ListItemAvatar, ListIte
 import PokemonIcon from './PokemonIcon';
 import CachedIcon from '@material-ui/icons/Cached';
 import axios from 'axios';
+import { element } from 'prop-types';
 
 interface ITree {
   [key: string]: ITree | string;
@@ -202,20 +203,24 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
     }
     // 処理を入れるならココ
     if (this.state.nowInput === '') {
-      updateSuggest = this.props.myPokemons
+      updateSuggest = this.props.myPokemons.filter((element: MyPokemon) => {
+        return (element.number !== '000' && element.deleted_at === 'None')
+      })
     } else {
       updateSuggest = nowSuggest.filter((element: MyPokemon) => {
-        return (
+        if (
           element.name.indexOf(str) > -1 ||
           this.pokemonNameInParty(element.number).indexOf(str) > -1 ||
           this.pokemonNameInParty(element.number).indexOf(eistr) > -1 ||
           this.pokemonNameInParty(element.number).indexOf(pst) > -1
-        )
+        ) {
+          return (element.number !== '000' && element.deleted_at === 'None')
+        }
       })
     }
     return (
       <List>
-        {updateSuggest.map((element: MyPokemon, i: number) => {
+        {updateSuggest.reverse().map((element: MyPokemon, i: number) => {
           return (
             <ListItem
               key={i}
@@ -332,10 +337,12 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
       nowSuggest = this.props.myParties
     }
     if (this.state.nowInput === '') {
-      updateSuggest = this.props.myParties
+      updateSuggest = this.props.myParties.filter(element => {
+        return element.deleted_at === 'None'
+      })
     } else {
       updateSuggest = nowSuggest.filter((element: MyParty) => {
-        return (
+        if (
           element.name.indexOf(str) > -1 ||
           this.pokemonNameInParty(element.pokemon_1 ? element.pokemon_1.number : '').indexOf(str) > -1 ||
           this.pokemonNameInParty(element.pokemon_2 ? element.pokemon_2.number : '').indexOf(str) > -1 ||
@@ -361,12 +368,14 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
           (element.pokemon_4 ? element.pokemon_4.name.indexOf(pst) > -1 : false) ||
           (element.pokemon_5 ? element.pokemon_5.name.indexOf(pst) > -1 : false) ||
           (element.pokemon_6 ? element.pokemon_6.name.indexOf(pst) > -1 : false)
-        )
+        ) {
+          return element.deleted_at === 'None'
+        }
       })
     }
     return (
       <List>
-        {updateSuggest.map((element: MyParty) => {
+        {updateSuggest.reverse().map((element: MyParty) => {
           return (
             <ListItem
               button
@@ -377,12 +386,12 @@ export default class FromRegisteredDialog extends React.Component<Props,State> {
               </ListItemText>
               <ListItemAvatar>
                 <Grid item container>
-                  <PokemonIcon number={element.pokemon_1 ? element.pokemon_1.number : ''} />
-                  <PokemonIcon number={element.pokemon_2 ? element.pokemon_2.number : ''} />
-                  <PokemonIcon number={element.pokemon_3 ? element.pokemon_3.number : ''} />
-                  <PokemonIcon number={element.pokemon_4 ? element.pokemon_4.number : ''} />
-                  <PokemonIcon number={element.pokemon_5 ? element.pokemon_5.number : ''} />
-                  <PokemonIcon number={element.pokemon_6 ? element.pokemon_6.number : ''} />
+                  <PokemonIcon number={element.pokemon_1 ? element.pokemon_1.number : '000'} />
+                  <PokemonIcon number={element.pokemon_2 ? element.pokemon_2.number : '000'} />
+                  <PokemonIcon number={element.pokemon_3 ? element.pokemon_3.number : '000'} />
+                  <PokemonIcon number={element.pokemon_4 ? element.pokemon_4.number : '000'} />
+                  <PokemonIcon number={element.pokemon_5 ? element.pokemon_5.number : '000'} />
+                  <PokemonIcon number={element.pokemon_6 ? element.pokemon_6.number : '000'} />
                 </Grid>
               </ListItemAvatar>
             </ListItem>

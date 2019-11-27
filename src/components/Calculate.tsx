@@ -5,7 +5,7 @@ import PokemonIcon from './PokemonIcon';
 import InputAutoPokemon from './InputAutoPokemon'
 import HPbar from './HPbar'
 import { powerNature, powerItem, powerWaza, attackItems, attackNatures, defenceItems, defenceNatures, damageNature, damageItem } from './CalculateData'
-import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography, Button, Menu, MenuItem } from '@material-ui/core';
+import { Avatar, TextField, FormControl, FormLabel, FormGroup, FormControlLabel, Checkbox, FormHelperText, Typography, Button, Menu, MenuItem, IconButton } from '@material-ui/core';
 import { DamageCalculate, CheckOptions } from './ComputeMethods'
 
 interface Props{
@@ -43,6 +43,8 @@ interface State{
   isOpenWeather: any
   weather: string
   isOpenOthers: any
+  atkDmax: boolean
+  defDmax: boolean
 }
 
 const allField: string[] = [
@@ -57,12 +59,29 @@ export default class Calculate extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {
+      atkDmax: false,
+      defDmax: false,
       isOpenField: null,
       field: "なし",
       isOpenWeather: null,
       weather: "なし",
       isOpenOthers: null,
-      checkOption: {attackItem: true, attackNature: true, attackWaza: false, defenceItem: false, defenceNature: true, reflect: false, light: false, aurora: false, many: false, scald: false, water: false, mad: false, cross: false}
+      checkOption: {
+        attackItem: true,
+        attackNature: true,
+        attackWaza: false,
+        defenceItem: false,
+        defenceNature: true,
+        reflect: false,
+        light: false,
+        aurora: false,
+        many: false,
+        scald: false,
+        water: false,
+        mad: false,
+        cross: false,
+        dmax: false
+      }
     }
   }
   componentDidUpdate() {
@@ -83,6 +102,16 @@ export default class Calculate extends React.Component<Props,State> {
         } else {
           this.setState({ attack: myState , defence: oppoState})
         }
+        if (this.state.defence) {
+          if (this.state.defence.pokemon.name !== oppoState.pokemon.name ||
+            this.state.defence.waza !== oppoState.waza ||
+            this.state.defence.status !== oppoState.status ||
+            this.state.defence.item !== oppoState.item ||
+            this.state.defence.nature !== oppoState.nature ||
+            this.state.defence.rank !== oppoState.rank) {
+            this.setState({ attack: myState , defence: oppoState})
+          }
+        }
       }
       if (myState.time < oppoState.time) {
         if (this.state.attack) {
@@ -91,6 +120,16 @@ export default class Calculate extends React.Component<Props,State> {
           }
         } else {
           this.setState({ attack: oppoState , defence: myState})
+        }
+        if (this.state.defence) {
+          if (this.state.defence.pokemon.name !== myState.pokemon.name ||
+            this.state.defence.waza !== myState.waza ||
+            this.state.defence.status !== myState.status ||
+            this.state.defence.item !== myState.item ||
+            this.state.defence.nature !== myState.nature ||
+            this.state.defence.rank !== myState.rank) {
+            this.setState({ attack: oppoState , defence: myState})
+          }
         }
       }
     }
@@ -222,10 +261,14 @@ export default class Calculate extends React.Component<Props,State> {
         this.state.defence.item, this.state.attack.nature, this.state.defence.nature,
         this.state.checkOption, this.state.weather)
       const useDamages: number[] = []
-      useDamages.push(damages[0][0] / this.state.defence.status.statusH) // minD
-      useDamages.push(damages[0][15] / this.state.defence.status.statusH) //maxD
-      useDamages.push(damages[1][0] / this.state.defence.status.statusH) //minCD
-      useDamages.push(damages[1][15] / this.state.defence.status.statusH) //maxCD
+      let HP: number = this.state.defence.status.statusH
+      if (this.state.defDmax) {
+        HP = HP * 2
+      }
+      useDamages.push(damages[0][0] / HP) // minD
+      useDamages.push(damages[0][15] / HP) //maxD
+      useDamages.push(damages[1][0] / HP) //minCD
+      useDamages.push(damages[1][15] / HP) //maxCD
       let i: number = -1
       let ransu: number = 0 // 0なら確定n(n>1)発
       let k: number = -1 // n(n>1)発
@@ -233,18 +276,18 @@ export default class Calculate extends React.Component<Props,State> {
         if (i !== -1) {
           break
         }
-        if (damages[0][j] > this.state.defence.status.statusH) {
+        if (damages[0][j] > HP) {
           i = j
           i = Math.round((16 - i) / 16 * 100 * 100)/100
         }
       }
       if (i === -1) {
         if (damages[0][15] > 0) {
-          k = Math.ceil(this.state.defence.status.statusH / damages[0][15])
+          k = Math.ceil(HP / damages[0][15])
         } else {
           k = -1
         }
-        if (k !== -1 && damages[0][0] * k < this.state.defence.status.statusH) {
+        if (k !== -1 && damages[0][0] * k < HP) {
           ransu = 1
         }
       }
@@ -285,12 +328,20 @@ export default class Calculate extends React.Component<Props,State> {
       }
     }
   }
+  handleAtkDmax = () => {
+    let checkOption: CheckOptions = this.state.checkOption
+    checkOption.dmax = !this.state.atkDmax
+    this.setState({atkDmax: !this.state.atkDmax, checkOption: checkOption})
+  }
+  handleDefDmax = () => {
+    this.setState({defDmax: !this.state.defDmax})
+  }
   renderAttack = () => {
     if (this.state.attack) {
       return (
         <div style={{padding: 15, marginLeft: 40}}>
           攻
-          <PokemonIcon number={this.state.attack.pokemon.number} />
+          <PokemonIcon onClick={this.handleAtkDmax} number={this.state.attack.pokemon.number} Dmax={this.state.atkDmax}/>
           <TextField
             label="Rank"
             value={this.state.attack.rank}
@@ -308,7 +359,7 @@ export default class Calculate extends React.Component<Props,State> {
     return (
       <div style={{padding: 15, marginLeft: 40}}>
         攻
-        <PokemonIcon number={"000"} />
+        <PokemonIcon number={"000"} onClick={this.handleAtkDmax} Dmax={this.state.atkDmax}/>
         <TextField
           label="Rank"
           value={0}
@@ -327,7 +378,7 @@ export default class Calculate extends React.Component<Props,State> {
       return (
         <div style={{padding: 15, marginLeft: 90}}>
           防
-          <PokemonIcon number={this.state.defence.pokemon.number} />
+          <PokemonIcon number={this.state.defence.pokemon.number} onClick={this.handleDefDmax} Dmax={this.state.defDmax}/>
           <TextField
             label="Rank"
             value={this.state.defence.rank}
@@ -345,7 +396,7 @@ export default class Calculate extends React.Component<Props,State> {
     return (
       <div style={{padding: 15, marginLeft: 90}}>
         防
-        <PokemonIcon number={"000"} />
+        <PokemonIcon number={"000"} onClick={this.handleDefDmax} Dmax={this.state.defDmax} />
         <TextField
           label="Rank"
           value={0}
@@ -566,10 +617,6 @@ export default class Calculate extends React.Component<Props,State> {
               <Checkbox checked={this.state.checkOption.mad} onChange={this.handleMad} style={{margin: 0}}/>
               <Typography onClick={this.handleMad} style={{width: 90, marginTop: 9, marginLeft: 0}}>どろあそび</Typography>
             </MenuItem>
-            <MenuItem>
-              <Checkbox checked={this.state.checkOption.cross} onChange={this.handleCross} style={{margin: 0}}/>
-              <Typography onClick={this.handleCross} style={{width: 90, marginTop: 9, marginLeft: 0}}>ダブルバトル</Typography>
-            </MenuItem>
           </Menu>
         </Grid>
       )
@@ -578,13 +625,17 @@ export default class Calculate extends React.Component<Props,State> {
   renderDamage = () => {
     if (this.state.attack && this.state.defence && this.state.attack.status && this.state.defence.status&& this.state.attack.waza && this.state.attack.waza.type !== "ダミー") {
       if (this.state.attack.waza.name !== "ダミー") {
+        let HP: number = this.state.defence.status.statusH
+        if (this.state.defDmax) {
+          HP = HP * 2
+        }
         return (
           <Grid item >
             <Typography align='center'>
-              ダメージ: {Math.round(this.damage()[0] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[1] * this.state.defence.status.statusH)}
+              ダメージ: {Math.round(this.damage()[0] * HP)} ~ {Math.round(this.damage()[1] * HP)}
             </Typography>
             <Typography align='center'>
-              急所ダメージ: {Math.round(this.damage()[2] * this.state.defence.status.statusH)} ~ {Math.round(this.damage()[3] * this.state.defence.status.statusH)}
+              急所ダメージ: {Math.round(this.damage()[2] * HP)} ~ {Math.round(this.damage()[3] * HP)}
             </Typography>
             <Typography align='center'>
               {this.renderRansu(this.damage()[4], this.damage()[5], this.damage()[6])}

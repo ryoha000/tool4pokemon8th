@@ -5,12 +5,14 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import MonsterBall from '@material-ui/icons/Restaurant';
 import Versus from '@material-ui/icons/SmokeFree';
+import ComputerIcon from '@material-ui/icons/Computer'
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CreateIcon from '@material-ui/icons/Create';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import VersusTabs from './VersusTabs'
 import Register from './Register'
+import Confirm from './Confirm'
 import { waza, PokemonData, MyPokemon, MyParty, MyLog } from './shared'
 import LogTab from './LogTab'
 
@@ -87,7 +89,7 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
         >
           <Tab label='VS' aria-label="versus" {...a11yProps(0)} />
           <Tab icon={<CreateIcon />} aria-label="pokemon" {...a11yProps(5)} />
-          {/* <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} /> */}
+          <Tab icon={<ComputerIcon />} aria-label="log" {...a11yProps(5)} />
           <Tab icon={<DescriptionOutlinedIcon />} aria-label="log" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
@@ -115,10 +117,19 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
           username={props.username}
         />
       </TabPanel>
-      {/* <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel> */}
       <TabPanel value={value} index={2}>
+        <Confirm
+          myPokemons={props.myPokemons}
+          myParties={props.myParties}
+          myLogs={props.myLogs}
+          handleAllData={handleAllData}
+          wazas={props.wazas}
+          pokemons={props.pokemons}
+          password={props.password}
+          username={props.username}
+        />
+      </TabPanel>
+      <TabPanel value={value} index={3}>
         <LogTab
           username={props.username}
           password={props.password}

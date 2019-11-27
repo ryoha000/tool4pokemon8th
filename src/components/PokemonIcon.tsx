@@ -1,12 +1,14 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress, IconButton, Button } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 
 interface Props{
   number: string;
   dot?: boolean
   big?: boolean
+  onClick?: () => void
+  Dmax?: boolean
 }
 
 interface State{
@@ -72,6 +74,22 @@ export default class PokemonIcon extends React.Component<Props,State> {
     if (this.state.loading) {
       return (
         <CircularProgress/>
+      )
+    } else if (this.props.onClick && this.props.Dmax) {
+      return (
+        <Avatar
+          onClick={this.props.onClick}
+          style={{marginLeft: 1, marginRight: 1, backgroundColor: '#ff69b4'}}
+          src={"https://ryoha000.github.io/tool4pokemon8th/assets/" + this.state.propsNumber + ".png"}
+        />
+      )
+    } else if (this.props.onClick) {
+      return (
+        <Avatar
+          onClick={this.props.onClick}
+          style={{marginLeft: 1, marginRight: 1}}
+          src={"https://ryoha000.github.io/tool4pokemon8th/assets/" + this.state.propsNumber + ".png"}
+        />
       )
     } else if (this.props.big) {
       return (

@@ -99,6 +99,9 @@ export default class LogTab extends React.Component<Props,State> {
                 />
                 {this.state.selectedLog ? 
                   <LogDetailDialog
+                    username={this.props.username}
+                    password={this.props.password}
+                    handleAllData={this.props.handleAllData}
                     isOpen={this.state.isOpenDetail}
                     log={this.state.selectedLog}
                     onClose={this.handleCloseDetail}

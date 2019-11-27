@@ -6,7 +6,7 @@ import Collapse from '@material-ui/core/Collapse';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import  {name2Pokemon, PokemonData, makeDB, waza, Status, MyParty, MyPokemon}  from './shared';
+import  {name2Pokemon, PokemonData, makeDB, waza, Status, MyParty, MyPokemon , datas}  from './shared';
 import  {getPokemonByName, getWazas}  from './shared_js';
 import { computeStatus, natures, Nature } from './ComputeMethods'
 import { CircularProgress, Slider, ListItem, ListItemText, List, ListItemAvatar, SnackbarContent, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Fab, Button, Grid, Menu, MenuItem, Select, Icon, TextField } from '@material-ui/core';
@@ -26,6 +26,7 @@ interface Props{
   pokemon?: PokemonData;
   wazas: waza[];
   color: string
+  fc: (poke: PokemonData) => void
 }
   
 export interface PokemonInBattleState{
@@ -935,6 +936,55 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     pastState = computeStatus(pastState)
     this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, this.state.selectedItem.name, this.state.selectedAbility)
   }
+  handleFC = () => {
+    const fc: PokemonData[] = datas.filter((element: PokemonData) => {
+      return element.number.indexOf(this.state.pokemonData.number.replace(/[^0-9]/g, '')) > -1
+    })
+    if (fc.length < 2) {
+      return
+    }
+    let nowNum: number = -1
+    fc.forEach((element: PokemonData, i: number) => {
+      if (element.number === this.state.pokemonData.number) {
+        nowNum = i
+      }
+    })
+    if (nowNum === -1) {
+      return
+    }
+    const fcLength: number = fc.length
+    if (fcLength === nowNum + 1) {
+      let pastState: PokemonInBattleState = this.state
+      pastState.pokemonData = fc[0]
+      pastState = computeStatus(pastState)
+      const status: Status = {
+        statusH: Math.floor(pastState.status.statusH),
+        statusA: Math.floor(pastState.status.statusA),
+        statusB: Math.floor(pastState.status.statusB),
+        statusC: Math.floor(pastState.status.statusC),
+        statusD: Math.floor(pastState.status.statusD),
+        statusS: Math.floor(pastState.status.statusS)
+      }
+      this.setState({pokemonData: fc[0]})
+      this.props.fc(fc[0])
+      this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, pastState.selectedItem.name, pastState.selectedAbility)
+    } else {
+      let pastState: PokemonInBattleState = this.state
+      pastState.pokemonData = fc[nowNum + 1]
+      pastState = computeStatus(pastState)
+      const status: Status = {
+        statusH: Math.floor(pastState.status.statusH),
+        statusA: Math.floor(pastState.status.statusA),
+        statusB: Math.floor(pastState.status.statusB),
+        statusC: Math.floor(pastState.status.statusC),
+        statusD: Math.floor(pastState.status.statusD),
+        statusS: Math.floor(pastState.status.statusS)
+      }
+      this.setState({pokemonData: fc[nowNum + 1]})
+      this.props.fc(fc[nowNum + 1])
+      this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, pastState.selectedItem.name, pastState.selectedAbility)
+    }
+  }
   render() {
     if (this.state.loading) {
       return (
@@ -954,7 +1004,9 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
               <IconButton style={{marginLeft: 0}} onClick={this.onAvatarClickHandler} >
                 <ArrowBackIcon />
               </IconButton>
-              <PokemonIcon number={this.state.pokemonData.number}/>
+              <IconButton onClick={this.handleFC}>
+                <PokemonIcon  number={this.state.pokemonData.number}/>
+              </IconButton>
             </Grid>
           </Grid>
         }

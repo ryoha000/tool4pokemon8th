@@ -112,6 +112,7 @@ const tree: ITree = {
 interface Props {
   handleInput: any
   disabled: boolean
+  value: string
 }
 
 interface State {
@@ -119,6 +120,7 @@ interface State {
   nowSuggest: Nature[]
   nowInput: string
   open: boolean
+  propsValue: string
 }
 
 export default class InputAutoNature extends React.Component<Props,State> {
@@ -128,8 +130,14 @@ export default class InputAutoNature extends React.Component<Props,State> {
       isOpenSuggest: null,
       nowSuggest: [],
       nowInput: "",
-      open: false
+      open: false,
+      propsValue: ''
     };
+  }
+  componentDidUpdate = () => {
+    if (this.state.propsValue !== this.props.value) {
+      this.setState({ nowInput: this.props.value, propsValue: this.props.value})
+    }
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let updateSuggest: Nature[] = []
@@ -211,7 +219,6 @@ export default class InputAutoNature extends React.Component<Props,State> {
   }
   openSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenSuggest: event.currentTarget})
-    console.log(event.currentTarget)
   }
   closeSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ open: false })

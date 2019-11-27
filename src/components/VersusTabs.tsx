@@ -37,6 +37,8 @@ interface State{
   myParty: PokemonData[]
   oppoParty: PokemonData[]
   mySelect?: PokemonData
+  mySelectN?: number
+  oppoSelectN?: number
   oppoSelect?: PokemonData
   myStatus?: Status
   oppoStatus?: Status
@@ -145,11 +147,11 @@ export default class VersusTabs extends React.Component<Props,State> {
     }
     this.setState({ oppoParty: newArray })
   }
-  handleMySelect = (pokemon: PokemonData) => {
-    this.setState({ mySelect: pokemon })
+  handleMySelect = (pokemon: PokemonData, i: number) => {
+    this.setState({ mySelect: pokemon, mySelectN: i })
   }
-  handleOppoSelect = (pokemon: PokemonData) => {
-    this.setState({ oppoSelect: pokemon })
+  handleOppoSelect = (pokemon: PokemonData, i: number) => {
+    this.setState({ oppoSelect: pokemon, oppoSelectN: i })
   }
   handleClickOppoPoke = () => {
     this.setState({ openOppo: !this.state.openOppo })
@@ -157,6 +159,26 @@ export default class VersusTabs extends React.Component<Props,State> {
   handleClickOppoPokeWithState = (myStatus: Status, myWaza: waza, myTime: number, myItem: string, nature: string) => {
     this.setState({oppoStatus: myStatus, oppoWaza: myWaza, oppoTime: myTime, oppoItem: myItem, oppoNature: nature })
   };
+  handleMyFC = (poke: PokemonData) => {
+    if (this.state.mySelectN === undefined) {
+      return
+    }
+    let party: PokemonData[] = this.state.myParty
+    if (party[this.state.mySelectN]) {
+      party[this.state.mySelectN] = poke
+    }
+    this.setState({mySelect: poke, myParty: party})
+  }
+  handleOppoFC = (poke: PokemonData) => {
+    if (this.state.oppoSelectN === undefined) {
+      return
+    }
+    let party: PokemonData[] = this.state.oppoParty
+    if (party[this.state.oppoSelectN]) {
+      party[this.state.oppoSelectN] = poke
+    }
+    this.setState({oppoSelect: poke, oppoParty: party})
+  }
   clickMyClear = (pokemon: PokemonData) => {
     let num: number = -1
     const target: PokemonData | undefined = this.state.myParty.find((element: PokemonData, i: number) => {
@@ -480,32 +502,32 @@ export default class VersusTabs extends React.Component<Props,State> {
           <FormControl>
             <FormGroup row>
               <Checkbox
-                color={this.state.oppofirst === 1 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 1 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(1, true)}}
                 checked={this.state.oppoSelect1}
               />
               <Checkbox
-                color={this.state.oppofirst === 2 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 2 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(2, true)}}
                 checked={this.state.oppoSelect2}
               />
               <Checkbox
-                color={this.state.oppofirst === 3 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 3 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(3, true)}}
                 checked={this.state.oppoSelect3}
               />
               <Checkbox
-                color={this.state.oppofirst === 4 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 4 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(4, true)}}
                 checked={this.state.oppoSelect4}
               />
               <Checkbox
-                color={this.state.oppofirst === 5 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 5 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(5, true)}}
                 checked={this.state.oppoSelect5}
               />
               <Checkbox
-                color={this.state.oppofirst === 6 ? 'primary' : 'secondary'}
+                color={this.state.oppofirst === 6 ? 'secondary' : 'primary'}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {this.handleSelect(6, true)}}
                 checked={this.state.oppoSelect6}
               />
@@ -545,7 +567,6 @@ export default class VersusTabs extends React.Component<Props,State> {
     this.setState({logName: logName})
   }
   send = () => {
-    this.setState({loading: true})
     const mypokemons: PokemonData[] = this.state.myParty
     let pokemonDatas: MyPokemon[] = []
     mypokemons.map((pokemon: PokemonData, i: number) => {
@@ -577,10 +598,10 @@ export default class VersusTabs extends React.Component<Props,State> {
       pokemonDatas.push(pokemonData)
     })
     let oppoFirst: PokemonData | undefined = undefined
-    if (this.state.oppoParty[this.state.oppofirst]) {
-      oppoFirst = this.state.oppoParty[this.state.oppofirst]
-    }
-    if (!oppoFirst) {
+    // if (this.state.oppoParty[this.state.oppofirst]) {
+    //   oppoFirst = this.state.oppoParty[this.state.oppofirst]
+    // }
+    if (this.state.oppofirst === undefined) {
       alert('相手の先発を入力してください')
       return
     }
@@ -605,7 +626,7 @@ export default class VersusTabs extends React.Component<Props,State> {
       oppo_select_4: this.state.oppoSelect4,
       oppo_select_5: this.state.oppoSelect5,
       oppo_select_6: this.state.oppoSelect6,
-      oppo_first: oppoFirst.number,
+      oppo_first: String(this.state.oppofirst),
       my_first: this.state.myfirst,
       pokemons: pokemonDatas,
       result: this.state.result
@@ -613,6 +634,7 @@ export default class VersusTabs extends React.Component<Props,State> {
     if (this.state.party_id) {
       logInfo.party_id = this.state.party_id
     }
+    this.setState({loading: true})
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/log',
       {
         name: this.props.username,
@@ -621,11 +643,33 @@ export default class VersusTabs extends React.Component<Props,State> {
       }
     ).then((res: any) => {
       alert('ログが記録されました')
-      this.setState({isOpenLogDialog: false, loading: false})
+      const dammypoke: PokemonData = {number:"000",name:"",type1:"くさ",type2:"どく",ability1:"しんりょく",ability2:"ようりょくそ",ability3:"",base_h:45,base_a:49,base_b:49,base_c:65,base_d:65,base_s:45,heavy:0}
+      this.setState({
+        isOpenLogDialog: false,
+        loading: false,
+        oppoParty: [dammypoke,dammypoke,dammypoke,dammypoke,dammypoke,dammypoke],
+        mySelect1: false,
+        mySelect2: false,
+        mySelect3: false,
+        mySelect4: false,
+        mySelect5: false,
+        mySelect6: false,
+        oppoSelect1: false,
+        oppoSelect2: false,
+        oppoSelect3: false,
+        oppoSelect4: false,
+        oppoSelect5: false,
+        oppoSelect6: false,
+        result: true,
+        logName: '',
+        memo: '',
+        myfirst: 0,
+        oppofirst: 0
+      })
     }).catch((e: any) => {
       if (e.response.data.message) {
         alert(e.response.data.message)
-        this.setState({isOpenLogDialog: false, loading: false})
+        this.setState({loading: false})
       }
     })
   }
@@ -665,7 +709,7 @@ export default class VersusTabs extends React.Component<Props,State> {
                 />
                 {this.state.myParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
                   return (
-                    <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickMyPoke();this.handleMySelect(element);}} key={i} disabled={element.number === "000"}>
+                    <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickMyPoke();this.handleMySelect(element, i);}} key={i} disabled={element.number === "000"}>
                       <ListItemAvatar>
                         <PokemonIcon number={element.number}/>
                       </ListItemAvatar>
@@ -709,7 +753,7 @@ export default class VersusTabs extends React.Component<Props,State> {
               </ListItem>
               {this.state.oppoParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
                 return (
-                  <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element);}} key={i} disabled={element.number === "000"}>
+                  <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element, i);}} key={i} disabled={element.number === "000"}>
                     <ListItemAvatar>
                       <PokemonIcon number={element.number}/>
                     </ListItemAvatar>
@@ -732,12 +776,12 @@ export default class VersusTabs extends React.Component<Props,State> {
             {this.renderLogDialog()}
             <Grid item>
               <Paper style={{ height: 430,width: 300 }}>
-                {this.state.openMy ? <PokemonInBattle color="primary" backParty={this.handleClickMyPoke} decidion={this.handleClickMyPokeWithState} pokemon={this.state.mySelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListMy()}
+                {this.state.openMy ? <PokemonInBattle fc={this.handleMyFC} color="primary" backParty={this.handleClickMyPoke} decidion={this.handleClickMyPokeWithState} pokemon={this.state.mySelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListMy()}
               </Paper>
             </Grid>
             <Grid item>
               <Paper style={{ height: 430,width: 300 }}>
-                {this.state.openOppo ? <PokemonInBattle color="a" backParty={this.handleClickOppoPoke} decidion={this.handleClickOppoPokeWithState} pokemon={this.state.oppoSelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListOppo()}
+                {this.state.openOppo ? <PokemonInBattle fc={this.handleOppoFC} color="a" backParty={this.handleClickOppoPoke} decidion={this.handleClickOppoPokeWithState} pokemon={this.state.oppoSelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListOppo()}
               </Paper>
             </Grid>
             <Grid item>

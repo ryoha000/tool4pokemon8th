@@ -293,7 +293,7 @@ export default class Register extends React.Component<Props,State> {
         this.state.party.forEach((element: PokemonData, i: number) => {
           pokemonNames += element.name
         })
-        alert(partyName + '(' + pokemonNames[-1] + ')が登録されました')
+        alert(partyName + '(' + pokemonNames.slice(0, -1) + ')が登録されました')
         this.setState({isOpenModal: false, modalTitle: '', loading: false})
       }).catch((e: any) => {
         alert(e)
@@ -477,6 +477,7 @@ export default class Register extends React.Component<Props,State> {
             <Grid item>
               <Paper style={{ height: 430,width: 300}}>
                 <PokemonMove
+                  buttonLabel='ポケモン単体を登録'
                   nowDetail={this.state.selectedPokemonIndex !== undefined ? this.state.partyDetail[this.state.selectedPokemonIndex] : undefined}
                   sendPokeMove={this.selectPokeMove}
                   openModal={this.openPokeModal}

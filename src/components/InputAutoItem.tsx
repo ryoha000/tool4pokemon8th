@@ -113,6 +113,7 @@ const tree: ITree = {
 
 interface Props {
   handleInput: any
+  value: string
   disabled: boolean
 }
 
@@ -121,17 +122,24 @@ interface State {
   nowSuggest: Item[]
   nowInput: string
   open: boolean
+  propsValue: string
 }
 
 export default class InputAutoItem extends React.Component<Props,State> {
   constructor(props: Readonly<Props>) {
     super(props);
     this.state = {
+      propsValue: '',
       isOpenSuggest: null,
       nowSuggest: [],
       nowInput: "",
       open: false
     };
+  }
+  componentDidUpdate = () => {
+    if (this.state.propsValue !== this.props.value) {
+      this.setState({ nowInput: this.props.value, propsValue: this.props.value})
+    }
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let updateSuggest: Item[] = []

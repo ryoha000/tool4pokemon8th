@@ -23,6 +23,7 @@ export interface CheckOptions {
 	water: boolean
 	mad: boolean
 	cross: boolean
+	dmax: boolean
 }
 
 export const natures: Nature[] = [
@@ -224,7 +225,133 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
 export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, weather: string): number[][] {
 	// level=50
 	const level: number = 50 * 2 / 5 + 2
-	let power: number = attackWaza.power * 4096
+	let wazapower: number = attackWaza.power
+	if (checkOptions.dmax) {
+		const p: number = attackWaza.power
+		const t: string = attackWaza.type
+		if (p > 9) {
+			if (p < 41) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 70
+				} else {
+					wazapower = 90
+				}
+			}
+			if (p < 51) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 75
+				} else {
+					wazapower = 100
+				}
+			}
+			if (p < 61) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 80
+				} else {
+					wazapower = 110
+				}
+			}
+			if (p < 71) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 85
+				} else {
+					wazapower = 120
+				}
+			}
+			if (p < 101) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 90
+				} else {
+					wazapower = 130
+				}
+			}
+			if (p < 141) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 95
+				} else {
+					wazapower = 140
+				}
+			}
+			if (p < 251) {
+				if (t === 'かくとう' || t === 'どく') {
+					wazapower = 100
+				} else {
+					wazapower = 150
+				}
+			}
+		}
+		const n: string = attackWaza.name
+		if (n === 'つっぱり') {
+			wazapower = 70
+		}
+		if (n === 'トリプルキック' || n === 'にどげり') {
+			wazapower = 80
+		}
+		if (n === 'おうふくビンタ' || n === 'みずしゅりけん') {
+			wazapower = 90
+		}
+		if (n === 'ダブルニードル' || n === 'ふくろだたき' || n === 'みだれひっかき' || n === 'れんぞくパンチ') {
+			wazapower = 100
+		}
+		if (n === 'ダブルアタック' || n === 'とげキャノン') {
+			wazapower = 120
+		}
+		if (
+			n === 'ギアソーサー' ||
+			n === 'スイープビンタ' ||
+			n === 'タネマシンガン' ||
+			n === 'ダブルチョップ' ||
+			n === 'つららばり' ||
+			n === 'ドラゴンアロー' ||
+			n === 'ロックブラスト' ||
+			n === 'ミサイルばり' ||
+			n === 'ボーンラッシュ'
+			) {
+			wazapower = 130
+		}
+		if (
+			n === 'きしかいせい' ||
+			n === 'けたぐり' ||
+			n === 'なげつける' ||
+			n === 'はきだす' ||
+			n === 'プレゼント'
+			) {
+			wazapower = 100
+		}
+		if (
+			n === 'じたばた' ||
+			n === 'くさむすび' ||
+			n === 'エレキボール' ||
+			n === 'ジャイロボール' ||
+			n === 'ヒートスタンプ' ||
+			n === 'ヘビーボンバー'
+			) {
+			wazapower = 130
+		}
+		if (n === 'カウンター' || n === 'ちきゅうなげ') {
+			wazapower = 75
+		}
+		if (
+			n === 'サイコウェーブ' ||
+			n === 'ナイトヘッド' ||
+			n === 'いのちがけ' ||
+			n === 'ミラーコート' ||
+			n === 'メタルバースト'
+			) {
+			wazapower = 100
+		}
+		if (
+			n === 'じわれ' ||
+			n === 'ぜったいれいど' ||
+			n === 'つのドリル' ||
+			n === 'ハサミギロチン' ||
+			n === 'いかりのまえば' ||
+			n === 'がむしゃら'
+			) {
+			wazapower = 130
+		}
+	}
+	let power: number = wazapower * 4096
 	let item = powerItem.find((element) => {return(element.name === attackItem)})
 	if (checkOptions.attackItem) {
 		if (item) {

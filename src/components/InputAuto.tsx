@@ -136,7 +136,6 @@ export default class InputAuto extends React.Component<Props,State> {
     };
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    // console.log('test')
     let updateSuggest: waza[] = []
     let str: string = event.target.value
     const pst: string = event.target.value
@@ -208,11 +207,14 @@ export default class InputAuto extends React.Component<Props,State> {
 
   handleSelect = (pokemon: waza) => {
     this.props.handleInput(pokemon)
-    this.setState({ nowInput: pokemon.name })
+    if (this.props.banish) {
+      this.setState({ nowInput: '' })
+    } else {
+      this.setState({ nowInput: pokemon.name })
+    }
   }
   openSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ isOpenSuggest: event.currentTarget})
-    console.log(event.currentTarget)
   }
   closeSuggest = (event: React.MouseEvent<HTMLElement>) => {
     this.setState({ open: false })
