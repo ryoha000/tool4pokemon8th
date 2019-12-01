@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5c9796ffaf184582e40f21c65cae82a8",
+    "revision": "8e0927d5ae1b34c4ea2fb2cf98b25eb5",
     "url": "/tool4pokemon8th/index.html"
   },
   {
-    "revision": "8f374c56a4b4e37dee63",
+    "revision": "cd03918344b84cbb90d4",
     "url": "/tool4pokemon8th/static/css/main.95fe5f59.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/tool4pokemon8th/static/js/2.24b0d6bd.chunk.js"
   },
   {
-    "revision": "8f374c56a4b4e37dee63",
-    "url": "/tool4pokemon8th/static/js/main.3aa5c6f0.chunk.js"
+    "revision": "cd03918344b84cbb90d4",
+    "url": "/tool4pokemon8th/static/js/main.9651309a.chunk.js"
   },
   {
     "revision": "003b9f67fc9bd8a68326",
