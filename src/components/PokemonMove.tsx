@@ -249,7 +249,7 @@ export default class PokemonMove extends React.Component<Props,PokemonInBattleSt
   }
   checkButton = (): boolean => {
     if (this.props.nowDetail) {
-      if (this.props.nowDetail.id === undefined) {
+      if (this.props.nowDetail.id !== undefined) {
         return true
       } else {
         return this.props.loading ? true : false

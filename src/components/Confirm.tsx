@@ -49,7 +49,7 @@ interface Props{
     myPokemons: MyPokemon[];
     myParties: MyParty[];
     myLogs: MyLog[];
-    handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+    handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
 }
 
 interface State{
@@ -89,7 +89,7 @@ export default class Confirm extends React.Component<Props,State> {
             this.setState({loading: false})
         }
     }
-    handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
+    handleAllData = (datas: MyPokemon[] | MyParty[] | MyLog[]) => {
         this.props.handleAllData(datas)
     }
     handleReload = () => {
@@ -198,7 +198,15 @@ export default class Confirm extends React.Component<Props,State> {
             }
             ).then(res => {
                 alert('ポケモンが削除されました')
-                this.setState({loading: false})
+                let myPokemons: MyPokemon[] = this.props.myPokemons
+                const after: MyPokemon[] = myPokemons.filter(element => {
+                    if (element.id === this.state.selectedPokemonId) {
+                        element.deleted_at = 'NotNone'
+                    }
+                    return element
+                })
+                this.props.handleAllData(after)
+                this.setState({loading: false, })
             }).catch((e: any) => {
                 alert(e)
                 this.setState({ loading: false })
@@ -231,11 +239,25 @@ export default class Confirm extends React.Component<Props,State> {
                     {
                         name: this.props.username,
                         pass: this.props.password,
-                        pokemons: pokemonData
+                        pokemon: pokemonData
                     }
                     ).then(res => {
                         alert('ポケモンが編集されました')
-                        this.setState({loading: false})
+                        const after: MyPokemon[] = this.props.myPokemons.filter(element => {
+                            if (pokemonData.id === element.id) {
+                                element = pokemonData
+                            }
+                            return element
+                        })
+                        this.props.handleAllData(after)
+                        this.setState({
+                            partyDetail: [{index: 0}, {index: 1}, {index: 2}, {index: 3}, {index: 4}, {index: 5}],
+                            selectedPokemonId: 0,
+                            selectedPokemonIndex: undefined,
+                            selectedPokemon: undefined,
+                            selectedPartyId: 0,
+                            loading: false
+                        })
                     }).catch((e: any) => {
                         alert(e)
                         this.setState({ loading: false })
@@ -321,6 +343,15 @@ export default class Confirm extends React.Component<Props,State> {
                 }
                 ).then(res => {
                     alert('パーティが編集されました')
+                    const after: MyParty[] = this.props.myParties.filter(element => {
+                        editPokemons.forEach(poke => {
+                            if (poke.id === element.id) {
+                                element = poke
+                            }
+                        })
+                        return element
+                    })
+                    this.props.handleAllData(after)
                     this.setState({loading: false})
                 }).catch((e: any) => {
                     alert(e)
@@ -337,6 +368,13 @@ export default class Confirm extends React.Component<Props,State> {
                 }
                 ).then(res => {
                     alert('パーティが削除されました')
+                    const after: MyParty[] = this.props.myParties.filter(element => {
+                        if (element.id === id) {
+                            element.deleted_at = 'NotNone'
+                        }
+                        return element
+                    })
+                    this.props.handleAllData(after)
                     this.setState({loading: false})
                 }).catch((e: any) => {
                     alert(e)
@@ -469,7 +507,12 @@ export default class Confirm extends React.Component<Props,State> {
             alert('パーティのポケモンの情報が不正です')
             return
         }
-        const nowDetail: SendData[] = [detail1, detail2, detail3, detail4, detail5, detail6]
+        let nowDetail: SendData[]
+        if (this.state.selectedPartyId === id) {
+            nowDetail = this.state.partyDetail
+        } else {
+            nowDetail = [detail1, detail2, detail3, detail4, detail5, detail6]
+        }
         const pokemonData: PokemonData | undefined = datas.find((element) => {
             return element.number === pokemon.number
         })
@@ -532,6 +575,7 @@ export default class Confirm extends React.Component<Props,State> {
                                     />
                                 :
                                     <SearchParty
+                                        // selectedPokeIndex={this.state.selectedPokemonIndex}
                                         selectPokemon={this.selectPokemon}
                                         selectedId={this.state.selectedPokemonId}
                                         nowInput={this.state.nowInput}

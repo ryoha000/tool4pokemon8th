@@ -14,7 +14,7 @@ interface Props {
   myParties: MyParty[]
   username: string
   password: string
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
 }
 
 interface State {

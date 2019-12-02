@@ -29,7 +29,7 @@ interface Props {
   myPokemons: MyPokemon[];
   myParties: MyParty[];
   myLogs: MyLog[];
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
   pokemons: PokemonData[];
 }
 
@@ -73,7 +73,7 @@ export default function ScrollableTabsButtonPrevent(props: Props) {
     setValue(newValue);
   };
 
-  const handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
+  const handleAllData = (datas: MyPokemon[] | MyParty[] | MyLog[]) => {
     props.handleAllData(datas)
   }
 

@@ -116,6 +116,7 @@ interface Props {
   datas: waza[]
   banish?: boolean
   disable?: boolean
+  value?: string
 }
 
 interface State {
@@ -134,6 +135,11 @@ export default class InputAuto extends React.Component<Props,State> {
       nowInput: "",
       open: false
     };
+  }
+  componentDidMount = () => {
+    if (this.props.value) {
+      this.setState({nowInput: this.props.value})
+    }
   }
   handleInput = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let updateSuggest: waza[] = []

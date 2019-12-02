@@ -230,8 +230,116 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       )
     }
   }
+  computeHeight = (): number => {
+    if (window.parent.screen.width < 600) {
+      return 530
+    } else {
+      return 430
+    }
+  }
   renderEffortForm = () => {
-    if (this.state.effortForm == "slider") {
+    if (this.state.effortForm == "slider" && window.parent.screen.width < 600) {
+      return (
+        <List component="div" disablePadding dense>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>H:{this.state.effortHP}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortHP"
+              value={this.state.effortHP}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortHP()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>A:{this.state.effortA}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortA"
+              value={this.state.effortA}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortA()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>B:{this.state.effortB}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortB"
+              value={this.state.effortB}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortB()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>C:{this.state.effortC}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortC"
+              value={this.state.effortC}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortC()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>D:{this.state.effortD}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortD"
+              value={this.state.effortD}
+              valueLabelDisplay="auto"
+              step={4}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              onChange={this.handleEffortD()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>S:{this.state.effortS}    </Typography>
+            <Slider
+              disabled={this.props.nowDetail ? this.props.nowDetail.id !== undefined : false}
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortS"
+              value={this.state.effortS}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortS()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+        </List>
+      )
+    } else if (this.state.effortForm == "slider") {
       return (
         <List component="div" disablePadding>
           <ListItem className="nested">
@@ -793,7 +901,7 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
   render() {
     if (this.state.loading) {
       return (
-        <Card style={{ height: 430, width: 300 }}>
+        <Card style={{ height: this.computeHeight(), width: 300 }}>
           <div>
             <CircularProgress/>
           </div>
@@ -801,13 +909,13 @@ export default class PokemonStatus extends React.Component<Props,PokemonInBattle
       )
     } else if (this.state.pokemonData.name === "ダミー") {
 			return (
-        <Card style={{ height: 430, width: 300 }}>
+        <Card style={{ height: this.computeHeight(), width: 300 }}>
           <Typography style={{marginTop: 190}}>ポケモンを選択してください</Typography>
         </Card>
       )
 		}
     return (
-    <Card style={{ height: 430, width: 300 }}>
+    <Card style={{ height: this.computeHeight(), width: 300 }}>
       <CardHeader
       avatar={
         <PokemonIcon number={this.state.pokemonData.number}/>

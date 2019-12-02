@@ -28,7 +28,7 @@ interface Props{
   myPokemons: MyPokemon[];
   myParties: MyParty[];
   myLogs: MyLog[];
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
 }
 
 interface State{
@@ -52,6 +52,7 @@ interface State{
   oppoNature?: string
   party_id?: number
   isOpenSelectDialog: boolean
+  isOpenSelectDialogOppo: boolean
   isOpenLogDialog: boolean
   dialogType: string
   registerIndex: number
@@ -100,6 +101,7 @@ export default class VersusTabs extends React.Component<Props,State> {
       registerIndex: -1,
       dialogType: '',
       isOpenSelectDialog: false,
+      isOpenSelectDialogOppo: false,
       openMy: false,
       openOppo: false,
       loading: false,
@@ -224,6 +226,21 @@ export default class VersusTabs extends React.Component<Props,State> {
       this.setState({myParty: myParty, isOpenSelectDialog: false})
     }
   }
+  handleOppoPokemon = (pokemon: MyPokemon, index: number) => {
+    if (pokemon.id) {
+      let myParty: PokemonData[] = this.state.oppoParty
+      let pokemonData: PokemonData | undefined = datas.find((element: PokemonData) => {
+        return element.number === pokemon.number
+      })
+      if (pokemonData === undefined) {
+        alert('指定されたポケモンが不適切です')
+        return
+      }
+      pokemonData.id = pokemon.id
+      myParty[index] = pokemonData
+      this.setState({oppoParty: myParty, isOpenSelectDialogOppo: false})
+    }
+  }
   handleMyParty = (party: MyParty) => {
     let myParty: PokemonData[] = this.state.myParty
     let pokemon: MyPokemon
@@ -314,6 +331,12 @@ export default class VersusTabs extends React.Component<Props,State> {
   }
   handleCloseSelectDialog = () => {
     this.setState({isOpenSelectDialog: false})
+  }
+  handleOpenSelectDialogOppo = (i: number, type: string) => {
+    this.setState({isOpenSelectDialogOppo: true, dialogType: type, registerIndex: i})
+  }
+  handleCloseSelectDialogOppo = () => {
+    this.setState({isOpenSelectDialogOppo: false})
   }
   handleOpenLogDialog = () => {
     this.setState({isOpenLogDialog: true, logName: new Date().toISOString()})
@@ -423,6 +446,13 @@ export default class VersusTabs extends React.Component<Props,State> {
       if (first) {
         this.setState({oppofirst: i})
       }
+    }
+  }
+  computeHeight = (): number => {
+    if (window.parent.screen.width < 600) {
+      return 530
+    } else {
+      return 430
     }
   }
   renderLogDialog = () => {
@@ -751,6 +781,19 @@ export default class VersusTabs extends React.Component<Props,State> {
                   </IconButton>
                 </ListItemSecondaryAction>
               </ListItem>
+              <FromRegisteredDialog
+                myParties={this.props.myParties}
+                myPokemons={this.props.myPokemons}
+                type={this.state.dialogType}
+                isOpen={this.state.isOpenSelectDialogOppo}
+                onClose={this.handleCloseSelectDialogOppo}
+                index={this.state.registerIndex ? this.state.registerIndex : 0}
+                selectParty={this.handleMyParty}
+                selectPokemon={this.handleOppoPokemon}
+                handleAllData={this.props.handleAllData}
+                username={this.props.username}
+                password={this.props.password}
+              />
               {this.state.oppoParty.map((element: PokemonData, i: number, array: PokemonData[]) => {
                 return (
                   <ListItem button onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleClickOppoPoke();this.handleOppoSelect(element, i);}} key={i} disabled={element.number === "000"}>
@@ -759,6 +802,11 @@ export default class VersusTabs extends React.Component<Props,State> {
                     </ListItemAvatar>
                     <ListItemText primary={element.name} />
                     <ListItemSecondaryAction>
+                      <IconButton
+                        onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleOpenSelectDialogOppo(i, 'pokemon')}}
+                      >
+                        <FolderIcon />
+                      </IconButton>
                       <IconButton edge="end"  onClick={(event: React.MouseEvent<HTMLElement>) => {this.clickOppoClear(element)}}>
                         <ClearIcon />
                       </IconButton>
@@ -775,12 +823,12 @@ export default class VersusTabs extends React.Component<Props,State> {
           <Grid container justify="center" spacing={2}>
             {this.renderLogDialog()}
             <Grid item>
-              <Paper style={{ height: 430,width: 300 }}>
+              <Paper style={{ height: this.computeHeight(),width: 300 }}>
                 {this.state.openMy ? <PokemonInBattle fc={this.handleMyFC} color="primary" backParty={this.handleClickMyPoke} decidion={this.handleClickMyPokeWithState} pokemon={this.state.mySelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListMy()}
               </Paper>
             </Grid>
             <Grid item>
-              <Paper style={{ height: 430,width: 300 }}>
+              <Paper style={{ height: this.computeHeight(),width: 300 }}>
                 {this.state.openOppo ? <PokemonInBattle fc={this.handleOppoFC} color="a" backParty={this.handleClickOppoPoke} decidion={this.handleClickOppoPokeWithState} pokemon={this.state.oppoSelect} wazas={this.props.wazas} myPokemons={this.props.myPokemons} myParties={this.props.myParties} /> : this.renderPartyListOppo()}
               </Paper>
             </Grid>

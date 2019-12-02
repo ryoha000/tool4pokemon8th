@@ -46,9 +46,9 @@ export default class App extends React.Component<Props,State>{
       myPokemons: []
     };
   }
-  componentDidMount = () => {
-    this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
-  }
+  // componentDidMount = () => {
+  //   this.setState({username: 'username', password: 'password', pokeInit: true, partyInit: true, logInit: true})
+  // }
   handleUserName = () => (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const userName: string = event.target.value
     this.setState({username: userName})
@@ -123,17 +123,10 @@ export default class App extends React.Component<Props,State>{
     this.setState({loading: true})
     axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/user?signup', {name: this.state.username, pass: this.state.password})
       .then(() => {
-        axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/pokemon', {name: this.state.username, pass: this.state.password})
-          .then((res) => this.setState({pokeInit: true, myPokemons: res.data.pokemons}))
-        axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/party', {name: this.state.username, pass: this.state.password})
-          .then((res) => this.setState({partyInit: true, myParties: res.data.parties}))
-        axios.post('https://us-central1-tool4pokemon8th.cloudfunctions.net/log', {name: this.state.username, pass: this.state.password})
-          .then((res) => this.setState({logInit: true, myLogs: res.data.logs}))
+         this.setState({pokeInit: true, partyInit: true,logInit: true, loading: false})
       })
-      .catch((e: any) => {
-        if (e.data) {
-          alert(e.response.data.message)
-        }
+      .catch((e) => {
+        alert("同名のユーザーが既に存在します")
         this.setState({loading: false, username: '', password: '', confirmPass: ''})
       })
   }

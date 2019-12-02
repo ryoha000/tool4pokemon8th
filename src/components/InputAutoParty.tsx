@@ -120,7 +120,7 @@ interface Props {
   myPokemons: MyPokemon[];
   myParties: MyParty[];
   myLogs: MyLog[]
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
   username: string
   password: string
   partyId?: number

@@ -224,6 +224,43 @@ export function computeStatus(pokemon: PokemonInBattleState): PokemonInBattleSta
 
 export function DamageCalculate(attackStatus: Status, defenceStatus: Status, attackWaza: waza, attackPokemon: PokemonData, defencePokemon: PokemonData, attackRank: number, defenceRank: number, field: string, attackItem: string, defenceItem: string, attackNature: string, defenceNature: string, checkOptions: CheckOptions, weather: string): number[][] {
 	// level=50
+	if (checkOptions.attackNature && attackNature === 'フェアリースキン') {
+		attackWaza.type = 'フェアリー'
+	}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ファイヤーメモリ") {attackPokemon.type1 = "ほのお"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ウオーターメモリ") {attackPokemon.type1 = "みず"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "グラスメモリ") {attackPokemon.type1 = "くさ"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "エレクトロメモリ") {attackPokemon.type1 = "でんき"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "アイスメモリ") {attackPokemon.type1 = "こおり"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ファイトメモリ") {attackPokemon.type1 = "かくとう"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ポイズンメモリ") {attackPokemon.type1 = "どく"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "グラウンドメモリ") {attackPokemon.type1 = "じめん"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "フライングメモリ") {attackPokemon.type1 = "ひこう"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "サイキックメモリ") {attackPokemon.type1 = "エスパー"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "バグメモリ") {attackPokemon.type1 = "むし"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ロックメモリ") {attackPokemon.type1 = "いわ"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ゴーストメモリ") {attackPokemon.type1 = "ゴースト"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ドラゴンメモリ") {attackPokemon.type1 = "ドラゴン"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "ダークメモリ") {attackPokemon.type1 = "あく"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "スチールメモリ") {attackPokemon.type1 = "はがね"}
+	if (attackPokemon.name === "シルヴァディ" && attackItem === "フェアリーメモリ") {attackPokemon.type1 = "フェアリー"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ファイヤーメモリ") {defencePokemon.type1 = "ほのお"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ウオーターメモリ") {defencePokemon.type1 = "みず"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "グラスメモリ") {defencePokemon.type1 = "くさ"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "エレクトロメモリ") {defencePokemon.type1 = "でんき"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "アイスメモリ") {defencePokemon.type1 = "こおり"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ファイトメモリ") {defencePokemon.type1 = "かくとう"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ポイズンメモリ") {defencePokemon.type1 = "どく"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "グラウンドメモリ") {defencePokemon.type1 = "じめん"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "フライングメモリ") {defencePokemon.type1 = "ひこう"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "サイキックメモリ") {defencePokemon.type1 = "エスパー"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "バグメモリ") {defencePokemon.type1 = "むし"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ロックメモリ") {defencePokemon.type1 = "いわ"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ゴーストメモリ") {defencePokemon.type1 = "ゴースト"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ドラゴンメモリ") {defencePokemon.type1 = "ドラゴン"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "ダークメモリ") {defencePokemon.type1 = "あく"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "スチールメモリ") {defencePokemon.type1 = "はがね"}
+	if (defencePokemon.name === "シルヴァディ" && defenceItem === "フェアリーメモリ") {defencePokemon.type1 = "フェアリー"}
 	const level: number = 50 * 2 / 5 + 2
 	let wazapower: number = attackWaza.power
 	if (checkOptions.dmax) {
@@ -236,43 +273,37 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 				} else {
 					wazapower = 90
 				}
-			}
-			if (p < 51) {
+			} else if (p < 51) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 75
 				} else {
 					wazapower = 100
 				}
-			}
-			if (p < 61) {
+			} else if (p < 61) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 80
 				} else {
 					wazapower = 110
 				}
-			}
-			if (p < 71) {
+			} else if (p < 71) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 85
 				} else {
 					wazapower = 120
 				}
-			}
-			if (p < 101) {
+			} else if (p < 101) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 90
 				} else {
 					wazapower = 130
 				}
-			}
-			if (p < 141) {
+			} else if (p < 141) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 95
 				} else {
 					wazapower = 140
 				}
-			}
-			if (p < 251) {
+			} else if (p < 251) {
 				if (t === 'かくとう' || t === 'どく') {
 					wazapower = 100
 				} else {
@@ -370,7 +401,7 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			power = Math.round(power * nature.number / 4096)
 		}
 	}
-  // 例外 とうそうしん
+  	// 例外 とうそうしん
 	nature = powerNature.find((element) => {return(element.name === defenceNature)})
 	if (checkOptions.defenceNature) {
 		if (nature) {
@@ -464,10 +495,15 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 		AorC = Math.floor(AorC * 6144 / 4096)
 	}
 	AorC = AorC * 4096
-	// 例外 すいほう
+	if (attackNature === 'すいほう' && checkOptions.attackNature && attackWaza.type === 'みず') {
+		AorC = Math.round(AorC * 8192 / 4096)
+	}
+	if (defenceNature === 'すいほう' && checkOptions.defenceNature && attackWaza.type === 'ほのお') {
+		AorC = Math.round(AorC * 2048 / 4096)
+	}
 	nature = attackNatures.find((element) => {return(element.name === attackNature)})
 	if (checkOptions.attackNature) {
-		if (nature) {
+		if (nature && nature.name !== 'すいほう') {
 			AorC = Math.round(AorC * nature.number / 4096)
 		}
 	}
@@ -480,7 +516,10 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	item = attackItems.find((element) => {return(element.name === attackItem)})
 	if (checkOptions.attackItem) {
 		if (item) {
-			AorC = Math.round(AorC * item.number / 4096)
+			if (attackItem.indexOf('こだわり') > -1 && checkOptions.dmax) {
+			} else {
+				AorC = Math.round(AorC * item.number / 4096)
+			}
 		}
 	}
 	item = attackItems.find((element) => {return(element.name === defenceItem)})
@@ -490,7 +529,7 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 		}
 	}
 	if (weather === "すなあらし") {
-		if (defencePokemon.type1 === "いわ" || defencePokemon.type2 === "いわ") {
+		if (defencePokemon.type1 = "いわ" || defencePokemon.type2 === "いわ") {
 			BorD = Math.floor(BorD * 6144 / 4096)
 		}
 	}
@@ -498,7 +537,18 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	nature = defenceNatures.find((element) => {return(element.name === defenceNature)})
 	if (checkOptions.defenceNature) {
 		if (nature) {
-			BorD = Math.round(BorD * nature.number / 4096)
+			if (defenceNature === 'フラワーギフト' && weather === 'はれ' && attackWaza.species === '特殊') {
+				BorD = Math.round(BorD * nature.number / 4096)
+			}
+			if (defenceNature === "ふしぎなうろこ" && attackWaza.species === '物理') {
+				BorD = Math.round(BorD * nature.number / 4096)
+			}
+			if (defenceNature === "くさのけがわ" && field === 'グラス' && attackWaza.species === '物理') {
+				BorD = Math.round(BorD * nature.number / 4096)
+			}
+			if (defenceNature === "ファーコート" && attackWaza.species === '物理') {
+				BorD = Math.round(BorD * nature.number / 4096)
+			}
 		}
 	}
 	item = defenceItems.find((element) => {return(element.name === defenceItem)})
@@ -609,9 +659,26 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 			criticalDamages[i] = Math.round(criticalDamages[i] * nature.number / 4096)
 		}
 	}
-	// 例外 もふもふ
+	if (defenceNature === 'もふもふ' && checkOptions.defenceNature) {
+		if (attackWaza.type === 'ほのお') {
+			for (let i = 0; i < 16; i++) {
+				damages[i] = Math.round(damages[i] * 8192 / 4096)
+			}
+			for (let i = 0; i < 16; i++) {
+				criticalDamages[i] = Math.round(criticalDamages[i] * 8192 / 4096)
+			}
+		}
+		if (attackWaza.species === '物理') {
+			for (let i = 0; i < 16; i++) {
+				damages[i] = Math.round(damages[i] * 2048 / 4096)
+			}
+			for (let i = 0; i < 16; i++) {
+				criticalDamages[i] = Math.round(criticalDamages[i] * 2048 / 4096)
+			}
+		}
+	}
 	nature = damageNature.find((element) => {return(element.name === defenceNature)})
-	if (nature && checkOptions.defenceNature) {
+	if (nature && checkOptions.defenceNature && defenceNature !== 'もふもふ') {
 		for (let i = 0; i < 16; i++) {
 			damages[i] = Math.round(damages[i] * nature.number / 4096)
 		}
@@ -621,15 +688,18 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 	}
 	item = damageItem.find((element) => {return(element.name === attackItem)})
 	if (item && checkOptions.attackItem) {
-		for (let i = 0; i < 16; i++) {
-			damages[i] = Math.round(damages[i] * item.number / 4096)
-		}
-		for (let i = 0; i < 16; i++) {
-			criticalDamages[i] = Math.round(criticalDamages[i] * item.number / 4096)
+		if (TypeCompatibility(attackWaza.type, defencePokemon) < 2 && attackItem === 'たつじんのおび') {
+		} else {
+			for (let i = 0; i < 16; i++) {
+				damages[i] = Math.round(damages[i] * item.number / 4096)
+			}
+			for (let i = 0; i < 16; i++) {
+				criticalDamages[i] = Math.round(criticalDamages[i] * item.number / 4096)
+			}
 		}
 	}
 	item = damageItem.find((element) => {return(element.name === defenceItem)})
-	if (item && checkOptions.attackItem) {
+	if (item && checkOptions.defenceItem) {
 		for (let i = 0; i < 16; i++) {
 			damages[i] = Math.round(damages[i] * item.number / 4096)
 		}
@@ -649,9 +719,9 @@ export function DamageCalculate(attackStatus: Status, defenceStatus: Status, att
 export function TypeCompatibility(attackType: string, defencePokemon: PokemonData): number {
 	let imahitotu: string[] = []
 	let batugun: string[] = []
-  let mukou: string[] = []
-  if (attackType === "ノーマル") {
-    mukou = ["ゴースト"]
+	let mukou: string[] = []
+	if (attackType === "ノーマル") {
+		mukou = ["ゴースト"]
 		imahitotu = ["はがね","いわ"]
 		batugun = []
 	}

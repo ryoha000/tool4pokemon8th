@@ -246,7 +246,7 @@ export const attackNatures: Hosei[] = [
 		number: 8192
 	},
 	{
-		name: "すいほう(強化)",
+		name: "すいほう",
 		number: 8192
 	},
 	{
@@ -258,7 +258,7 @@ export const attackNatures: Hosei[] = [
 		number: 2048
 	},
 	{
-		name: "すいほう(弱化)",
+		name: "すいほう",
 		number: 2048
 	},
 ]
@@ -314,10 +314,10 @@ export const defenceItems: Hosei[] = [
 		name: "とつげきチョッキ",
 		number: 6144
 	},
-	{
-		name: "しんかいのウロコ",
-		number: 8192
-	},
+	// {
+	// 	name: "しんかいのウロコ",
+	// 	number: 8192
+	// },
 	{
 		name: "メタルパウダー",
 		number: 8192
@@ -337,7 +337,7 @@ export const damageNature: Hosei[] = [
 		number: 8192
 	},
 	{
-		name: "もふもふ(被炎)",
+		name: "もふもふ",
 		number: 8192
 	},
 	{
@@ -349,7 +349,7 @@ export const damageNature: Hosei[] = [
 		number: 2048
 	},
 	{
-		name: "もふもふ(被接触)",
+		name: "もふもふ",
 		number: 2048
 	},
 	{
@@ -368,6 +368,10 @@ export const damageNature: Hosei[] = [
 		name: "プリズムアーマー",
 		number: 3072
 	},
+	{
+		name: 'こおりのりんぷん',
+		number: 2048
+	}
 ]
 
 export const damageItem: Hosei[] = [

@@ -14,7 +14,7 @@ import InputAutoParty from './InputAutoParty'
 interface Props{
   username: string
   password: string
-  handleAllData: (datas: MyPokemon | MyLog | MyParty) => void
+  handleAllData: (datas: MyPokemon[] | MyLog[] | MyParty[]) => void
   myPokemons: MyPokemon[];
   myParties: MyParty[];
   myLogs: MyLog[];

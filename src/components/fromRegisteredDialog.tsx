@@ -123,7 +123,7 @@ interface Props {
   type: string
   myPokemons: MyPokemon[];
   myParties: MyParty[];
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
   username: string
   password: string
 }

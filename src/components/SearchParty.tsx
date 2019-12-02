@@ -116,6 +116,7 @@ interface Props {
     nowInput: string
     loading: boolean
     selectedId: number
+    // selectedPokeIndex: number | undefined
     selectPokemon: (id: number, i: number) => void
     send: (type: string, id: number) => void
 }
@@ -335,6 +336,13 @@ export default class SearchParty extends React.Component<Props,State> {
         )
     }
     render() {
+        if (this.props.loading) {
+            return (
+                <CardContent>
+                    <CircularProgress/>
+                </CardContent>
+            )
+        }
         return (
             <DialogContent style={{marginLeft: 0, padding: 0}}>
                 {this.renderPartySearch()}

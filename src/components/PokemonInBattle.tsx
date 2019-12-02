@@ -214,18 +214,65 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
   }
   renderOver508 = () => {
     let allEffort: number = this.state.effortA + this.state.effortB + this.state.effortC + this.state.effortD + this.state.effortS + this.state.effortHP
-    if (allEffort > 508) {
+    if (allEffort > 508 && window.parent.screen.width > 600) {
       return (
         <SnackbarContent
           style={{backgroundColor: 'red', height: 30}}
           message="努力値の合計が508を超えています"
         />
       )
-    } else {
+    } else if (allEffort < 509 && window.parent.screen.width > 600) {
       return (
         <div style={{whiteSpace: 'pre-line', height: 42}}>
           <FormControl component="fieldset">
             <FormLabel component="legend">{this.state.status.statusH + "-" +  this.state.status.statusA + "-" +  this.state.status.statusB + "-" +  this.state.status.statusC + "-" +  this.state.status.statusD + "-" +  this.state.status.statusS}</FormLabel>
+            <Grid item>
+              <Grid container>
+                <Button onClick={this.openNature} variant="outlined" color={this.props.color === "primary" ? "primary" : 'secondary'	} style={{height: 35,width: 125}}>
+                  {this.state.natureName}▼
+                </Button>
+                <Menu
+                  id="long-menu"
+                  anchorEl={this.state.isOpenNature}
+                  keepMounted
+                  open={Boolean(this.state.isOpenNature)}
+                  onClose={this.closeNature}
+                  PaperProps={{
+                    style: {
+                      maxHeight: 216,
+                      width: 200,
+                    },
+                  }}
+                >
+                  {natures.map(nature => (
+                    <MenuItem key={nature.id} selected={nature.name === this.state.natureName} onClick={(event: React.MouseEvent<HTMLElement>) => {this.handleNature(nature.name);this.closeNature(event);}}>
+                      {nature.name}
+                    </MenuItem>
+                  ))}
+                </Menu>
+                <RadioGroup aria-label="position" name="position" value={this.state.effortForm} onChange={this.handleChangeEffortForm()} row>
+                  <FormControlLabel
+                    value="slider"
+                    control={<Radio color={this.props.color === "primary" ? "primary" : 'secondary'	} />}
+                    label="Slider"
+                    labelPlacement="end"
+                  />
+                  <FormControlLabel
+                    value="input"
+                    control={<Radio color={this.props.color === "primary" ? "primary" : 'secondary'	} />}
+                    label="Input"
+                    labelPlacement="end"
+                  />
+                </RadioGroup>
+              </Grid>
+            </Grid>
+          </FormControl>
+        </div>
+      )
+    } else {
+      return (
+        <div style={{whiteSpace: 'pre-line', height: 42}}>
+          <FormControl component="fieldset">
             <Grid item>
               <Grid container>
                 <Button onClick={this.openNature} variant="outlined" color={this.props.color === "primary" ? "primary" : 'secondary'	} style={{height: 35,width: 125}}>
@@ -338,7 +385,102 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
     return
   }
   renderEffortForm = () => {
-    if (this.state.effortForm == "slider") {
+    if (this.state.effortForm == "slider" && window.parent.screen.width < 600) {
+      return (
+        <List component="div" disablePadding dense>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>H:{this.state.effortHP}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortHP"
+              value={this.state.effortHP}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortHP()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>A:{this.state.effortA}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortA"
+              value={this.state.effortA}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortA()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>B:{this.state.effortB}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortB"
+              value={this.state.effortB}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortB()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>C:{this.state.effortC}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortC"
+              value={this.state.effortC}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortC()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>D:{this.state.effortD}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortD"
+              value={this.state.effortD}
+              valueLabelDisplay="auto"
+              step={4}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              onChange={this.handleEffortD()}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+          <ListItem className="nested">
+            <Typography style={{whiteSpace: 'break-spaces', width: 70}}>S:{this.state.effortS}    </Typography>
+            <Slider
+              color={this.props.color === "primary" ? "primary" : 'secondary'	}
+              aria-labelledby="effortS"
+              value={this.state.effortS}
+              valueLabelDisplay="auto"
+              step={4}
+              onChange={this.handleEffortS()}
+              onChangeCommitted={this.handleChangeCommittedSlider}
+              min={0}
+              max={252}
+              style={{width: 200}}
+            />
+          </ListItem>
+        </List>
+      )
+    } else if (this.state.effortForm == "slider") {
       return (
         <List component="div" disablePadding>
           <ListItem className="nested">
@@ -985,10 +1127,17 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       this.props.decidion(pastState.status, pastState.selectedWaza, pastState.wazaTime, pastState.selectedItem.name, pastState.selectedAbility)
     }
   }
+  computeHeight = (): number => {
+    if (window.parent.screen.width < 600) {
+      return 530
+    } else {
+      return 430
+    }
+  }
   render() {
     if (this.state.loading) {
       return (
-        <Card style={{ height: 430, width: 300 }}>
+        <Card style={{ height: this.computeHeight(), width: 300 }}>
           <div>
             <CircularProgress/>
           </div>
@@ -996,7 +1145,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
       )
     }
     return (
-    <Card style={{ height: 430, width: 300 }}>
+    <Card style={{ height: this.computeHeight(), width: 300 }}>
       <CardHeader
         avatar={
           <Grid item>
@@ -1028,7 +1177,7 @@ export default class PokemonInBattle extends React.Component<Props,PokemonInBatt
               color={this.props.color === "primary" ? "primary" : 'secondary'	}
               disabled={this.state.inputWaza.name === ""}
             />
-            <InputAuto datas={wazaData.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
+            <InputAuto value={this.state.inputWaza.name} datas={wazaData.filter((element: waza) => {return(element.power > 0)})} handleInput={this.handleChangeInputWaza} />
           </Grid>
           <Grid container>
             <RadioGroup onChange={this.handleCheckWazaGroup}>

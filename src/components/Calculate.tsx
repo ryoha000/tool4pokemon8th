@@ -96,13 +96,24 @@ export default class Calculate extends React.Component<Props,State> {
       }
       if (myState.time > oppoState.time) {
         if (this.state.attack) {
+          myState.rank = this.state.attack.rank
+          if (this.state.defence) {
+            oppoState.rank = this.state.defence.rank
+          }
           if (this.state.attack.pokemon.name !== myState.pokemon.name || this.state.attack.waza !== myState.waza || this.state.attack.status !== myState.status || this.state.attack.item !== myState.item || this.state.attack.nature !== myState.nature || this.state.attack.rank !== myState.rank) {
             this.setState({ attack: myState , defence: oppoState})
           }
         } else {
+          if (this.state.defence) {
+            oppoState.rank = this.state.defence.rank
+          }
           this.setState({ attack: myState , defence: oppoState})
         }
         if (this.state.defence) {
+          oppoState.rank = this.state.defence.rank
+          if (this.state.attack) {
+            myState.rank = this.state.attack.rank
+          }
           if (this.state.defence.pokemon.name !== oppoState.pokemon.name ||
             this.state.defence.waza !== oppoState.waza ||
             this.state.defence.status !== oppoState.status ||
@@ -115,13 +126,24 @@ export default class Calculate extends React.Component<Props,State> {
       }
       if (myState.time < oppoState.time) {
         if (this.state.attack) {
+          oppoState.rank = this.state.attack.rank
+          if (this.state.defence) {
+            myState.rank = this.state.defence.rank
+          }
           if (this.state.attack.pokemon.name !== oppoState.pokemon.name || this.state.attack.waza !== oppoState.waza || this.state.attack.status !== oppoState.status || this.state.attack.item !== oppoState.item || this.state.attack.nature !== oppoState.nature || this.state.attack.rank !== oppoState.rank) {
             this.setState({ attack: oppoState , defence: myState})
           }
         } else {
+          if (this.state.defence) {
+            myState.rank = this.state.defence.rank
+          }
           this.setState({ attack: oppoState , defence: myState})
         }
         if (this.state.defence) {
+          myState.rank = this.state.defence.rank
+          if (this.state.attack) {
+            oppoState.rank = this.state.attack.rank
+          }
           if (this.state.defence.pokemon.name !== myState.pokemon.name ||
             this.state.defence.waza !== myState.waza ||
             this.state.defence.status !== myState.status ||
@@ -175,7 +197,8 @@ export default class Calculate extends React.Component<Props,State> {
     if (side === "defence") {
       if (this.state.defence) {
         const now: DamageInfo = this.state.defence
-        if (defenceNatures.find(element => {return element.name === now.nature})
+        if (now.nature === 'すいほう'
+          || defenceNatures.find(element => {return element.name === now.nature})
           || damageNature.find(element => {return element.name === now.nature})
           || "たいねつ" === now.nature
           || "あついしぼう" === now.nature
@@ -511,9 +534,9 @@ export default class Calculate extends React.Component<Props,State> {
           <FormControl component="fieldset" style={{ marginLeft: 17, marginTop: 3, marginBottom: 0 }}>
             <FormGroup row>
               <Checkbox checked={this.state.checkOption.attackNature && this.checkNature("attack")} onChange={this.handleChangeANOption} value="attackNature" style={{margin: 0}} disabled={!this.checkNature("attack")} />
-              <Typography style={{width: 90, marginTop: this.state.attack.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.attack.nature.length)}}>{this.state.attack.nature.length > 7 ? "とう..." + this.state.attack.nature.slice(-4) : this.state.attack.nature}</Typography>
+              <Typography style={{width: 90, marginTop: this.state.attack.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.attack.nature.length)}}>{this.state.attack.nature.length > 7 ? this.state.attack.nature.slice(0, 2) + "..." + this.state.attack.nature.slice(-4) : this.state.attack.nature}</Typography>
               <Checkbox checked={this.state.checkOption.defenceNature && this.checkNature("defence")} onChange={this.handleChangeDNOption} value="defenceNature" style={{margin: 0}} disabled={!this.checkNature("defence")} />
-              <Typography style={{width: 90, marginTop: this.state.defence.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.defence.nature.length)}}>{this.state.defence.nature.length > 7 ? "とう..." + this.state.defence.nature.slice(-4) : this.state.defence.nature}</Typography>
+              <Typography style={{width: 90, marginTop: this.state.defence.nature.length > 6 ? 11 : 9, marginLeft: 0, fontSize: this.natureFontSize(this.state.defence.nature.length)}}>{this.state.defence.nature.length > 7 ? this.state.attack.nature.slice(0, 2) + "..." + this.state.defence.nature.slice(-4) : this.state.defence.nature}</Typography>
             </FormGroup>
             <FormGroup row>
               <Checkbox

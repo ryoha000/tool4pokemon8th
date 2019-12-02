@@ -48,7 +48,7 @@ interface Props{
   myPokemons: MyPokemon[];
   myParties: MyParty[];
   myLogs: MyLog[];
-  handleAllData: (datas: MyPokemon | MyParty | MyLog) => void
+  handleAllData: (datas: MyPokemon[] | MyParty[] | MyLog[]) => void
 }
 
 interface State{
@@ -81,7 +81,7 @@ export default class Register extends React.Component<Props,State> {
   }
   componentDidUpdate = () => {
   }
-  handleAllData = (datas: MyPokemon | MyParty | MyLog) => {
+  handleAllData = (datas: MyPokemon[] | MyParty[] | MyLog[]) => {
     this.props.handleAllData(datas)
   }
   renderModal = () => {
@@ -402,6 +402,13 @@ export default class Register extends React.Component<Props,State> {
       this.setState({party: nowParty, partyDetail: nowDetail, selectedPokemon: pokemonData})
     }
   }
+  computeHeight = (): number => {
+    if (window.parent.screen.width < 600) {
+      return 530
+    } else {
+      return 430
+    }
+  }
   render() {
     return (
       <Grid container spacing={2}>
@@ -463,7 +470,7 @@ export default class Register extends React.Component<Props,State> {
               </Paper>
             </Grid>
             <Grid item>
-              <Paper style={{ height: 430,width: 300 }}>
+              <Paper style={{ height: this.computeHeight(),width: 300 }}>
                 <PokemonStatus
                   nowDetail={this.state.selectedPokemonIndex !== undefined ? this.state.partyDetail[this.state.selectedPokemonIndex] : undefined}
                   sendPokemonStatus={this.selectPokeStatus}
