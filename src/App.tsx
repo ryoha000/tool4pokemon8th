@@ -281,7 +281,7 @@ export default class App extends React.Component<Props,State>{
     } else {
       return (
         <div className="App">
-          <ParentTabs
+          {/* <ParentTabs
             pokemons={this.state.pokemons}
             wazas={this.state.wazas}
             username={this.state.username}
@@ -290,9 +290,11 @@ export default class App extends React.Component<Props,State>{
             myParties={this.state.myParties}
             myLogs={this.state.myLogs}
             handleAllData={this.handleAllData}
-          />
+          /> */}
+          現在ちょっと鯖代がやばくてとめてます＞＜
+          データベースを置く場所を変えたら大分安くなるので移したら再開します
         </div>
       )
     }
-  } 
+  }
 }
