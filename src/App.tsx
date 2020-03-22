@@ -251,34 +251,34 @@ export default class App extends React.Component<Props,State>{
     )
   }
   render() {
-    if (!this.state.pokeInit || !this.state.partyInit || !this.state.logInit) {
-      if (this.state.login) {
-        return (
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Grid item>
-                  {this.renderLogin()}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        )
-      }
-      if (this.state.signup) {
-        return (
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container justify="center">
-                <Grid item>
-                {this.renderSignup()}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        )
-      }
-    } else {
+    // if (!this.state.pokeInit || !this.state.partyInit || !this.state.logInit) {
+    //   if (this.state.login) {
+    //     return (
+    //       <Grid container>
+    //         <Grid item xs={12}>
+    //           <Grid container justify="center">
+    //             <Grid item>
+    //               {this.renderLogin()}
+    //             </Grid>
+    //           </Grid>
+    //         </Grid>
+    //       </Grid>
+    //     )
+    //   }
+    //   if (this.state.signup) {
+    //     return (
+    //       <Grid container>
+    //         <Grid item xs={12}>
+    //           <Grid container justify="center">
+    //             <Grid item>
+    //             {this.renderSignup()}
+    //             </Grid>
+    //           </Grid>
+    //         </Grid>
+    //       </Grid>
+    //     )
+    //   }
+    // } else {
       return (
         <div className="App">
           {/* <ParentTabs
