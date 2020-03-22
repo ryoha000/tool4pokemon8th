@@ -295,6 +295,6 @@ export default class App extends React.Component<Props,State>{
           データベースを置く場所を変えたら大分安くなるので移したら再開します
         </div>
       )
-    }
+    // }
   }
 }
