@@ -55,7 +55,7 @@
   "devDependencies": {
     "concurrently": "^5.0.0",
     "electron": "^6.0.12",
-    "electron-is-dev": "^1.1.0",
+    "electron-is-dev": "^1.2.0",
     "gh-pages": "^2.1.1",
     "wait-on": "^3.3.0"
   }
