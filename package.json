@@ -20,7 +20,7 @@
     "nedb": "^1.8.0",
     "nedb-promise": "^2.0.1",
     "react": "^16.13.1",
-    "react-dom": "^16.10.2",
+    "react-dom": "^16.13.1",
     "react-rnd": "^10.1.1",
     "react-scripts": "3.2.0",
     "react-select": "^3.0.8",
