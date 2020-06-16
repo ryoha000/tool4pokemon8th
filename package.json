@@ -8,7 +8,7 @@
     "@types/jest": "26.0.0",
     "@types/nedb": "^1.8.9",
     "@types/node": "12.7.12",
-    "@types/react": "16.9.5",
+    "@types/react": "16.9.36",
     "@types/react-dom": "16.9.8",
     "@types/react-rnd": "^7.4.4",
     "@types/react-select": "^3.0.5",
