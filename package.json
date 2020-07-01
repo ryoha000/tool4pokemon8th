@@ -21,7 +21,7 @@
     "nedb-promise": "^2.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-rnd": "^10.1.1",
+    "react-rnd": "^10.1.10",
     "react-scripts": "3.4.1",
     "react-select": "^3.0.8",
     "recharts": "^1.8.5",
