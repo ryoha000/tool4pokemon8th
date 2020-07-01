@@ -2341,12 +2341,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-rnd@^7.4.4":
-  version "7.4.4"
-  resolved "https://registry.yarnpkg.com/@types/react-rnd/-/react-rnd-7.4.4.tgz#d5704e166241aed417cae4c62ec4c58848cdea2d"
-  integrity sha512-Rh9UdKFiV4fxh/05shQsU3RO+eH5anU6eZCo8NBzobEfB6QU50ISLVP24rEZtIXbYsiiwjo7w960aAZ6JicpMg==
+"@types/react-rnd@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-rnd/-/react-rnd-8.0.0.tgz#aec90d5398c83b1c809a5b61a228ae47ac150136"
+  integrity sha512-k/exWCXCY3CDqyJUJeny2SgsfWslWh6XU32/S0YJH6p4E8q2FK89WAPzdG0AECA2k95UC75YKErDRQ/IyvDz6g==
   dependencies:
-    "@types/react" "*"
+    react-rnd "*"
 
 "@types/react-select@^3.0.5":
   version "3.0.8"
@@ -10395,10 +10395,10 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-re-resizable@6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.1.0.tgz#ba4ece505b48f05691446d57837151349d7575e8"
-  integrity sha512-Jj9zdYW6SnUto8pmH4b/3Kms/PKPv9CuWE70W1IuUIR1HlrEibgsqhbUe8BYDRBTuagH1gav09806k7TieUeSA==
+re-resizable@6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/re-resizable/-/re-resizable-6.3.2.tgz#27cc984af6ea5dbafd2b79f64c5224a6e1722fbe"
+  integrity sha512-ngxe4XBSb46vfwXjAwpURacVDig/pPt1kHRhcKlRRIoGICmo4aQHr725jurezepp1pm5jSC6iQhyLYfx3zOC3w==
   dependencies:
     fast-memoize "^2.5.1"
 
@@ -10454,10 +10454,10 @@ react-dom@^16.13.1:
     prop-types "^15.6.2"
     scheduler "^0.19.1"
 
-react-draggable@4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.0.3.tgz#6b9f76f66431c47b9070e9b805bbc520df8ca481"
-  integrity sha512-4vD6zms+9QGeZ2RQXzlUBw8PBYUXy+dzYX5r22idjp9YwQKIIvD/EojL0rbjS1GK4C3P0rAJnmKa8gDQYWUDyA==
+react-draggable@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/react-draggable/-/react-draggable-4.2.0.tgz#40cc5209082ca7d613104bf6daf31372cc0e1114"
+  integrity sha512-5wFq//gEoeTYprnd4ze8GrFc+Rbnx+9RkOMR3vk4EbWxj02U6L6T3yrlKeiw4X5CtjD2ma2+b3WujghcXNRzkw==
   dependencies:
     classnames "^2.2.5"
     prop-types "^15.6.0"
@@ -10494,14 +10494,14 @@ react-resize-detector@^2.3.0:
     prop-types "^15.6.0"
     resize-observer-polyfill "^1.5.0"
 
-react-rnd@^10.1.1:
-  version "10.1.1"
-  resolved "https://registry.yarnpkg.com/react-rnd/-/react-rnd-10.1.1.tgz#4f4d9d28c46a6060acb64600df7a88490862a324"
-  integrity sha512-KwNUbNd4Kg2DTLdw/Eb8dSC3T5nMRQIRfyyVjdoLT85hKXpeCkMRb2zo4BHCzkgdgCbFGgYLDmj1qRH5DUkTGA==
+react-rnd@*, react-rnd@^10.1.1:
+  version "10.1.10"
+  resolved "https://registry.yarnpkg.com/react-rnd/-/react-rnd-10.1.10.tgz#4203a846631184559d5ae5ee6ad7fbdca162fc10"
+  integrity sha512-xR+CasLBGXJUJQpds2CHocKp/Wze8/VKOf7KaaVDEy2MFzDJKcxPQ0J4QCAGSIaN20cTDmpfTyCzdTfwVGxN8A==
   dependencies:
-    re-resizable "6.1.0"
-    react-draggable "4.0.3"
-    tslib "1.10.0"
+    re-resizable "6.3.2"
+    react-draggable "4.2.0"
+    tslib "1.11.1"
 
 react-scripts@3.4.1:
   version "3.4.1"
@@ -12264,15 +12264,20 @@ ts-pnp@^1.1.6:
   resolved "https://registry.yarnpkg.com/ts-pnp/-/ts-pnp-1.2.0.tgz#a500ad084b0798f1c3071af391e65912c86bca92"
   integrity sha512-csd+vJOb/gkzvcCHgTGSChYpy5f1/XKNsmvBGO4JXS+z1v2HobugDz4s1IeFXM3wZB44uczs+eazB5Q/ccdhQw==
 
-tslib@1.10.0, tslib@^1.8.1, tslib@^1.9.0:
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
-  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
+tslib@1.11.1:
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
+  integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
 
 tslib@^1.10.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.13.0.tgz#c881e13cc7015894ed914862d276436fa9a47043"
   integrity sha512-i/6DQjL8Xf3be4K/E6Wgpekn5Qasl1usyw++dAA35Ue5orEn65VIxOA+YvNNl9HV3qv70T7CNwjODHZrLwvd1Q==
+
+tslib@^1.8.1, tslib@^1.9.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
+  integrity sha512-qOebF53frne81cf0S9B41ByenJ3/IuH8yJKngAX35CmiZySA0khhkovshKK+jGCaMnVomla7gVlIcc3EvKPbTQ==
 
 tsutils@^3.17.1:
   version "3.17.1"
