@@ -13,7 +13,7 @@
     "@types/react-rnd": "^7.4.4",
     "@types/react-select": "^3.0.5",
     "@types/react-window": "^1.8.2",
-    "@types/recharts": "^1.8.12",
+    "@types/recharts": "^1.8.13",
     "axios": "^0.19.2",
     "http-proxy-middleware": "^1.0.4",
     "http-server": "^0.12.3",
