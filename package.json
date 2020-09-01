@@ -5,7 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
-    "@types/jest": "26.0.8",
+    "@types/jest": "26.0.12",
     "@types/nedb": "^1.8.10",
     "@types/node": "14.0.13",
     "@types/react": "16.9.44",
