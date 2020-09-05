@@ -25,7 +25,7 @@
     "react-scripts": "3.4.1",
     "react-select": "^3.1.0",
     "recharts": "^1.8.5",
-    "typescript": "3.9.7"
+    "typescript": "4.0.2"
   },
   "homepage": "https://ryoha000.github.io/tool4pokemon8th",
   "main": "public/electron.js",
